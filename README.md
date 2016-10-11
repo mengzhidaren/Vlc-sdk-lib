@@ -4,6 +4,9 @@ vlc-android-lib 3.0.0-2.1.0
 此次版本对最新版的 vlc-android的代码在linux  ubuntu64  16.4  中搭建编绎环境
 android-sdk 版本 api24    ndk版本 r12    java 版本 8   vlc-android 版本 3.0.0-v2.1.0版本
 
+目前的功能：几乎所有格式文件的播放 buffing进度支持 多线程死锁的bug也修好了
+
+**个人评价 比 ijk的播放器要好很多 应该是本人目前所知道的开源播放器 中最好的了
 
 1.我在win10中安装的  VMware Workstation Pro  可以自已百度下载
 安装ubuntu 64  16 的最新版
