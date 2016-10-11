@@ -22,13 +22,11 @@ package org.videolan.vlc.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.os.Debug;
 import android.preference.PreferenceManager;
 import android.support.annotation.MainThread;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.videolan.BuildConfig;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.util.AndroidUtil;
@@ -36,15 +34,10 @@ import org.videolan.libvlc.util.HWDecoderUtil;
 import org.videolan.libvlc.util.VLCUtil;
 import org.videolan.vlc.media.MediaWrapper;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
- *  <string-array name="chroma_formats_values" translatable="false">
- <item>RV32</item>
- <item>RV16</item>
- <item>YV12</item>
- </string-array>
+ *
  */
 public class VLCOptions {
     private static final String TAG = "VLCConfig";
@@ -52,7 +45,6 @@ public class VLCOptions {
     public static final int AOUT_AUDIOTRACK = 0;
     public static final int AOUT_OPENSLES = 1;
 
-    @SuppressWarnings("unused")
     public static final int HW_ACCELERATION_AUTOMATIC = -1;
     public static final int HW_ACCELERATION_DISABLED = 0;
     public static final int HW_ACCELERATION_DECODING = 1;
@@ -94,9 +86,9 @@ public class VLCOptions {
         if (networkCaching > 0)
             options.add("--network-caching=" + networkCaching);
         options.add("--androidwindow-chroma");
-        if (AndroidUtil.isKitKatOrLater()){
+        if (AndroidUtil.isKitKatOrLater()) {
             options.add("RV32");
-        }else{
+        } else {
             options.add("RV16");
         }
 
@@ -202,7 +194,9 @@ public class VLCOptions {
             media.addOption(":start-paused");
     }
 
-    @MainThread
+    /**
+     * MainThread
+     */
     public static MediaPlayer.Equalizer getEqualizer(Context context) {
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         if (pref.getBoolean("equalizer_enabled", false)) {

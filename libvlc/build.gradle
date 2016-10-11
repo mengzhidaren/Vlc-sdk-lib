@@ -1,10 +1,14 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-
-def siteUrl = 'https://github.com/kanglongba/MagicRedDot'   // 项目的主页
-def gitUrl = 'https://github.com/kanglongba/MagicRedDot.git'   // Git仓库的url
-
+apply plugin: 'com.novoda.bintray-release'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.3.4'
+    }
+}
+def siteUrl = 'https://github.com/mengzhidaren/Vlc-sdk-lib'   // 项目的主页
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 android {
@@ -14,22 +18,24 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.2"
     }
 
     sourceSets {
-    main {
-        jni.srcDirs = [] // Prevent gradle from building native code with ndk; we have our own Makefile for it.
-        jniLibs.srcDirs = [ 'jni/libs', 'private_libs/libs' ] // Where generated .so files are placed.
-        manifest.srcFile 'AndroidManifest.xml'
-        java.srcDirs = ['src']
-        resources.srcDirs = ['src']
-        aidl.srcDirs = ['src']
-        renderscript.srcDirs = ['src']
-        res.srcDirs = ['res']
-        assets.srcDirs = ['assets' ]
-    }
+        main {
+            jni.srcDirs = []
+            // Prevent gradle from building native code with ndk; we have our own Makefile for it.
+            jniLibs.srcDirs = ['jni/libs', 'private_libs/libs']
+            // Where generated .so files are placed.
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
     }
 
     buildTypes {
@@ -38,19 +44,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
 
     // Make per-variant version code
-    libraryVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.aar')) {
-                def fileName = "libvlc.aar"
-                output.outputFile = new File(outputFile.parent, fileName)
-            }
-        }
-    }
+//    libraryVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            def outputFile = output.outputFile
+//            if (outputFile != null && outputFile.name.endsWith('.aar')) {
+//                def fileName = "libvlc.aar"
+//                output.outputFile = new File(outputFile.parent, fileName)
+//            }
+//        }
+//    }
 }
-
+publish {
+    userOrg = 'yuyunlongyyl' //用户所在组织
+    groupId = 'com.yyl.vlc'// 包名
+    artifactId = 'vlc-android-sdk' // library的名字
+    publishVersion = '1.0.1'// 版本
+    desc = 'vlc-android-lib 2.0.0   2016/10/10 最新的版本了吧' // 描述
+    website=siteUrl
+}
 /*
  * Include GDB files into apk
  */
@@ -58,95 +75,7 @@ android {
 //    Sync packageTask = project.getTasks().findByName("packageReleaseJniLibs")
 //    packageTask.include(['**/gdbserver', '**/gdb.setup'])
 //}
-bintray {
 
-    user = properties.getProperty("bintray.user")
-
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-
-    pkg {
-
-        repo = "maven"
-        name = "vlc-android-lib"    //发布到JCenter上的项目名字
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        userOrg = 'bintray_user' //可选项，如果作者属于一个组织，填写组织的名字；否则默认为‘BINTRAY_USER’
-        publish = true
-        version{
-
-            desc = '最新的2016 10 1 编译的版本 vlc 2.0.0'
-
-        }
-    }
-
-}
-install {
-
-    repositories.mavenInstaller {
-
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                // Add your description here
-                name 'vlc android lib 2.0.0 - 2016.10.1' //项目描述
-                url siteUrl
-                // Set your license
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'yuyunlongyyl'    //填写的一些基本信息
-                        name 'YYL'
-                        email 'yuyunlongyyl@gmail.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-
-        }
-
-    }
-
-}
-task sourcesJar(type: Jar) {
-
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-
-}
-
-task javadoc(type: Javadoc) {
-
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-
-    classifier = 'javadoc'
-
-    from javadoc.destinationDir
-
-}
-artifacts {
-
-    archives javadocJar
-    archives sourcesJar
-
-}
 
 dependencies {
     compile 'com.android.support:support-annotations:24.2.1'

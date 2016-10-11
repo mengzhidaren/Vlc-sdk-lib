@@ -160,7 +160,7 @@ public class MediaBrowser {
     /**
      * Browse to the specified local path starting with '/'.
      *
-     * @param path
+     * @param path specified local
      * @param flags see {@link MediaBrowser.Flag}
      */
     @MainThread
@@ -210,6 +210,7 @@ public class MediaBrowser {
 
     /**
      * Get the number or media.
+     * @return number
      */
     @MainThread
     public int getMediaCount() {

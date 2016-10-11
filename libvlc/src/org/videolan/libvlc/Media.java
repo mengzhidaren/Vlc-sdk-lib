@@ -620,9 +620,9 @@ public class Media extends VLCObject<Media.Event> {
      * event (only if this methods returned true).
      *
      * @param flags see {@link Parse}
-     * @param imeout maximum time allowed to preparse the media. If -1, the
+     * @param timeout maximum time allowed to preparse the media. If -1, the
      * default "preparse-timeout" option will be used as a timeout. If 0, it will
-     * wait indefinitely. If > 0, the timeout will be used (in milliseconds).
+     * wait indefinitely.如果小于0, the timeout will be used (in milliseconds).
      * @return true in case of success, false otherwise.
      */
     public boolean parseAsync(int flags, int timeout) {
@@ -659,7 +659,7 @@ public class Media extends VLCObject<Media.Event> {
     /**
      * Get the type of the media
      *
-     * @see {@link Type}
+     * @return type
      */
     public int getType() {
         synchronized (this) {

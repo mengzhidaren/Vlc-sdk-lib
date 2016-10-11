@@ -332,7 +332,6 @@ public class MediaWrapper implements Parcelable {
      * Sets the raw picture object.
      *
      *
-     * @param p
      */
     public void setPicture(Bitmap p) {
         mPicture = p;
