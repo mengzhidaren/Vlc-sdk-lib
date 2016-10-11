@@ -36,8 +36,8 @@ export ANDROID_ABI=armeabi-v7a   //对应的cpu平台 .so包
 
 
 4.安装工具  https://wiki.videolan.org/AndroidCompile/
-##Points
-  sudo apt-get install automake ant autopoint cmake build-essential libtool \
+
+## sudo apt-get install automake ant autopoint cmake build-essential libtool \
      patch pkg-config protobuf-compiler ragel subversion unzip git
 还是最新版就行
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/4.png)
@@ -66,4 +66,9 @@ MAC电脑没试过 本来就是linux 应该会简单一点
 目前已知bug：  还没有   就是库文件有点大
 
 可以用我编译好的仓库   不定期更新
-compile 'com.yyl.vlc:vlc-android-sdk:1.0.1'
+##Points
+dependencies {
+  // jCenter
+ compile 'com.yyl.vlc:vlc-android-sdk:1.0.1'
+}
+
