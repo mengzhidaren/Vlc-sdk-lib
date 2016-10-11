@@ -47,15 +47,15 @@ export ANDROID_ABI=armeabi-v7a   //对应的cpu平台 .so包
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/7.png)
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/8.png)
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/9.png)
-MAC电脑没试过 会简单一点
+MAC电脑没试过 本来就是linux 应该会简单一点
 
 
-可以用我编译好的
+
 
 发现bug或有好的建议欢迎[issue]
 
 我后期会时间会优化下库大小  和其它bug
 
 目前已知bug：  还没有   就是库文件有点大
-
+可以用我编译好的
 compile 'com.yyl.vlc:vlc-android-sdk:1.0.1'
