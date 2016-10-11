@@ -67,8 +67,10 @@ MAC电脑没试过 本来就是linux 应该会简单一点
 
 可以用我编译好的仓库   不定期更新
 ##Points
+```
 dependencies {
   // jCenter
  compile 'com.yyl.vlc:vlc-android-sdk:1.0.1'
 }
+```
 
