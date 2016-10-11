@@ -16,7 +16,7 @@ android-sdk 版本 api24    ndk版本 r12    java 版本 8   vlc-android 版本 
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/3.png)
 
 全局用户环境设置
-
+```
 sudo gedit /etc/profile
 $source /etc/profile
 
@@ -32,13 +32,14 @@ export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib:${JAVA_HOME}/lib/tools.jar
 export PATH=${JAVA_HOME}/bin:$PATH
 
 export ANDROID_ABI=armeabi-v7a   //对应的cpu平台 .so包
-
+```
 
 
 4.安装工具  https://wiki.videolan.org/AndroidCompile/
-
+```
 ## sudo apt-get install automake ant autopoint cmake build-essential libtool \
      patch pkg-config protobuf-compiler ragel subversion unzip git
+```
 还是最新版就行
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/4.png)
 
