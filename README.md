@@ -1,14 +1,15 @@
 # Vlc-sdk-lib
 vlc-android-lib 3.0.0-2.1.0
  在这吐槽下 我在github上找 vlc-android的代码几 乎所有源码都是3年前或者两年前的 库文件
-*此次版本对最新版的
-*vlc-android的代码在
-*linux  ubuntu64  16.4  中搭建编绎环境
-*android-sdk 版本 api24
-*ndk版本 r12
-*java 版本 8
-*vlc-android 版本 3.0.0-v2.1.0版本
-
+此次版本对最新版
+```
+vlc-android的代码在
+linux  ubuntu64  16.4  中搭建编绎环境
+android-sdk 版本 api24
+ndk版本 r12
+java 版本 8
+vlc-android 版本 3.0.0-v2.1.0版本
+```
 目前支持的库： x86_64   x86  armeabi-v7a  arm64-v8a
 
 *目前的功能：几乎所有格式文件的播放 buffing进度支持 多线程死锁的bug也修好了
