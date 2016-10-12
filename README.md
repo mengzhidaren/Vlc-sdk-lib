@@ -1,7 +1,7 @@
 # Vlc-sdk-lib
 vlc-android-lib 3.0.0-2.1.0
  在这吐槽下 我在github上找 vlc-android的代码几 乎所有源码都是3年前或者两年前的 库文件
-此次版本对最新版
+此次版本是最新版的 vlc-android 3.0.0- v2.1.0
 ```
 vlc-android的代码在
 linux  ubuntu64  16.4  中搭建编绎环境
