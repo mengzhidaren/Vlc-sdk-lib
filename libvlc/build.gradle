@@ -9,8 +9,7 @@ buildscript {
     }
 }
 def siteUrl = 'https://github.com/mengzhidaren/Vlc-sdk-lib'   // 项目的主页
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
@@ -18,8 +17,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 2
-        versionName "1.0.2"
+        versionCode 3
+        versionName "1.1.0"
     }
 
     sourceSets {
@@ -64,8 +63,8 @@ publish {
     userOrg = 'yuyunlongyyl' //用户所在组织
     groupId = 'com.yyl.vlc'// 包名
     artifactId = 'vlc-android-sdk' // library的名字
-    publishVersion = '1.0.1'// 版本
-    desc = 'vlc-android-lib 2.0.0   2016/10/10 最新的版本了吧' // 描述
+    publishVersion = '1.1.0'// 版本
+    desc = 'vlc-android-lib 2.0.0   2016/10/10  suport x86_64   x86  armeabi-v7a  arm64-v8a' // 描述
     website=siteUrl
 }
 /*
