@@ -25,6 +25,9 @@
     compile 'com.yyl.vlc:vlc-android-sdk:1.2.0'
    }
 ```
+#效果预览
+![image](https://github.com/mengzhidaren/VlcPlayer/blob/master/GIF/j1.gif)
+
 版本号vlc-android-lib 3.0.0-2.1.0
  在这吐槽下 我在github上找 vlc-android的代码几 乎所有源码都是3年前或者两年前的 库文件
 此次版本是最新版的 vlc-android 3.0.0- v2.1.0
