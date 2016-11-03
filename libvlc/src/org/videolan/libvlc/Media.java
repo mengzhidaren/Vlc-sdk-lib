@@ -1,18 +1,18 @@
 /*****************************************************************************
  * Media.java
- *****************************************************************************
+ * ****************************************************************************
  * Copyright © 2015 VLC authors, VideoLAN and VideoLabs
- *
+ * <p>
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -44,6 +44,7 @@ public class Media extends VLCObject<Media.Event> {
         protected Event(int type) {
             super(type);
         }
+
         protected Event(int type, long arg1) {
             super(type, arg1);
         }
@@ -61,7 +62,8 @@ public class Media extends VLCObject<Media.Event> {
         }
     }
 
-    public interface EventListener extends VLCEvent.Listener<Media.Event> {}
+    public interface EventListener extends VLCEvent.Listener<Media.Event> {
+    }
 
     /**
      * libvlc_media_type_t
@@ -126,11 +128,11 @@ public class Media extends VLCObject<Media.Event> {
      * see libvlc_media_parse_flag_t
      */
     public static class Parse {
-        public static final int ParseLocal   = 0;
+        public static final int ParseLocal = 0;
         public static final int ParseNetwork = 0x01;
-        public static final int FetchLocal   = 0x02;
+        public static final int FetchLocal = 0x02;
         public static final int FetchNetwork = 0x04;
-        public static final int DoInteract   = 0x08;
+        public static final int DoInteract = 0x08;
     }
 
     /*
@@ -165,7 +167,7 @@ public class Media extends VLCObject<Media.Event> {
         public final String description;
 
         private Track(int type, String codec, String originalCodec, int id, int profile,
-                int level, int bitrate, String language, String description) {
+                      int level, int bitrate, String language, String description) {
             this.type = type;
             this.codec = codec;
             this.originalCodec = originalCodec;
@@ -186,8 +188,8 @@ public class Media extends VLCObject<Media.Event> {
         public final int rate;
 
         private AudioTrack(String codec, String originalCodec, int id, int profile,
-                int level, int bitrate, String language, String description,
-                int channels, int rate) {
+                           int level, int bitrate, String language, String description,
+                           int channels, int rate) {
             super(Type.Audio, codec, originalCodec, id, profile, level, bitrate, language, description);
             this.channels = channels;
             this.rate = rate;
@@ -196,8 +198,8 @@ public class Media extends VLCObject<Media.Event> {
 
     @SuppressWarnings("unused") /* Used from JNI */
     private static Track createAudioTrackFromNative(String codec, String originalCodec, int id, int profile,
-            int level, int bitrate, String language, String description,
-            int channels, int rate) {
+                                                    int level, int bitrate, String language, String description,
+                                                    int channels, int rate) {
         return new AudioTrack(codec, originalCodec, id, profile,
                 level, bitrate, language, description,
                 channels, rate);
@@ -215,8 +217,8 @@ public class Media extends VLCObject<Media.Event> {
         public final int frameRateDen;
 
         private VideoTrack(String codec, String originalCodec, int id, int profile,
-                int level, int bitrate, String language, String description,
-                int height, int width, int sarNum, int sarDen, int frameRateNum, int frameRateDen) {
+                           int level, int bitrate, String language, String description,
+                           int height, int width, int sarNum, int sarDen, int frameRateNum, int frameRateDen) {
             super(Type.Video, codec, originalCodec, id, profile, level, bitrate, language, description);
             this.height = height;
             this.width = width;
@@ -229,8 +231,8 @@ public class Media extends VLCObject<Media.Event> {
 
     @SuppressWarnings("unused") /* Used from JNI */
     private static Track createVideoTrackFromNative(String codec, String originalCodec, int id, int profile,
-            int level, int bitrate, String language, String description,
-            int height, int width, int sarNum, int sarDen, int frameRateNum, int frameRateDen) {
+                                                    int level, int bitrate, String language, String description,
+                                                    int height, int width, int sarNum, int sarDen, int frameRateNum, int frameRateDen) {
         return new VideoTrack(codec, originalCodec, id, profile,
                 level, bitrate, language, description,
                 height, width, sarNum, sarDen, frameRateNum, frameRateDen);
@@ -243,8 +245,8 @@ public class Media extends VLCObject<Media.Event> {
         public final String encoding;
 
         private SubtitleTrack(String codec, String originalCodec, int id, int profile,
-                int level, int bitrate, String language, String description,
-                String encoding) {
+                              int level, int bitrate, String language, String description,
+                              String encoding) {
             super(Type.Text, codec, originalCodec, id, profile, level, bitrate, language, description);
             this.encoding = encoding;
         }
@@ -252,8 +254,8 @@ public class Media extends VLCObject<Media.Event> {
 
     @SuppressWarnings("unused") /* Used from JNI */
     private static Track createSubtitleTrackFromNative(String codec, String originalCodec, int id, int profile,
-            int level, int bitrate, String language, String description,
-            String encoding) {
+                                                       int level, int bitrate, String language, String description,
+                                                       String encoding) {
         return new SubtitleTrack(codec, originalCodec, id, profile,
                 level, bitrate, language, description,
                 encoding);
@@ -365,10 +367,10 @@ public class Media extends VLCObject<Media.Event> {
                                                int sentBytes,
                                                float sendBitrate) {
         return new Stats(readBytes, inputBitrate, demuxReadBytes,
-                         demuxBitrates, demuxCorrupted, demuxDiscontinuity,
-                         decodedVideo, decodedAudio, displayedPictures,
-                         lostPictures, playedAbuffers, lostAbuffers,
-                         sentPackets, sentBytes, sendBitrate);
+                demuxBitrates, demuxCorrupted, demuxDiscontinuity,
+                decodedVideo, decodedAudio, displayedPictures,
+                lostPictures, playedAbuffers, lostAbuffers,
+                sentPackets, sentBytes, sendBitrate);
     }
 
     private static final int PARSE_STATUS_INIT = 0x00;
@@ -489,21 +491,21 @@ public class Media extends VLCObject<Media.Event> {
     @Override
     protected synchronized Event onEventNative(int eventType, long arg1, float arg2) {
         switch (eventType) {
-        case Event.MetaChanged:
-            // either we update all metas (if first call) or we update a specific meta
-            int id = (int) arg1;
-            if (id >= 0 && id < Meta.MAX)
-                mNativeMetas[id] = null;
-            return new Event(eventType, arg1);
-        case Event.DurationChanged:
-            mDuration = -1;
-            break;
-        case Event.ParsedChanged:
-            postParse();
-            return new Event(eventType, arg1);
-        case Event.StateChanged:
-            mState = -1;
-            break;
+            case Event.MetaChanged:
+                // either we update all metas (if first call) or we update a specific meta
+                int id = (int) arg1;
+                if (id >= 0 && id < Meta.MAX)
+                    mNativeMetas[id] = null;
+                return new Event(eventType, arg1);
+            case Event.DurationChanged:
+                mDuration = -1;
+                break;
+            case Event.ParsedChanged:
+                postParse();
+                return new Event(eventType, arg1);
+            case Event.StateChanged:
+                mState = -1;
+                break;
         }
         return new Event(eventType);
     }
@@ -856,21 +858,38 @@ public class Media extends VLCObject<Media.Event> {
 
     /* JNI */
     private native void nativeNewFromPath(LibVLC libVLC, String path);
+
     private native void nativeNewFromLocation(LibVLC libVLC, String location);
+
     private native void nativeNewFromFd(LibVLC libVLC, FileDescriptor fd);
+
     private native void nativeNewFromMediaList(MediaList ml, int index);
+
     private native void nativeRelease();
+
     private native boolean nativeParseAsync(int flags, int timeout);
+
     private native boolean nativeParse(int flags);
+
     private native String nativeGetMrl();
+
     private native int nativeGetState();
+
     private native String nativeGetMeta(int id);
+
     private native Track[] nativeGetTracks();
+
     private native long nativeGetDuration();
+
     private native int nativeGetType();
+
     private native void nativeAddOption(String option);
+
     private native void nativeAddSlave(int type, int priority, String uri);
+
     private native void nativeClearSlaves();
+
     private native Slave[] nativeGetSlaves();
+
     private native Stats nativeGetStats();
 }

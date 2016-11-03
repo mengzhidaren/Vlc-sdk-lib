@@ -2,13 +2,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextureView
-        android:id="@+id/textureView"
+    <org.videolan.vlc.VlcVideoView
+        android:id="@+id/player"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <Button
+
+    <TextView
+        android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="ssssss" />
+        android:layout_gravity="center"
+        android:text="testDemo"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="change"
+        android:visibility="visible" />
 </FrameLayout>

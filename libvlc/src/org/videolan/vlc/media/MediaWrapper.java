@@ -1,18 +1,18 @@
 /*****************************************************************************
  * MediaWrapper.java
- *****************************************************************************
+ * ****************************************************************************
  * Copyright © 2011-2015 VLC authors and VideoLAN
- *
+ * <p>
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -112,7 +112,7 @@ public class MediaWrapper implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        Uri otherUri = ((MediaWrapper)obj).getUri();
+        Uri otherUri = ((MediaWrapper) obj).getUri();
         if (mUri == null || otherUri == null)
             return false;
         if (mUri == otherUri)
@@ -136,7 +136,7 @@ public class MediaWrapper implements Parcelable {
                         mType = TYPE_VIDEO;
                         mWidth = videoTrack.width;
                         mHeight = videoTrack.height;
-                    } else if (mType == TYPE_ALL && track.type == Media.Track.Type.Audio){
+                    } else if (mType == TYPE_ALL && track.type == Media.Track.Type.Audio) {
                         mType = TYPE_AUDIO;
                     }
                 }
@@ -214,11 +214,11 @@ public class MediaWrapper implements Parcelable {
     }
 
     public MediaWrapper(Uri uri, long time, long length, int type,
-                 Bitmap picture, String title, String artist, String genre, String album, String albumArtist,
-                 int width, int height, String artworkURL, int audio, int spu, int trackNumber, int discNumber, long lastModified) {
+                        Bitmap picture, String title, String artist, String genre, String album, String albumArtist,
+                        int width, int height, String artworkURL, int audio, int spu, int trackNumber, int discNumber, long lastModified) {
         mUri = uri;
         init(time, length, type, picture, title, artist, genre, album, albumArtist,
-             width, height, artworkURL, audio, spu, trackNumber, discNumber, lastModified, null);
+                width, height, artworkURL, audio, spu, trackNumber, discNumber, lastModified, null);
     }
 
     public String getLocation() {
@@ -246,13 +246,15 @@ public class MediaWrapper implements Parcelable {
         if (!TextUtils.isEmpty(trackNumber)) {
             try {
                 mTrackNumber = Integer.parseInt(trackNumber);
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
         final String discNumber = getMetaId(media, null, Meta.DiscNumber, false);
         if (!TextUtils.isEmpty(discNumber)) {
             try {
                 mDiscNumber = Integer.parseInt(discNumber);
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
     }
 
@@ -305,7 +307,7 @@ public class MediaWrapper implements Parcelable {
         return mType;
     }
 
-    public void setType(int type){
+    public void setType(int type) {
         mType = type;
     }
 
@@ -345,11 +347,11 @@ public class MediaWrapper implements Parcelable {
         mIsPictureParsed = isParsed;
     }
 
-    public void setDisplayTitle(String title){
+    public void setDisplayTitle(String title) {
         mDisplayTitle = title;
     }
 
-    public void setArtist(String artist){
+    public void setArtist(String artist) {
         mArtist = artist;
     }
 
@@ -412,7 +414,7 @@ public class MediaWrapper implements Parcelable {
         return mDiscNumber;
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         mDescription = description;
     }
 
@@ -467,15 +469,19 @@ public class MediaWrapper implements Parcelable {
     public void addFlags(int flags) {
         mFlags |= flags;
     }
+
     public void setFlags(int flags) {
         mFlags = flags;
     }
+
     public int getFlags() {
         return mFlags;
     }
+
     public boolean hasFlag(int flag) {
         return (mFlags & flag) != 0;
     }
+
     public void removeFlags(int flags) {
         mFlags &= ~flags;
     }
@@ -539,8 +545,7 @@ public class MediaWrapper implements Parcelable {
                 pslaves[i] = new PSlave(mSlaves[i]);
             }
             dest.writeTypedArray(pslaves, flags);
-        }
-        else
+        } else
             dest.writeTypedArray(null, flags);
     }
 
@@ -548,6 +553,7 @@ public class MediaWrapper implements Parcelable {
         public MediaWrapper createFromParcel(Parcel in) {
             return new MediaWrapper(in);
         }
+
         public MediaWrapper[] newArray(int size) {
             return new MediaWrapper[size];
         }

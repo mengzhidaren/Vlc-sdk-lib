@@ -1,20 +1,20 @@
 /*****************************************************************************
  * MediaPlayer.java
- *****************************************************************************
+ * ****************************************************************************
  * Copyright © 2015 VLC authors and VideoLAN
- *
+ * <p>
  * Authors  Jean-Baptiste Kempf <jb@videolan.org>
- *
+ * <p>
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -30,36 +30,38 @@ import java.io.File;
 public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
 
     public static class Event extends VLCEvent {
-        public static final int MediaChanged        = 0x100;
+        public static final int MediaChanged = 0x100;
         //public static final int NothingSpecial      = 0x101;
-        public static final int Opening             = 0x102;
-        public static final int Buffering           = 0x103;
-        public static final int Playing             = 0x104;
-        public static final int Paused              = 0x105;
-        public static final int Stopped             = 0x106;
+        public static final int Opening = 0x102;
+        public static final int Buffering = 0x103;
+        public static final int Playing = 0x104;
+        public static final int Paused = 0x105;
+        public static final int Stopped = 0x106;
         //public static final int Forward             = 0x107;
         //public static final int Backward            = 0x108;
-        public static final int EndReached          = 0x109;
-        public static final int EncounteredError   = 0x10a;
-        public static final int TimeChanged         = 0x10b;
-        public static final int PositionChanged     = 0x10c;
-        public static final int SeekableChanged     = 0x10d;
-        public static final int PausableChanged     = 0x10e;
+        public static final int EndReached = 0x109;
+        public static final int EncounteredError = 0x10a;
+        public static final int TimeChanged = 0x10b;
+        public static final int PositionChanged = 0x10c;
+        public static final int SeekableChanged = 0x10d;
+        public static final int PausableChanged = 0x10e;
         //public static final int TitleChanged        = 0x10f;
         //public static final int SnapshotTaken       = 0x110;
         //public static final int LengthChanged       = 0x111;
-        public static final int Vout                = 0x112;
+        public static final int Vout = 0x112;
         //public static final int ScrambledChanged    = 0x113;
-        public static final int ESAdded             = 0x114;
-        public static final int ESDeleted           = 0x115;
+        public static final int ESAdded = 0x114;
+        public static final int ESDeleted = 0x115;
         //public static final int ESSelected          = 0x116;
 
         protected Event(int type) {
             super(type);
         }
+
         protected Event(int type, long arg1) {
             super(type, arg1);
         }
+
         protected Event(int type, float arg2) {
             super(type, arg2);
         }
@@ -67,27 +69,34 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
         public long getTimeChanged() {
             return arg1;
         }
+
         public float getPositionChanged() {
             return arg2;
         }
+
         public int getVoutCount() {
             return (int) arg1;
         }
+
         public int getEsChangedType() {
             return (int) arg1;
         }
+
         public boolean getPausable() {
             return arg1 != 0;
         }
+
         public boolean getSeekable() {
             return arg1 != 0;
         }
+
         public float getBuffering() {
             return arg2;
         }
     }
 
-    public interface EventListener extends VLCEvent.Listener<MediaPlayer.Event> {}
+    public interface EventListener extends VLCEvent.Listener<MediaPlayer.Event> {
+    }
 
     public static class Position {
         public static final int Disable = -1;
@@ -114,7 +123,9 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
         private static class Flags {
             public static final int MENU = 0x01;
             public static final int INTERACTIVE = 0x02;
-        };
+        }
+
+        ;
         /**
          * duration in milliseconds
          */
@@ -319,15 +330,25 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
         }
 
         private static native int nativeGetPresetCount();
+
         private static native String nativeGetPresetName(int index);
+
         private static native int nativeGetBandCount();
+
         private static native float nativeGetBandFrequency(int index);
+
         private native void nativeNew();
+
         private native void nativeNewFromPreset(int index);
+
         private native void nativeRelease();
+
         private native float nativeGetPreAmp();
+
         private native boolean nativeSetPreAmp(float preamp);
+
         private native float nativeGetAmp(int index);
+
         private native boolean nativeSetAmp(int index, float amp);
     }
 
@@ -816,11 +837,17 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
     public native long getLength();
 
     public native int getTitle();
+
     public native void setTitle(int title);
+
     public native int getChapter();
+
     public native int previousChapter();
+
     public native int nextChapter();
+
     public native void setChapter(int chapter);
+
     public native void navigate(int navigate);
 
     public synchronized void setEventListener(EventListener listener) {
@@ -868,32 +895,60 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
 
     /* JNI */
     private native void nativeNewFromLibVlc(LibVLC libVLC, AWindowNativeHandler window);
+
     private native void nativeNewFromMedia(Media media, AWindowNativeHandler window);
+
     private native void nativeRelease();
+
     private native void nativeSetMedia(Media media);
+
     private native void nativePlay();
+
     private native void nativeStop();
+
     private native void nativeSetVideoTitleDisplay(int position, int timeout);
+
     private native boolean nativeSetAudioOutput(String aout);
+
     private native boolean nativeSetAudioOutputDevice(String id);
+
     private native Title[] nativeGetTitles();
+
     private native Chapter[] nativeGetChapters(int title);
+
     private native int nativeGetVideoTracksCount();
+
     private native TrackDescription[] nativeGetVideoTracks();
+
     private native int nativeGetVideoTrack();
+
     private native boolean nativeSetVideoTrack(int index);
+
     private native int nativeGetAudioTracksCount();
+
     private native TrackDescription[] nativeGetAudioTracks();
+
     private native int nativeGetAudioTrack();
+
     private native boolean nativeSetAudioTrack(int index);
+
     private native long nativeGetAudioDelay();
+
     private native boolean nativeSetAudioDelay(long delay);
+
     private native int nativeGetSpuTracksCount();
+
     private native TrackDescription[] nativeGetSpuTracks();
+
     private native int nativeGetSpuTrack();
+
     private native boolean nativeSetSpuTrack(int index);
+
     private native long nativeGetSpuDelay();
+
     private native boolean nativeSetSpuDelay(long delay);
+
     private native boolean nativeAddSlave(int type, String location, boolean select);
+
     private native boolean nativeSetEqualizer(Equalizer equalizer);
 }

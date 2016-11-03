@@ -32,7 +32,9 @@ public class VLCInstance {
     private static LibVLC sLibVLC = null;
 
 
-    /** A set of utility functions for the VLC application */
+    /**
+     * A set of utility functions for the VLC application
+     */
     public synchronized static LibVLC get(final Context context) throws IllegalStateException {
         if (sLibVLC == null) {
             if (!VLCUtil.hasCompatibleCPU(context)) {

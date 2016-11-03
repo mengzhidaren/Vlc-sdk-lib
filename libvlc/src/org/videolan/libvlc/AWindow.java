@@ -432,7 +432,7 @@ public class AWindow implements IVLCVout {
 
     @Override
     public void removeCallback(IVLCVout.Callback callback) {
-            mIVLCVoutCallbacks.remove(callback);
+        mIVLCVoutCallbacks.remove(callback);
     }
 
     public AWindowNativeHandler getNativeHandler() {

@@ -1,18 +1,18 @@
 /*****************************************************************************
  * MediaBrowser.java
- *****************************************************************************
+ * ****************************************************************************
  * Copyright © 2015 VLC authors, VideoLAN and VideoLabs
- *
+ * <p>
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -42,7 +42,7 @@ public class MediaBrowser {
     private EventListener mEventListener;
     private boolean mAlive;
 
-    private static final String IGNORE_LIST_OPTION =  ":ignore-filetypes=";
+    private static final String IGNORE_LIST_OPTION = ":ignore-filetypes=";
     private String mIgnoreList = "db,nfo,ini,jpg,jpeg,ljpg,gif,png,pgm,pgmyuv,pbm,pam,tga,bmp,pnm,xpm,xcf,pcx,tif,tiff,lbm,sfv,txt,sub,idx,srt,cue,ssa";
 
     public static class Flag {
@@ -62,6 +62,7 @@ public class MediaBrowser {
          * @param media
          */
         void onMediaAdded(int index, Media media);
+
         /**
          * Received when a media is removed (Happens only when you discover networks)
          * @param index
@@ -69,6 +70,7 @@ public class MediaBrowser {
          * available (like media.getMrl())
          */
         void onMediaRemoved(int index, Media media);
+
         /**
          * Called when browse ended.
          * It won't be called when you discover networks
@@ -116,7 +118,7 @@ public class MediaBrowser {
      * @param eventListener new EventListener for this browser
      */
     @MainThread
-    public void changeEventListener(EventListener eventListener){
+    public void changeEventListener(EventListener eventListener) {
         reset();
         mEventListener = eventListener;
     }
@@ -249,14 +251,14 @@ public class MediaBrowser {
             final MediaList.Event mlEvent = event;
 
             switch (mlEvent.type) {
-            case MediaList.Event.ItemAdded:
-                mEventListener.onMediaAdded(mlEvent.index, mlEvent.media);
-                break;
-            case MediaList.Event.ItemDeleted:
-                mEventListener.onMediaRemoved(mlEvent.index, mlEvent.media);
-                break;
-            case MediaList.Event.EndReached:
-                mEventListener.onBrowseEnd();
+                case MediaList.Event.ItemAdded:
+                    mEventListener.onMediaAdded(mlEvent.index, mlEvent.media);
+                    break;
+                case MediaList.Event.ItemDeleted:
+                    mEventListener.onMediaRemoved(mlEvent.index, mlEvent.media);
+                    break;
+                case MediaList.Event.EndReached:
+                    mEventListener.onBrowseEnd();
             }
         }
     };
@@ -273,19 +275,19 @@ public class MediaBrowser {
              * We use an intermediate array here since more than one MediaDiscoverer can be used
              */
             switch (mlEvent.type) {
-            case MediaList.Event.ItemAdded:
-                mDiscovererMediaArray.add(mlEvent.media);
-                mEventListener.onMediaAdded(index, mlEvent.media);
-                break;
-            case MediaList.Event.ItemDeleted:
-                index = mDiscovererMediaArray.indexOf(mlEvent.media);
-                if (index != -1)
-                    mDiscovererMediaArray.remove(index);
-                if (index != -1)
-                    mEventListener.onMediaRemoved(index, mlEvent.media);
-                break;
-            case MediaList.Event.EndReached:
-                mEventListener.onBrowseEnd();
+                case MediaList.Event.ItemAdded:
+                    mDiscovererMediaArray.add(mlEvent.media);
+                    mEventListener.onMediaAdded(index, mlEvent.media);
+                    break;
+                case MediaList.Event.ItemDeleted:
+                    index = mDiscovererMediaArray.indexOf(mlEvent.media);
+                    if (index != -1)
+                        mDiscovererMediaArray.remove(index);
+                    if (index != -1)
+                        mEventListener.onMediaRemoved(index, mlEvent.media);
+                    break;
+                case MediaList.Event.EndReached:
+                    mEventListener.onBrowseEnd();
             }
         }
     };

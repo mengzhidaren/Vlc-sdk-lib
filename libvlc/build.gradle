@@ -8,7 +8,7 @@ buildscript {
         classpath 'com.novoda:bintray-release:0.3.4'
     }
 }
-def siteUrl = 'https://github.com/mengzhidaren/Vlc-sdk-lib'   // 项目的主页
+def siteUrl = 'https://github.com/mengzhidaren'   // 项目的主页
 
 android {
     compileSdkVersion 24
@@ -17,8 +17,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 3
-        versionName "1.1.0"
+        versionCode 4
+        versionName "1.2.0"
     }
 
     sourceSets {
@@ -63,9 +63,9 @@ publish {
     userOrg = 'yuyunlongyyl' //用户所在组织
     groupId = 'com.yyl.vlc'// 包名
     artifactId = 'vlc-android-sdk' // library的名字
-    publishVersion = '1.1.0'// 版本
+    publishVersion = '1.2.0'// 版本
     desc = 'vlc-android-lib 2.0.0   2016/10/10  suport x86_64   x86  armeabi-v7a  arm64-v8a' // 描述
-    website=siteUrl
+    website = siteUrl
 }
 /*
  * Include GDB files into apk
@@ -75,7 +75,12 @@ publish {
 //    packageTask.include(['**/gdbserver', '**/gdb.setup'])
 //}
 
-
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+}
 dependencies {
     compile 'com.android.support:support-annotations:24.2.1'
 }

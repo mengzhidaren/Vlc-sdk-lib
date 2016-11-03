@@ -1,18 +1,18 @@
 /*****************************************************************************
  * Logcat.java
- *****************************************************************************
+ * ****************************************************************************
  * Copyright © 2011-2015 VLC authors and VideoLAN
- *
+ * <p>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -44,7 +44,7 @@ public class Logcat implements Runnable {
 
     @Override
     public void run() {
-        final String[] args = { "logcat", "-v", "time" };
+        final String[] args = {"logcat", "-v", "time"};
         InputStreamReader input = null;
         BufferedReader br = null;
         try {
@@ -107,7 +107,7 @@ public class Logcat implements Runnable {
      * @throws IOException
      */
     public static void writeLogcat(String filename) throws IOException {
-        String[] args = { "logcat", "-v", "time", "-d" };
+        String[] args = {"logcat", "-v", "time", "-d"};
 
         Process process = Runtime.getRuntime().exec(args);
 
@@ -116,7 +116,7 @@ public class Logcat implements Runnable {
         FileOutputStream fileStream;
         try {
             fileStream = new FileOutputStream(filename);
-        } catch( FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             return;
         }
 
@@ -130,8 +130,8 @@ public class Logcat implements Runnable {
                 bw.write(line);
                 bw.newLine();
             }
-        }catch(Exception e) {}
-        finally {
+        } catch (Exception e) {
+        } finally {
             Util.close(bw);
             Util.close(output);
             Util.close(br);
@@ -146,7 +146,7 @@ public class Logcat implements Runnable {
      * @throws IOException
      */
     public static String getLogcat() throws IOException {
-        String[] args = { "logcat", "-v", "time", "-d", "-t", "500" };
+        String[] args = {"logcat", "-v", "time", "-d", "-t", "500"};
 
         Process process = Runtime.getRuntime().exec(args);
         InputStreamReader input = new InputStreamReader(

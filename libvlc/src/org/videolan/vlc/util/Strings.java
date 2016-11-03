@@ -1,18 +1,18 @@
 /*****************************************************************************
  * Strings.java
- *****************************************************************************
+ * ****************************************************************************
  * Copyright © 2011-2014 VLC authors and VideoLAN
- *
+ * <p>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -32,7 +32,7 @@ public class Strings {
     public final static String TAG = "VLC/UiTools/Strings";
 
     public static String stripTrailingSlash(String s) {
-        if( s.endsWith("/") && s.length() > 1 )
+        if (s.endsWith("/") && s.length() > 1)
             return s.substring(0, s.length() - 1);
         return s;
     }
@@ -45,7 +45,7 @@ public class Strings {
     }
 
     static int containsName(List<String> array, String text) {
-        for (int i = array.size()-1 ; i >= 0 ; --i)
+        for (int i = array.size() - 1; i >= 0; --i)
             if (array.get(i).endsWith(text))
                 return i;
         return -1;
@@ -56,8 +56,7 @@ public class Strings {
      * @param millis e.g.time/length from file
      * @return formated string (hh:)mm:ss
      */
-    public static String millisToString(long millis)
-    {
+    public static String millisToString(long millis) {
         return Strings.millisToString(millis, false);
     }
 
@@ -66,8 +65,7 @@ public class Strings {
      * @param millis e.g.time/length from file
      * @return formated string "[hh]h[mm]min" / "[mm]min[s]s"
      */
-    public static String millisToText(long millis)
-    {
+    public static String millisToText(long millis) {
         return Strings.millisToString(millis, true);
     }
 
@@ -83,7 +81,7 @@ public class Strings {
         int hours = (int) millis;
 
         String time;
-        DecimalFormat format = (DecimalFormat)NumberFormat.getInstance(Locale.US);
+        DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         format.applyPattern("00");
         if (text) {
             if (millis > 0)
@@ -92,8 +90,7 @@ public class Strings {
                 time = (negative ? "-" : "") + min + "min";
             else
                 time = (negative ? "-" : "") + sec + "s";
-        }
-        else {
+        } else {
             if (millis > 0)
                 time = (negative ? "-" : "") + hours + ":" + format.format(min) + ":" + format.format(sec);
             else
@@ -117,20 +114,20 @@ public class Strings {
     }
 
     public static String readableFileSize(long size) {
-        if(size <= 0) return "0";
-        final String[] units = new String[] { "B", "KiB", "MiB", "GiB", "TiB" };
-        int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+        if (size <= 0) return "0";
+        final String[] units = new String[]{"B", "KiB", "MiB", "GiB", "TiB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     public static String readableSize(long size) {
-        if(size <= 0) return "0";
-        final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
-        int digitGroups = (int) (Math.log10(size)/Math.log10(1000));
-        return new DecimalFormat("#,##0.#").format(size/Math.pow(1000, digitGroups)) + " " + units[digitGroups];
+        if (size <= 0) return "0";
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1000));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1000, digitGroups)) + " " + units[digitGroups];
     }
 
-    public static String removeFileProtocole(String path){
+    public static String removeFileProtocole(String path) {
         if (path == null)
             return null;
         if (path.startsWith("file://"))

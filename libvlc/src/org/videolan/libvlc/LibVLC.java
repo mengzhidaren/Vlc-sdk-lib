@@ -1,18 +1,18 @@
 /*****************************************************************************
  * LibVLC.java
- *****************************************************************************
+ * ****************************************************************************
  * Copyright © 2010-2013 VLC authors and VideoLAN
- *
+ * <p>
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -137,13 +137,15 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
      * @param name human-readable application name, e.g. "FooBar player 1.2.3"
      * @param http HTTP User Agent, e.g. "FooBar/1.2.3 Python/2.6.0"
      */
-    public void setUserAgent(String name, String http){
+    public void setUserAgent(String name, String http) {
         nativeSetUserAgent(name, http);
     }
 
     /* JNI */
     private native void nativeNew(String[] options, String homePath);
+
     private native void nativeRelease();
+
     private native void nativeSetUserAgent(String name, String http);
 
     private static boolean sLoaded = false;
