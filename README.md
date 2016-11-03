@@ -81,7 +81,7 @@ MAC电脑没试过 本来就是linux 应该会简单一点
 ```
 dependencies {
   // jCenter
- compile 'com.yyl.vlc:vlc-android-sdk:1.1.0'
+ compile 'com.yyl.vlc:vlc-android-sdk:1.2.0'
 }
 ```
 
