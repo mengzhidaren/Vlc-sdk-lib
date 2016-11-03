@@ -16,6 +16,8 @@
                    player.startPlay(path);
 
 ```
+
+##Points
 #引用库文件
 ```
    dependencies {
@@ -92,7 +94,8 @@ MAC电脑没试过 本来就是linux 应该会简单一点
 
 ###V1.0.1
 1.提交第一版
-
+###V1.2.0
+1更新播放控件
 
 发现bug或有好的建议欢迎[issue]
 
@@ -101,11 +104,4 @@ MAC电脑没试过 本来就是linux 应该会简单一点
 目前已知bug：  还没有   就是库文件有点大
 
 可以用我编译好的仓库   不定期更新
-##Points
-```
-dependencies {
-  // jCenter
- compile 'com.yyl.vlc:vlc-android-sdk:1.2.0'
-}
-```
 
