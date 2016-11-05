@@ -2,7 +2,15 @@
 如果你想构建列表播放器
  请到我的另一个项目有更多列表demo参考  我会长期更新这个列表demo的(ps:公司不忙的话)
   * [VlcPlayer] https://github.com/mengzhidaren/VlcPlayer
-
+#实现的功能
+```
+1,能支持MP4,FLV,AVI,TS,3GP,RMVB,WM,WMV等格式还有网络流 http,rtsp,rtmp,mms,m3u8.（有不支持的请留言）
+2,软硬解切换.支持ffmpeg指令  < transform:rotation=90>
+3,当前缓冲百分比    <MediaPlayer.Event.Buffering>
+4,视频(音频)播放速度可调,任意速度可调. (0.25-4)   < player.setRate(float rate); >
+5,加载字幕，设置镜面，A-B循环.<>
+6,播放器控件左滑动,右半屏滑动,横向滑动来完成调节亮度/声音/快进的功能.<正在完善----可查看我另一个项目vlcplayer>
+```
 #使用方法
 ```
  <org.videolan.vlc.VlcVideoView
