@@ -1,0 +1,1720 @@
+URL syntax:
+  [file://]filename              Plain media file
+  http://ip:port/file            HTTP URL
+  ftp://ip:port/file             FTP URL
+  mms://ip:port/file             MMS URL
+  screen://                      Screen capture
+  [dvd://][device][@raw_device]  DVD device
+  [vcd://][device]               VCD device
+  [cdda://][device]              Audio CD device
+  udp:[[<source address>]@[<bind address>][:<bind port>]]
+                                 UDP stream sent by a streaming server
+  vlc:pause:<seconds>            Special item to pause the playlist for a certain time
+  vlc:quit                       Special item to quit VLC
+
+standard:标准输出
+--access : 设定传输媒介
+file
+udp
+http
+https
+mmsh
+rtp
+
+--mux    : 封装方式
+ts
+ps
+mpegl
+ogg
+asf
+asfh
+avi
+mpjpeg
+--dst     : 地址
+file:存储路径
+dup/rtp:单播/多播地址 格式: IP:PORT
+
+--sap     :服务发现协议 仅用在 UDP模式下
+
+--group   :分组 仅VLC能够读出 用于SAP下
+
+--slp     :
+
+--name    :用于SAP/SLP 下 为流命名
+
+
+
+transcode:转换
+--vcodec : 转换成的编码
+--vb     : 视频码率
+--venc   : 选择编码器
+--fps    : 帧数
+--deinterlace :交错
+--croptop,cropbottom,cropleft,cropright :裁剪
+--scale : 比例
+--width/height    : 宽/高
+--acodec : 音频编码
+--ab     : 音频码率
+--aenc   : 音频编码器选择
+--samplerate: 采样率
+--channels: 声道
+--scodec :字幕
+--senc   : 字幕转换器选择
+--soverlay:字幕直接显示在视频上
+--sfilter : 视频上加logo
+--threads : 多线程转换
+--audio-sync :video/audio同步
+
+duplicate:复制
+
+
+es:分离基本码流
+
+
+vlc input_stream --sout "#module1{option1=parameter1{parameter-option1},option2=parameter2}:module2{option1=...,option2=...}:..."
+
+vlc模拟udp
+
+vlc -vvv sample1.avi --sout udp://192.168.1.100:1234 --ttl 10
+
+使用广播地址xxx.xxx.xxx.255可在局域网广播
+
+客户端播放：vlc udp://@:1234
+
+客户端接收并保存为文件：vlc udp://@:1234  --sout /path/temp.ts
+
+vlc模拟RTP协议
+
+vlc -vvv sample1.avi --sout  "#transcode{vcodec=h264,vb=0,scale=0,acodec=mpga,ab=128,channels=2,samplerate=44100}:rtp{dst=192.168.1.100,port=5004,mux=ts,ttl=10}"
+
+客户端接收播放：vlc rtp://@:5004
+
+vlc模拟RTSP
+
+vlc -vvv sample1.avi --sout "#transcode{vcodec=h264,vb=0,scale=0,acodec=mpga,ab=128,channels=2,samplerate=44100}:rtp{sdp=rtsp://:8554/test}"
+
+客户端：vlc rtsp://192.168.1.1:8554/test
+
+
+
+vlc模拟HTTP
+
+vlc -vvv sample1.avi --sout "#transcode{vcodec=h264,vb=0,scale=0,acodec=mpga,ab=128,channels=2,samplerate=44100}:http{mux=ffmpeg{mux=flv},dst=:8080/test}"
+
+客户端：vlc http://192.168.1.1:8080/test
+
+
+
+
+
+
+
+
+
+URL syntax:
+  [file://]filename              Plain media file
+  http://ip:port/file            HTTP URL
+  ftp://ip:port/file             FTP URL
+  mms://ip:port/file             MMS URL
+  screen://                      Screen capture
+  [dvd://][device][@raw_device]  DVD device
+  [vcd://][device]               VCD device
+  [cdda://][device]              Audio CD device
+  udp:[[<source address>]@[<bind address>][:<bind port>]]
+                                 UDP stream sent by a streaming server
+  vlc:pause:<seconds>            Special item to pause the playlist for a certain time
+  vlc:quit                       Special item to quit VLC
+
+ 音频
+      --audio, --no-audio        打开音频 (默认打开)
+      --volume <整型>          默认音量
+      --volume-step <整型>     输出音量步长
+      --aout-rate <整型>       音频输出频率(Hz)
+      --hq-resampling, --no-hq-resampling
+                                 高质量音频采样 (默认打开)
+      --spdif, --no-spdif        当可用时使用 S/PDIF 音频输出
+                                 (默认关闭)
+      --force-dolby-surround {0 (自动), 1 (开), 2 (关)}
+                                 强制检测杜比环绕
+      --audio-desync <整型>    音频异步校正
+      --aout <字符串型>      音频输出模块
+      --audio-filter <字符串型>
+                                 音频滤波器
+      --audio-visual <字符串型>
+                                 音频视觉效果
+
+ 视频
+      --video, --no-video        启动视频 (默认打开)
+      --grayscale, --no-grayscale
+                                 灰度视频输出 (默认关闭)
+  -f, --fullscreen, --no-fullscreen
+                                 全屏幕视频输出 (默认关闭)
+      --drop-late-frames, --no-drop-late-frames
+                                 丢弃晚的帧 (默认打开)
+      --skip-frames, --no-skip-frames
+                                 跳过帧 (默认打开)
+      --quiet-synchro, --no-quiet-synchro
+                                 静音同步 (默认关闭)
+      --overlay, --no-overlay    重叠视频输出 (默认打开)
+      --video-on-top, --no-video-on-top
+                                 永远在最上层 (默认关闭)
+      --disable-screensaver, --no-disable-screensaver
+                                 关闭屏幕保护程序 (默认打开)
+      --snapshot-path <字符串型>
+                                 视频快照目录 (或文件名)
+      --snapshot-prefix <字符串型>
+                                 视频快照文件前缀
+      --snapshot-format {png,jpg}
+                                 视频快照格式
+      --snapshot-preview, --no-snapshot-preview
+                                 显示视频快照预览 (默认打开)
+      --snapshot-sequential, --no-snapshot-sequential
+                                 Use sequential numbers instead of timestamps
+                                 (默认关闭)
+      --width <整型>           视频宽度
+      --height <整型>          视频高度
+      --video-x <整型>         视频 X 坐标
+      --video-y <整型>         视频 Y 坐标
+      --crop <字符串型>      视频修整
+      --custom-crop-ratios <字符串型>
+                                 自定义修整比率列表
+      --aspect-ratio <字符串型>
+                                 源比率
+      --monitor-par <字符串型>
+                                 监视器像素纵横比
+      --custom-aspect-ratios <字符串型>
+                                 自定义纵横比列表
+      --hdtv-fix, --no-hdtv-fix  固定 HDTV 高度 (默认打开)
+      --video-deco, --no-video-deco
+                                 窗口装饰 (默认打开)
+      --video-title <字符串型>
+                                 视频标题
+      --align {0 (居中), 1 (左), 2 (右), 4 (顶部), 8 (底部), 5 (左上), 6 (右上), 9 (左下), 10 (右下)}
+                                 视频对齐
+      --zoom <浮点型>         缩放视频
+  -V, --vout <字符串型>      视频输出模块
+      --vout-filter <字符串型>
+                                 视频过滤器模块
+
+ 子画面
+      --spu, --no-spu            启用子画面 (默认打开)
+      --osd, --no-osd            画面上显示(OSD) (默认打开)
+      --text-renderer <字符串型>
+                                 字体渲染模块
+      --sub-file <字符串型>  使用字幕文件
+      --sub-autodetect-file, --no-sub-autodetect-file
+                                 自动侦测字幕档 (默认打开)
+      --sub-autodetect-fuzzy <整型>
+                                 字幕自动侦测模糊化
+      --sub-autodetect-path <字符串型>
+                                 字幕自动侦测路径
+      --sub-margin <整型>      强制字幕位置
+      --sub-filter <字符串型>
+                                 子画面过滤器模块
+      --program <整型>         程序
+      --programs <字符串型>  程序
+      --audio-track <整型>     音轨
+      --sub-track <整型>       字幕轨
+      --audio-language <字符串型>
+                                 音频语言
+      --sub-language <字符串型>
+                                 字幕语言
+      --audio-track-id <整型>  音轨 ID
+      --sub-track-id <整型>    字幕轨 ID
+      --input-repeat <整型>    输入重复
+      --start-time <整型>      开始时间
+      --stop-time <整型>       停止时间
+      --input-list <字符串型>
+                                 输入清单
+      --input-slave <字符串型>
+                                 从输入(试验性的)
+      --bookmarks <字符串型> 串流书签清单
+      --dvd <字符串型>       DVD装置
+      --vcd <字符串型>       VCD 设备
+      --cd-audio <字符串型>  音乐 CD 设备
+      --server-port <整型>     UDP 端口
+      --mtu <整型>             网络接口的MTU
+  -6, --ipv6, --no-ipv6          强制使用 IPv6 (默认关闭)
+  -4, --ipv4, --no-ipv4          强制使用 IPv4 (默认关闭)
+      --ipv4-timeout <整型>    TCP连接超时时间
+      --socks <字符串型>     SOCKS服务器
+      --socks-user <字符串型>
+                                 SOCKS使用者名称
+      --socks-pwd <字符串型> SOCKS密码
+      --meta-title <字符串型>
+                                 标题数据
+      --meta-author <字符串型>
+                                 作者元数据
+      --meta-artist <字符串型>
+                                 艺术家元数据
+      --meta-genre <字符串型>
+                                 流派元数据
+      --meta-copyright <字符串型>
+                                 版权元数据
+      --meta-description <字符串型>
+                                 描述元数据
+      --meta-date <字符串型> 日期元数据
+      --meta-url <字符串型>  网址元数据
+      --cr-average <整型>      时钟参考平均计数器
+      --clock-synchro {-1 (默认), 0 (关闭), 1 (启动)}
+                                 时钟同步
+      --network-synchronisation, --no-network-synchronisation
+                                 网络同步化 (默认关闭)
+
+ 译码器
+      --codec <字符串型>     偏好的解码器清单
+      --encoder <字符串型>   偏好的编码器清单
+
+ 输入
+      --access <字符串型>    存取模块
+      --access-filter <字符串型>
+                                 存取过滤器模块
+      --demux <字符串型>     解多任务模块
+
+ 串流输出
+      --sout <字符串型>      默认串流输出链
+      --sout-display, --no-sout-display
+                                 串流时显示 (默认关闭)
+      --sout-keep, --no-sout-keep
+                                 持续开启串流输出 (默认关闭)
+      --sout-all, --no-sout-all  打开串流所有 ES (默认关闭)
+      --sout-audio, --no-sout-audio
+                                 启动音频串流输出 (默认打开)
+      --sout-video, --no-sout-video
+                                 启动视频串流输出 (默认打开)
+      --sout-spu, --no-sout-spu  启动 SPU 串流输出 (默认打开)
+      --vlm-conf <字符串型>  VLM设置档
+      --mux <字符串型>       多任务模块
+      --access_output <字符串型>
+                                 存取输出模块
+      --ttl <整型>             Hop 限制 (TTL)
+      --miface <字符串型>    IPv6 多播输出接口
+      --miface-addr <字符串型>
+                                 IPv4 多播输出接口地址
+      --packetizer <字符串型>
+                                 偏好的封包器清单
+      --sap-flow-control, --no-sap-flow-control
+                                 控制SAP流量 (默认关闭)
+      --sap-interval <整型>    SAP 通告间隔
+
+ CPU
+      --fpu, --no-fpu            启用 FPU 支持 (默认打开)
+      --mmx, --no-mmx            启用 CPU MMX 支持 (默认打开)
+      --3dn, --no-3dn            启用 CPU 3D Now! 支持 (默认打开)
+      --mmxext, --no-mmxext      启用 CPU MMX EXT 支持 (默认打开)
+      --sse, --no-sse            启用 CPU SSE 支持 (默认打开)
+      --sse2, --no-sse2          启用 CPU SSE2 支持 (默认打开)
+
+ 杂项
+  -A, --memcpy <字符串型>    内存复制模块
+      --plugins-cache, --no-plugins-cache
+                                 使用外挂缓存 (默认打开)
+      --plugin-path <字符串型>
+                                 模块搜寻路径
+      --minimize-threads, --no-minimize-threads
+                                 最小线程数量 (默认关闭)
+      --one-instance, --no-one-instance
+                                 只允许一个实例运行 (默认关闭)
+      --started-from-file, --no-started-from-file
+                                 VLC 从文件关联启动 (默认关闭)
+      --one-instance-when-started-from-file, --no-one-instance-when-started-from-file
+                                 当从文件开始时只允许一个实例
+                                 (默认打开)
+      --playlist-enqueue, --no-playlist-enqueue
+                                 Enqueue items to playlist when in one
+                                 instance mode (默认关闭)
+      --high-priority, --no-high-priority
+                                 提高程序优先权 (默认关闭)
+      --fast-mutex, --no-fast-mutex
+                                 Fast mutex on NT/2K/XP (developers only)
+                                 (默认关闭)
+      --win9x-cv-method <整型> Condition variables implementation for Win9x
+                                 (developers only)
+
+ 播放列表
+  -Z, --random, --no-random      永远随机播放文件 (默认关闭)
+  -L, --loop, --no-loop          重复播放全部 (默认关闭)
+  -R, --repeat, --no-repeat      重复播放目前项目 (默认关闭)
+      --play-and-stop, --no-play-and-stop
+                                 播放和停止 (默认关闭)
+      --open <字符串型>      默认串流
+      --auto-preparse, --no-auto-preparse
+                                 自动预解释文件 (默认打开)
+  -S, --services-discovery <字符串型>
+                                 服务探索模块
+  -v, --verbose <整型>         提示(0,1,2)
+  -q, --quiet, --no-quiet        安静 (默认关闭)
+      --file-logging, --no-file-logging
+                                 记录到文件 (默认关闭)
+      --language {auto,en,en_GB,ar,ca,cs,da,de,es,fa,fr,gl,he,hu,it,ja,ka,ko,ms,ne,nl,oc,pl,pt_BR,ro,ru,sk,sl,sv,th,tr,zh_CN,zh_TW}
+                                 语言
+      --color, --no-color        色彩化讯息 (默认关闭)
+      --advanced, --no-advanced  显示高级选项 (默认打开)
+      --interact, --no-interact  界面互动 (默认打开)
+      --show-intf, --no-show-intf
+                                 用鼠标来显示界面 (默认关闭)
+      --stats, --no-stats        收集统计信息 (默认打开)
+  -I, --intf <字符串型>      界面模块
+      --extraintf <字符串型> 额外界面模块
+      --control <字符串型>   控制界面
+
+ 热键
+      --key-fullscreen <整型>  全屏幕
+      --key-play-pause <整型>  播放/暂停
+      --key-pause <整型>       仅暂停
+      --key-play <整型>        仅播放
+      --key-faster <整型>      加快
+      --key-slower <整型>      放慢
+      --key-next <整型>        下一项
+      --key-prev <整型>        上一项
+      --key-stop <整型>        停止
+      --key-position <整型>    位置
+      --key-jump-extrashort <整型>
+                                 向后跳一很小的段
+      --key-jump+extrashort <整型>
+                                 向前跳一很小的段
+      --key-jump-short <整型>  向后跳一小段
+      --key-jump+short <整型>  向前跳一小段
+      --key-jump-medium <整型> 向后跳一中段
+      --key-jump+medium <整型> 向前跳一中段
+      --key-jump-long <整型>   向后跳一大段
+      --key-jump+long <整型>   向前跳一大段
+      --key-nav-activate <整型>
+                                 启动
+      --key-nav-up <整型>      向上导览
+      --key-nav-down <整型>    向下导览
+      --key-nav-left <整型>    向左导览
+      --key-nav-right <整型>   向右导览
+      --key-disc-menu <整型>   转到DVD选单
+      --key-title-prev <整型>  选择上一个DVD章节
+      --key-title-next <整型>  选择下一个DVD章节
+      --key-chapter-prev <整型>
+                                 选择上一个 DVD 章节
+      --key-chapter-next <整型>
+                                 选择下一个 DVD 章节
+      --key-quit <整型>        离开
+      --key-vol-up <整型>      增加音量
+      --key-vol-down <整型>    减低音量
+      --key-vol-mute <整型>    静音
+      --key-subdelay-up <整型> 增加字幕延迟
+      --key-subdelay-down <整型>
+                                 减少字幕延迟
+      --key-audiodelay-up <整型>
+                                 增加音频延迟
+      --key-audiodelay-down <整型>
+                                 减少音频延迟
+      --key-audio-track <整型> 循环音轨
+      --key-subtitle-track <整型>
+                                 循环字幕轨
+      --key-aspect-ratio <整型>
+                                 循环源纵横比
+      --key-crop <整型>        循环视频修整
+      --key-deinterlace <整型> 循环解除交错模块
+      --key-intf-show <整型>   显示界面
+      --key-intf-hide <整型>   隐藏接口
+      --key-snapshot <整型>    获取视频快照
+      --key-history-back <整型>
+                                 在浏览历史中后退
+      --key-history-forward <整型>
+                                 在浏览历史中前进
+      --key-record <整型>      录制
+      --key-dump <整型>        倾倒
+      --key-crop-top <整型>    在视频顶部修剪一个像素
+      --key-uncrop-top <整型>  不在视频顶部修剪一个像素
+      --key-crop-left <整型>   在视频左侧修剪一个像素
+      --key-uncrop-left <整型> 不在视频左侧修剪一个像素
+      --key-crop-bottom <整型> 在视频底部修剪一个像素
+      --key-uncrop-bottom <整型>
+                                 不在视频底部修剪一个像素
+      --key-crop-right <整型>  从视频右侧修剪一个像素
+      --key-uncrop-right <整型>
+                                 不在视频右部修剪一个像素
+      --extrashort-jump-size <整型>
+                                 跳一很小的段的长度
+      --short-jump-size <整型> 跳一小段的长度
+      --medium-jump-size <整型>
+                                 跳一中段的长度
+      --long-jump-size <整型>  长跳长度
+      --key-set-bookmark1 <整型>
+                                 设置播放列表书签 1
+      --key-set-bookmark2 <整型>
+                                 设置播放列表书签 2
+      --key-set-bookmark3 <整型>
+                                 设置播放列表书签 3
+      --key-set-bookmark4 <整型>
+                                 设置播放列表书签 4
+      --key-set-bookmark5 <整型>
+                                 设置播放列表书签 5
+      --key-set-bookmark6 <整型>
+                                 设置播放列表书签 6
+      --key-set-bookmark7 <整型>
+                                 设置播放列表书签 7
+      --key-set-bookmark8 <整型>
+                                 设置播放列表书签 8
+      --key-set-bookmark9 <整型>
+                                 设置播放列表书签 9
+      --key-set-bookmark10 <整型>
+                                 设置播放列表书签 10
+      --key-play-bookmark1 <整型>
+                                 播放播放列表书签 1
+      --key-play-bookmark2 <整型>
+                                 播放播放列表书签 2
+      --key-play-bookmark3 <整型>
+                                 播放播放列表书签 3
+      --key-play-bookmark4 <整型>
+                                 播放播放列表书签 4
+      --key-play-bookmark5 <整型>
+                                 播放播放列表书签 5
+      --key-play-bookmark6 <整型>
+                                 播放播放列表书签 6
+      --key-play-bookmark7 <整型>
+                                 播放播放列表书签 7
+      --key-play-bookmark8 <整型>
+                                 播放播放列表书签 8
+      --key-play-bookmark9 <整型>
+                                 播放播放列表书签 9
+      --key-play-bookmark10 <整型>
+                                 播放播放列表书签 10
+      --bookmark1 <字符串型> 播放列表书签 1
+      --bookmark2 <字符串型> 播放列表书签 2
+      --bookmark3 <字符串型> 播放列表书签 3
+      --bookmark4 <字符串型> 播放列表书签 4
+      --bookmark5 <字符串型> 播放列表书签 5
+      --bookmark6 <字符串型> 播放列表书签 6
+      --bookmark7 <字符串型> 播放列表书签 7
+      --bookmark8 <字符串型> 播放列表书签 8
+      --bookmark9 <字符串型> 播放列表书签 9
+      --bookmark10 <字符串型>
+                                 播放列表书签 10
+
+ Help options
+  -h, --help                     print help for VLC (can be combined with
+                                 --advanced)
+  -H, --longhelp                 print help for VLC and all its modules (can
+                                 be combined with --advanced)
+      --advanced                 打印高级选项的帮助信息
+      --help-verbose             ask for extra verbosity when displaying help
+  -l, --list                     打印一个可用模块的列表
+  -p, --module <字符串型>    print help on a specific module (can be
+                                 combined with --advanced)
+      --save-config              在配置中保存当前的命令行选项
+      --reset-config             将当前设置复位为默认值
+      --config <字符串型>    使用替代的组态档
+      --reset-plugins-cache      重置目前外挂缓存
+      --version                  打印版本信息
+
+ live.com (RTSP/RTP/SDP) 分离器
+      --rtsp-tcp, --no-rtsp-tcp  在 RTSP 上使用 RTP (TCP) (默认关闭)
+      --rtp-client-port <整型> 客户端端口
+      --rtsp-http, --no-rtsp-http
+                                 Tunnel RTSP and RTP over HTTP (默认关闭)
+      --rtsp-http-port <整型>  HTTP 隧道端口
+      --rtsp-caching <整型>    缓存值 (毫秒)
+      --rtsp-kasenna, --no-rtsp-kasenna
+                                 Kasenna RTSP dialect (默认关闭)
+      --rtsp-user <字符串型> RTSP 用户名
+      --rtsp-pwd <字符串型>  RTSP 密码
+
+ TS 复用器 (libdvbpsi)
+      --sout-ts-pid-video <整型>
+                                 视频PID
+      --sout-ts-pid-audio <整型>
+                                 音频PID
+      --sout-ts-pid-spu <整型> SPU PID
+      --sout-ts-pid-pmt <整型> PMT PID
+      --sout-ts-tsid <整型>    TS ID
+      --sout-ts-netid <整型>   NET ID
+      --sout-ts-program-pmt <字符串型>
+                                 PMT 程序数量
+      --sout-ts-es-id-pid, --no-sout-ts-es-id-pid
+                                 将 PID 设为 ES 的 ID (默认关闭)
+      --sout-ts-muxpmt <字符串型>
+                                 Mux PMT (requires --sout-ts-es-id-pid)
+      --sout-ts-sdtdesc <字符串型>
+                                 SDT Descriptors (requires --sout-ts-es-id-pid)
+      --sout-ts-alignment, --no-sout-ts-alignment
+                                 数据对齐 (默认打开)
+      --sout-ts-shaping <整型> Shaping delay (ms)
+      --sout-ts-use-key-frames, --no-sout-ts-use-key-frames
+                                 使用关键帧 (默认关闭)
+      --sout-ts-pcr <整型>     PCR延迟(ms)
+      --sout-ts-bmin <整型>    最小的 B (不推荐使用)
+      --sout-ts-bmax <整型>    最大的 B (不推荐使用)
+      --sout-ts-dts-delay <整型>
+                                 DTS 延迟
+      --sout-ts-crypt-audio, --no-sout-ts-crypt-audio
+                                 加密音频 (默认打开)
+      --sout-ts-crypt-video, --no-sout-ts-crypt-video
+                                 加密视频 (默认打开)
+      --sout-ts-csa-ck <字符串型>
+                                 CSA 密钥
+      --sout-ts-csa-pkt <整型> 要加密的包的 大小
+
+ ATSC A/52 (AC-3)音频译码器
+      --a52-dynrng, --no-a52-dynrng
+                                 A/52 dynamic range compression (默认打开)
+      --a52-upmix, --no-a52-upmix
+                                 Enable internal upmixing (默认关闭)
+
+ 标准文件目录输入
+      --recursive {none,collapse,expand}
+                                 子目录行为
+      --ignore-filetypes <字符串型>
+                                 忽略的扩展
+
+ 假输入
+      --fake-caching <整型>    缓存值 (毫秒)
+      --fake-fps <浮点型>     帧率
+      --fake-id <整型>         ID
+      --fake-duration <整型>   长度(毫秒)
+
+ 文件输入
+      --file-caching <整型>    缓存值 (毫秒)
+      --file-cat <字符串型>  Concatenate with additional files
+
+ 倾倒
+      --dump-force, --no-dump-force
+                                 Force use of dump module (默认关闭)
+      --dump-margin <整型>     Maximum size of temporary file (Mb)
+
+ 录制
+      --record-path <字符串型>
+                                 录制目录
+
+ 时间差
+      --timeshift-granularity <整型>
+                                 Timeshift granularity
+      --timeshift-dir <字符串型>
+                                 时间差目录
+      --timeshift-force, --no-timeshift-force
+                                 Force use of the timeshift module
+                                 (默认关闭)
+
+ FTP 输入
+      --ftp-caching <整型>     缓存值 (毫秒)
+      --ftp-user <字符串型>  FTP 用户名
+      --ftp-pwd <字符串型>   FTP 密码
+      --ftp-account <字符串型>
+                                 FTP 账户
+
+ HTTP输入
+      --http-proxy <字符串型>
+                                 HTTP 代理
+      --http-caching <整型>    缓存值 (毫秒)
+      --http-user-agent <字符串型>
+                                 HTTP 用户代理
+      --http-reconnect, --no-http-reconnect
+                                 自动重新连接 (默认关闭)
+      --http-continuous, --no-http-continuous
+                                 连续流 (默认关闭)
+
+
+
+
+
+Microsoft Media Server (MMS)输入
+      --mms-caching <整型>     缓存值 (毫秒)
+      --mms-all, --no-mms-all    Force selection of all streams (默认关闭)
+      --mms-maxbitrate <整型>  最大比特率
+
+ 文件串流输出
+      --sout-file-append, --no-sout-file-append
+                                 追加到文件 (默认关闭)
+
+ HTTP 串流输出
+      --sout-http-user <字符串型>
+                                 用户名
+      --sout-http-pwd <字符串型>
+                                 密码
+      --sout-http-mime <字符串型>
+                                 Mime
+      --sout-http-cert <字符串型>
+                                 证书文件
+      --sout-http-key <字符串型>
+                                 私钥文件
+      --sout-http-ca <字符串型>
+                                 根 CA 文件
+      --sout-http-crl <字符串型>
+                                 CRL 文件
+      --sout-http-bonjour, --no-sout-http-bonjour
+                                 Advertise with Bonjour (默认关闭)
+
+ IceCAST 输出
+      --sout-shout-name <字符串型>
+                                 串流名称
+      --sout-shout-description <字符串型>
+                                 串流描述
+      --sout-shout-mp3, --no-sout-shout-mp3
+                                 串流 MP3 (默认关闭)
+
+ UDP 串流输出
+      --sout-udp-caching <整型>
+                                 缓存值 (毫秒)
+      --sout-udp-ttl <整型>    有效时间(TTL)
+      --sout-udp-group <整型>  Group packets
+      --sout-udp-raw, --no-sout-udp-raw
+                                 Raw 写入 (默认关闭)
+
+ Real RTSP
+      --realrtsp-caching <整型>
+                                 缓存值 (毫秒)
+
+ SMB输入
+      --smb-caching <整型>     缓存值 (毫秒)
+      --smb-user <字符串型>  SMB 用户名
+      --smb-pwd <字符串型>   SMB 密码
+      --smb-domain <字符串型>
+                                 SMB 域
+
+ TCP输入
+      --tcp-caching <整型>     缓存值 (毫秒)
+
+ UDP/RTP 输入
+      --udp-caching <整型>     缓存值 (毫秒)
+      --rtp-late <整型>        RTP reordering timeout in ms
+      --udp-auto-mtu, --no-udp-auto-mtu
+                                 自动检测 MTU (默认打开)
+
+ 图像属性过滤器
+      --contrast <浮点型>     影像对比(0-2)
+      --brightness <浮点型>   影像亮度(0-2)
+      --hue <整型>             影像色调(0-360)
+      --saturation <浮点型>   影像饱和度(0-3)
+      --gamma <浮点型>        影像反差系数(0-10)
+      --brightness-threshold, --no-brightness-threshold
+                                 亮度阈值 (默认关闭)
+
+ DirectX音频输出
+      --directx-audio-device <整型>
+                                 输出装置
+      --directx-audio-float32, --no-directx-audio-float32
+                                 使用float32输出 (默认关闭)
+
+ 文件音频输出
+      --audiofile-format {u8,s8,u16,s16,u16_le,s16_le,u16_be,s16_be,fixed32,float32,spdif}
+                                 输出格式
+      --audiofile-channels <整型>
+                                 输出频道数量
+      --audiofile-file <字符串型>
+                                 输出文件
+      --audiofile-wav, --no-audiofile-wav
+                                 加入 WAVE 头部 (默认打开)
+
+ AVI 分离器
+      --avi-interleaved, --no-avi-interleaved
+                                 Force interleaved method (默认关闭)
+      --avi-index {0 (询问), 1 (永远固定), 2 (从不修复)}
+                                 Force index creation
+
+ 音频 CD 输入
+      --cdda-caching <整型>    缓存值 (毫秒)
+      --cdda-separate-tracks, --no-cdda-separate-tracks
+                                 (null) (默认打开)
+      --cdda-track <整型>      (null)
+      --cddb-server <字符串型>
+                                 CDDB 服务器
+      --cddb-port <整型>       CDDB 服务器端口
+
+ 复制视频过滤器
+      --clone-count <整型>     复制数量
+      --clone-vout-list <字符串型>
+                                 视频输出模块
+
+ 修整视频过滤器
+      --crop-geometry <字符串型>
+                                 修剪几何图形 (像素)
+      --autocrop, --no-autocrop  自动修整 (默认关闭)
+
+ 解除交错视频过滤器
+      --deinterlace-mode {discard,blend,mean,bob,linear,x}
+                                 解除交错模式
+      --sout-deinterlace-mode {discard,blend,mean,bob,linear,x}
+                                 串流解除交错模式
+
+ 文件 dumpper
+      --demuxdump-file <字符串型>
+                                 Dump 文件名
+      --demuxdump-append, --no-demuxdump-append
+                                 追加到现有文件 (默认关闭)
+
+ 扭曲视频过滤器
+      --distort-mode {wave,ripple,gradient,edge,hough,psychedelic}
+                                 扭曲模式
+      --distort-gradient-type <整型>
+                                 灰度图像类型
+      --distort-cartoon, --no-distort-cartoon
+                                 应用动画效果 (默认打开)
+
+ DTS Coherent Acoustics audio decoder
+      --dts-dynrng, --no-dts-dynrng
+                                 DTS dynamic range compression (默认打开)
+
+ 虚拟接口功能
+      --dummy-quiet, --no-dummy-quiet
+                                 不要开启DOS指令窗口接口
+                                 (默认关闭)
+      --dummy-save-es, --no-dummy-save-es
+                                 储存空白编码器数据 (默认关闭)
+      --dummy-chroma <字符串型>
+                                 虚拟影像彩度格式
+
+ DVB 字幕译码器
+      --dvbsub-position {0 (居中), 1 (左), 2 (右), 4 (顶部), 8 (底部), 5 (左上), 6 (右上), 9 (左下), 10 (右下)}
+                                 子图像位置
+      --dvbsub-x <整型>        解码 X 坐标
+      --dvbsub-y <整型>        解码 Y 坐标
+      --sout-dvbsub-x <整型>   编码 X 坐标
+      --sout-dvbsub-y <整型>   编码 Y 坐标
+
+ DVDnav输入
+      --dvdnav-angle <整型>    DVD 角度
+      --dvdnav-caching <整型>  缓存值 (毫秒)
+      --dvdnav-menu, --no-dvdnav-menu
+                                 直接从菜单开始 (默认打开)
+
+ DVDRead 输入 (无菜单支持的 DVD)
+      --dvdread-angle <整型>   DVD 角度
+      --dvdread-caching <整型> 缓存值 (毫秒)
+      --dvdread-css-method {title,disc,key}
+                                 libdvdcss 解密的方式
+
+ Equalizer with 10 bands
+      --equalizer-preset {flat,classical,club,dance,fullbass,fullbasstreble,fulltreble,headphones,largehall,live,party,pop,reggae,rock,ska,soft,softrock,techno}
+                                 均衡器预设
+      --equalizer-bands <字符串型>
+                                 频带增益
+      --equalizer-2pass, --no-equalizer-2pass
+                                 Two pass (默认关闭)
+      --equalizer-preamp <浮点型>
+                                 全域增益
+
+ 伪视频译码器
+      --fake-file <字符串型> 图像文件
+      --fake-width <整型>      视频宽度
+      --fake-height <整型>     视频高度
+      --fake-keep-ar, --no-fake-keep-ar
+                                 保持纵横比 (默认关闭)
+      --fake-aspect-ratio <字符串型>
+                                 背景分辨率
+      --fake-deinterlace, --no-fake-deinterlace
+                                 解除交错视频 (默认关闭)
+      --fake-deinterlace-module {deinterlace,ffmpeg-deinterlace}
+                                 解除交错模块
+
+ FFmpeg audio/video decoder/encoder ((MS)MPEG4,SVQ1,H263,WMV,WMA)
+      --ffmpeg-dr, --no-ffmpeg-dr
+                                 Direct rendering (默认打开)
+      --ffmpeg-error-resilience <整型>
+                                 Error resilience
+      --ffmpeg-workaround-bugs <整型>
+                                 Workaround bugs
+      --ffmpeg-hurry-up, --no-ffmpeg-hurry-up
+                                 快速 (默认关闭)
+      --ffmpeg-vismv <整型>    Visualize motion vectors
+      --ffmpeg-lowres <整型>   低分辨率译码
+      --ffmpeg-skiploopfilter {0 (无), 1 (Non-ref), 2 (Bidir), 3 (Non-key), 4 (全部)}
+                                 Skip the loop filter for H.264 decoding
+      --ffmpeg-pp-q <整型>     后处理质量
+      --ffmpeg-pp-name <字符串型>
+                                 FFmpeg post processing filter chains
+      --ffmpeg-debug <整型>    调试掩码
+      --sout-ffmpeg-hq {rd,bits,simple}
+                                 质量等级
+      --sout-ffmpeg-keyint <整型>
+                                 Ratio of key frames
+      --sout-ffmpeg-bframes <整型>
+                                 Ratio of B frames
+      --sout-ffmpeg-hurry-up, --no-sout-ffmpeg-hurry-up
+                                 快速 (默认关闭)
+      --sout-ffmpeg-interlace, --no-sout-ffmpeg-interlace
+                                 交错编码 (默认关闭)
+      --sout-ffmpeg-interlace-me, --no-sout-ffmpeg-interlace-me
+                                 Interlaced motion estimation (默认打开)
+      --sout-ffmpeg-vt <整型>  视频比特率容忍度
+      --sout-ffmpeg-pre-me, --no-sout-ffmpeg-pre-me
+                                 动作前估计 (默认关闭)
+      --sout-ffmpeg-strict-rc, --no-sout-ffmpeg-strict-rc
+                                 Strict rate control (默认关闭)
+      --sout-ffmpeg-rc-buffer-size <整型>
+                                 Rate control buffer size
+      --sout-ffmpeg-rc-buffer-aggressivity <浮点型>
+                                 Rate control buffer aggressiveness
+      --sout-ffmpeg-i-quant-factor <浮点型>
+                                 I quantization factor
+      --sout-ffmpeg-noise-reduction <整型>
+                                 噪声消除
+      --sout-ffmpeg-mpeg4-matrix, --no-sout-ffmpeg-mpeg4-matrix
+                                 MPEG4 quantization matrix (默认关闭)
+      --sout-ffmpeg-qmin <整型>
+                                 Minimum video quantizer scale
+      --sout-ffmpeg-qmax <整型>
+                                 Maximum video quantizer scale
+      --sout-ffmpeg-trellis, --no-sout-ffmpeg-trellis
+                                 Trellis quantization (默认关闭)
+      --sout-ffmpeg-qscale <浮点型>
+                                 固定量化器刻度
+      --sout-ffmpeg-strict <整型>
+                                 Strict standard compliance
+      --sout-ffmpeg-lumi-masking <浮点型>
+                                 Luminance masking
+      --sout-ffmpeg-dark-masking <浮点型>
+                                 Darkness masking
+      --sout-ffmpeg-p-masking <浮点型>
+                                 动作遮掩
+      --sout-ffmpeg-border-masking <浮点型>
+                                 边界遮掩
+      --sout-ffmpeg-luma-elim-threshold <整型>
+                                 Luminance elimination
+      --sout-ffmpeg-chroma-elim-threshold <整型>
+                                 Chrominance elimination
+
+ Freetype2 字体渲染器
+      --freetype-font <字符串型>
+                                 字体
+      --freetype-fontsize <整型>
+                                 字体大小 (像素)
+      --freetype-opacity <整型>
+                                 不透明
+      --freetype-color {0 (黑色), 8421504 (灰色), 12632256 (银色), 16777215 (白色), 8388608 (栗色), 16711680 (红色), 16711935 (紫红色), 16776960 (黄色), 8421376 (橄榄色), 32768 (绿色), 32896 (蓝绿色), 65280 (柠檬色), 8388736 (紫色), 128 (藏青色), 255 (蓝色), 65535 (浅绿色)}
+                                 文字默认颜色
+      --freetype-rel-fontsize {20 (更小), 18 (小), 16 (正常), 12 (大), 6 (更大)}
+                                 相对字号
+      --freetype-effect {1 (背景), 2 (大纲), 3 (Fat Outline)}
+                                 字体效果
+      --freetype-yuvp, --no-freetype-yuvp
+                                 使用 YUVP 渲染 (默认关闭)
+
+ Mouse gestures control interface
+      --gestures-threshold <整型>
+                                 Motion threshold (10-100)
+      --gestures-button {left,middle,right}
+                                 触发按键
+
+ GnuTLS TLS 加密层
+      --tls-check-cert, --no-tls-check-cert
+                                 检查 TLS/SSL 服务器证书有效性
+                                 (默认打开)
+      --tls-check-hostname, --no-tls-check-hostname
+                                 在证书中检查 TLS/SSL 服务器主机名
+                                 (默认打开)
+      --gnutls-dh-bits <整型>  Diffie-Hellman prime bits
+      --gnutls-cache-expiration <整型>
+                                 已恢复的 TLS 会话的过期时间
+      --gnutls-cache-size <整型>
+                                 已恢复的 TLS 会话的数量
+
+ Goom效果
+      --goom-width <整型>      Goom显示宽度
+      --goom-height <整型>     Goom显示高度
+      --goom-speed <整型>      Goom动画速度
+
+ Growl 通知插件
+      --growl-server <字符串型>
+                                 Growl 服务器
+      --growl-password <字符串型>
+                                 Growl 密码
+      --growl-port <整型>      Growl UDP 端口
+
+ H264 视频分离器
+      --h264-fps <浮点型>     每秒帧数
+
+ 耳机虚拟空间化效果
+      --headphone-dim <整型>   Characteristic dimension
+      --headphone-compensate, --no-headphone-compensate
+                                 Compensate delay (默认关闭)
+      --headphone-dolby, --no-headphone-dolby
+                                 No decoding of Dolby Surround (默认关闭)
+
+ HTTP remote control interface
+      --http-host <字符串型> 主机地址
+      --http-src <字符串型>  源目录
+      --http-charset <字符串型>
+                                 字符集
+      --http-handlers <字符串型>
+                                 Handlers
+      --http-intf-cert <字符串型>
+                                 证书文件
+      --http-intf-key <字符串型>
+                                 私钥文件
+      --http-intf-ca <字符串型>
+                                 根 CA 文件
+      --http-intf-crl <字符串型>
+                                 CRL 文件
+
+ 影像视频输出
+      --image-out-format {png,jpeg}
+                                 影像格式
+      --image-width <整型>     图像宽度
+      --image-height <整型>    图像高度
+      --image-out-ratio <整型> 录制比率
+      --image-out-prefix <字符串型>
+                                 文件名称前缀
+      --image-out-replace, --no-image-out-replace
+                                 总是写到相同的文件 (默认关闭)
+
+ 文件记录
+      --logfile <字符串型>   记录文件文件名
+      --logmode {text,html}      记录格式
+      --rrd-file <字符串型>  RRD 输出文件
+
+ Logo 视频过滤器
+      --logo-file <字符串型> Logo 文件名
+      --logo-x <整型>          X 坐标
+      --logo-y <整型>          Y 坐标
+      --logo-delay <整型>      Logo 每个图像的时间 (毫秒)
+      --logo-repeat <整型>     Logo 循环的动画编号
+      --logo-transparency <整型>
+                                 Logo 的透明度
+      --logo-position {0 (居中), 1 (左), 2 (右), 4 (顶部), 8 (底部), 5 (左上), 6 (右上), 9 (左下), 10 (右下)}
+                                 Logo位置
+
+ 显示滚动字幕
+      --marq-marquee <字符串型>
+                                 文本
+      --marq-x <整型>          X 偏移量
+      --marq-y <整型>          Y 偏移量
+      --marq-position <整型>   字幕位置
+      --marq-opacity <整型>    不透明
+      --marq-color {-268435456 (默认), 0 (黑色), 8421504 (灰色), 12632256 (银色), 16777215 (白色), 8388608 (栗色), 16711680 (红色), 16711935 (紫红色), 16776960 (黄色), 8421376 (橄榄色), 32768 (绿色), 32896 (蓝绿色), 65280 (柠檬色), 8388736 (紫色), 128 (藏青色), 255 (蓝色), 65535 (浅绿色)}
+                                 色彩
+      --marq-size <整型>       字号
+      --marq-timeout <整型>    超时
+
+ M-JPEG 摄像机分离器
+      --mjpeg-fps <浮点型>    每秒帧数
+
+ Matroska 串流分离器
+      --mkv-use-ordered-chapters, --no-mkv-use-ordered-chapters
+                                 Ordered chapters (默认打开)
+      --mkv-use-chapter-codec, --no-mkv-use-chapter-codec
+                                 章节编码器 (默认打开)
+      --mkv-preload-local-dir, --no-mkv-preload-local-dir
+                                 预读取目录 (默认打开)
+      --mkv-seek-percent, --no-mkv-seek-percent
+                                 Seek based on percent not time (默认关闭)
+      --mkv-use-dummy, --no-mkv-use-dummy
+                                 Dummy Elements (默认关闭)
+
+ MOD 分离器 (libmodplug)
+      --mod-noisereduction, --no-mod-noisereduction
+                                 噪声消除 (默认打开)
+      --mod-reverb, --no-mod-reverb
+                                 Reverb (默认关闭)
+      --mod-reverb-level <整型>
+                                 Reverberation level
+      --mod-reverb-delay <整型>
+                                 Reverberation delay
+      --mod-megabass, --no-mod-megabass
+                                 Mega bass (默认关闭)
+      --mod-megabass-level <整型>
+                                 Mega bass 等级
+      --mod-megabass-range <整型>
+                                 Mega bass cutoff
+      --mod-surround, --no-mod-surround
+                                 环绕 (默认关闭)
+      --mod-surround-level <整型>
+                                 环绕等级
+      --mod-surround-delay <整型>
+                                 环绕延迟(ms)
+
+ 马赛克视频过滤器
+      --mosaic-alpha <整型>    透明
+      --mosaic-height <整型>   高度
+      --mosaic-width <整型>    宽度
+      --mosaic-align {0 (居中), 1 (左), 2 (右), 4 (顶部), 8 (底部), 5 (左上), 6 (右上), 9 (左下), 10 (右下)}
+                                 马赛克对齐
+      --mosaic-xoffset <整型>  左上角 x 坐标
+      --mosaic-yoffset <整型>  左上角 x 坐标
+      --mosaic-borderw <整型>  边界宽度
+      --mosaic-borderh <整型>  边界高度
+      --mosaic-position {0 (自动), 1 (固定)}
+                                 定位模式
+      --mosaic-rows <整型>     行数
+      --mosaic-cols <整型>     列数
+      --mosaic-keep-aspect-ratio, --no-mosaic-keep-aspect-ratio
+                                 保持纵横比 (默认关闭)
+      --mosaic-keep-picture, --no-mosaic-keep-picture
+                                 保持原始大小 (默认关闭)
+      --mosaic-order <字符串型>
+                                 元素顺序
+      --mosaic-delay <整型>    延迟
+      --mosaic-bs, --no-mosaic-bs
+                                 蓝屏 (默认关闭)
+      --mosaic-bsu <整型>      蓝屏 U 值
+      --mosaic-bsv <整型>      蓝屏 V 值
+      --mosaic-bsut <整型>     蓝屏 U 容忍度
+      --mosaic-bsvt <整型>     蓝屏 V 容忍度
+
+ 动作模糊化过滤器
+      --blur-factor <整型>     模糊化因数 (1-127)
+
+ 动作检测视频过滤器
+      --motiondetect-history <整型>
+                                 历史参数
+      --motiondetect-description <字符串型>
+                                 Description file
+
+ MusePack 分离器
+      --mpc-replaygain-type {0 (无), 1 (标题), 2 (专辑)}
+                                 Replay Gain type
+
+ MSN 正在播放
+      --msn-format <字符串型>
+                                 MSN Title format string
+
+ ASF 复用器
+      --sout-asf-title <字符串型>
+                                 标题
+      --sout-asf-author <字符串型>
+                                 作者
+      --sout-asf-copyright <字符串型>
+                                 版权
+      --sout-asf-comment <字符串型>
+                                 批注
+      --sout-asf-rating <字符串型>
+                                 评分
+      --sout-asf-packet-size <整型>
+                                 封包大小
+
+ MP4/MOV 复用器
+      --sout-mp4-faststart, --no-sout-mp4-faststart
+                                 建立"快速开始"文件 (默认打开)
+
+ 多部分 jpeg 复用器
+      --sout-mpjpeg-separator <字符串型>
+                                 Multipart separator string
+
+ PS 复用器
+      --sout-ps-dts-delay <整型>
+                                 DTS 延迟
+      --sout-ps-pes-max-size <整型>
+                                 PES 最大尺寸
+
+ 网络同步化
+      --netsync-master, --no-netsync-master
+                                 Act as master (默认关闭)
+      --netsync-master-ip <字符串型>
+                                 Master client ip address
+
+ 音量正常化
+      --norm-buff-size <整型>  音频缓冲器数量
+      --norm-max-level <浮点型>
+                                 最大等级
+
+ Windows服务接口
+      --ntservice-install, --no-ntservice-install
+                                 安装Windows服务 (默认关闭)
+      --ntservice-uninstall, --no-ntservice-uninstall
+                                 解除安装Windows服务 (默认关闭)
+      --ntservice-name <字符串型>
+                                 服务显示名称
+      --ntservice-options <字符串型>
+                                 配置选项
+      --ntservice-extraintf <字符串型>
+                                 额外界面模块
+
+ OpenGL视频输出
+      --opengl-cube-speed <浮点型>
+                                 OpenGL 立方体旋转速度
+      --opengl-effect {none,cube,transparent-cube}
+                                 效果
+
+ 画面上显示 (OSD)
+      --osdmenu-x <整型>       X 坐标
+      --osdmenu-y <整型>       Y 坐标
+      --osdmenu-position {0 (居中), 1 (左), 2 (右), 4 (顶部), 8 (底部), 5 (左上), 6 (右上), 9 (左下), 10 (右下)}
+                                 菜单位置
+      --osdmenu-file <字符串型>
+                                 设置文件
+      --osdmenu-file-path <字符串型>
+                                 OSD 菜单图片的路径
+      --osdmenu-timeout <整型> 菜单超时时间
+      --osdmenu-update <整型>  菜单更新间隔
+
+ MPEG-I/II视频封包器
+      --packetizer-mpegvideo-sync-iframe, --no-packetizer-mpegvideo-sync-iframe
+                                 Sync on Intra Frame (默认关闭)
+
+ 参数均衡器
+      --param-eq-lowf <浮点型>
+                                 低频 (Hz)
+      --param-eq-lowgain <浮点型>
+                                 Low freq gain (Db)
+      --param-eq-highf <浮点型>
+                                 高频 (Hz)
+      --param-eq-highgain <浮点型>
+                                 High freq gain (Db)
+      --param-eq-f1 <浮点型>  频率 1 (Hz)
+      --param-eq-gain1 <浮点型>
+                                 Freq 1 gain (Db)
+      --param-eq-q1 <浮点型>  频率 1 Q
+      --param-eq-f2 <浮点型>  频率 2 (Hz)
+      --param-eq-gain2 <浮点型>
+                                 Freq 2 gain (Db)
+      --param-eq-q2 <浮点型>  频率 2 Q
+      --param-eq-f3 <浮点型>  频率 3 (Hz)
+      --param-eq-gain3 <浮点型>
+                                 Freq 3 gain (Db)
+      --param-eq-q3 <浮点型>  频率 3 Q
+
+ 播放列表
+      --playlist-autostart, --no-playlist-autostart
+                                 自动开始 (默认打开)
+      --m3u-extvlcopt, --no-m3u-extvlcopt
+                                 Enable parsing of EXTVLCOPT: options
+                                 (默认关闭)
+      --shoutcast-show-adult, --no-shoutcast-show-adult
+                                 Show shoutcast adult content (默认关闭)
+
+ Podcast
+      --podcast-urls <字符串型>
+                                 Podcast URLs 列表
+
+ PORTAUDIO音频输出
+      --portaudio-device <整型>
+                                 输出装置
+
+ MPEG-PS 分离器
+      --ps-trust-timestamps, --no-ps-trust-timestamps
+                                 信任 MPEG 时间戳 (默认打开)
+
+ DV (数字视频) 分离器
+      --rawdv-hurry-up, --no-rawdv-hurry-up
+                                 快速 (默认关闭)
+
+ 摇控界面
+      --rc-show-pos, --no-rc-show-pos
+                                 显示串流位置 (默认关闭)
+      --rc-quiet, --no-rc-quiet  不要开启DOS指令窗口接口
+                                 (默认关闭)
+      --rc-host <字符串型>   TCP指令输入
+
+ RSS 及 Atom feed 显示
+      --rss-urls <字符串型>  Feed URL
+      --rss-x <整型>           X 偏移量
+      --rss-y <整型>           Y 偏移量
+      --rss-position {0 (居中), 1 (左), 2 (右), 4 (顶部), 8 (底部), 5 (左上), 6 (右上), 9 (左下), 10 (右下)}
+                                 文字位置
+      --rss-opacity <整型>     不透明
+      --rss-color {-268435456 (默认), 0 (黑色), 8421504 (灰色), 12632256 (银色), 16777215 (白色), 8388608 (栗色), 16711680 (红色), 16711935 (紫红色), 16776960 (黄色), 8421376 (橄榄色), 32768 (绿色), 32896 (蓝绿色), 65280 (柠檬色), 8388736 (紫色), 128 (藏青色), 255 (蓝色), 65535 (浅绿色)}
+                                 色彩
+      --rss-size <整型>        字号
+      --rss-speed <整型>       Feed 的速度
+      --rss-length <整型>      最大长度
+      --rss-ttl <整型>         刷新时间
+      --rss-images, --no-rss-images
+                                 Feed 图像 (默认打开)
+
+
+
+
+
+SAP 通告
+      --sap-addr <字符串型>  SAP 多播地址
+      --sap-ipv4, --no-sap-ipv4  IPv4 SAP (默认打开)
+      --sap-ipv6, --no-sap-ipv6  IPv6 SAP (默认打开)
+      --sap-timeout <整型>     SAP 超时
+      --sap-parse, --no-sap-parse
+                                 尝试解析通告 (默认打开)
+      --sap-strict, --no-sap-strict
+                                 SAP 严格模式 (默认关闭)
+      --sap-timeshift, --no-sap-timeshift
+                                 Allow timeshifting (默认关闭)
+
+ 画面输入
+      --screen-caching <整型>  缓存值 (毫秒)
+      --screen-fps <浮点型>   帧率
+      --screen-fragment-size <整型>
+                                 Capture fragment size
+
+ Shoutcast 收音机列表
+
+ 用鼠标来显示界面
+      --showintf-threshold <整型>
+                                 阈值
+
+ 桥接串流输出
+      --sout-bridge-out-id <整型>
+                                 ID
+      --sout-bridge-in-delay <整型>
+                                 延迟
+      --sout-bridge-in-id-offset <整型>
+                                 ID 偏移量
+
+ 显示串流输出
+      --sout-display-audio, --no-sout-display-audio
+                                 打开音频 (默认打开)
+      --sout-display-video, --no-sout-display-video
+                                 启动视频 (默认打开)
+      --sout-display-delay <整型>
+                                 延迟
+
+ 个体流输出
+      --sout-es-access <字符串型>
+                                 输出存取方式
+      --sout-es-access-audio <字符串型>
+                                 音频输出存取方式
+      --sout-es-access-video <字符串型>
+                                 视频输出存取方式
+      --sout-es-mux <字符串型>
+                                 输出复用器
+      --sout-es-mux-audio <字符串型>
+                                 音频输出复用器
+      --sout-es-mux-video <字符串型>
+                                 视频输出复用器
+      --sout-es-dst <字符串型>
+                                 输出 URL
+      --sout-es-dst-audio <字符串型>
+                                 音频输出 URL
+      --sout-es-dst-video <字符串型>
+                                 视频输出 URL
+
+ Mosaic bridge 串流输出
+      --sout-mosaic-bridge-id <字符串型>
+                                 ID
+      --sout-mosaic-bridge-width <整型>
+                                 视频宽度
+      --sout-mosaic-bridge-height <整型>
+                                 视频高度
+      --sout-mosaic-bridge-sar <字符串型>
+                                 采样率
+
+ RTP串流输出
+      --sout-rtp-dst <字符串型>
+                                 目标
+      --sout-rtp-sdp <字符串型>
+                                 SDP
+      --sout-rtp-mux <字符串型>
+                                 复用器
+      --sout-rtp-name <字符串型>
+                                 部分名称
+      --sout-rtp-description <字符串型>
+                                 部分描述
+      --sout-rtp-url <字符串型>
+                                 会话 URL
+      --sout-rtp-email <字符串型>
+                                 会话 E-mail
+      --sout-rtp-port <整型>   端口
+      --sout-rtp-port-audio <整型>
+                                 音频端口
+      --sout-rtp-port-video <整型>
+                                 视频端口
+      --sout-rtp-ttl <整型>    有效时间(TTL)
+      --sout-rtp-mp4a-latm, --no-sout-rtp-mp4a-latm
+                                 MP4A LATM (默认关闭)
+
+ 标准串流输出
+      --sout-standard-access <字符串型>
+                                 输出存取方式
+      --sout-standard-mux <字符串型>
+                                 输出复用器
+      --sout-standard-dst <字符串型>
+                                 输出目的地
+      --sout-standard-sap, --no-sout-standard-sap
+                                 SAP 通告 (默认关闭)
+      --sout-standard-name <字符串型>
+                                 部分名称
+      --sout-standard-group <字符串型>
+                                 会话组名
+
+ 转码串流输出
+      --sout-transcode-venc <字符串型>
+                                 视频编码器
+      --sout-transcode-vcodec <字符串型>
+                                 目的视频编码器
+      --sout-transcode-vb <整型>
+                                 视频位率
+      --sout-transcode-scale <浮点型>
+                                 视频缩放
+      --sout-transcode-fps <浮点型>
+                                 视频帧率
+      --sout-transcode-hurry-up, --no-sout-transcode-hurry-up
+                                 快速 (默认打开)
+      --sout-transcode-deinterlace, --no-sout-transcode-deinterlace
+                                 解除交错视频 (默认关闭)
+      --sout-transcode-deinterlace-module {deinterlace,ffmpeg-deinterlace}
+                                 解除交错模块
+      --sout-transcode-width <整型>
+                                 视频宽度
+      --sout-transcode-height <整型>
+                                 视频高度
+      --sout-transcode-maxwidth <整型>
+                                 最大视频宽度
+      --sout-transcode-maxheight <整型>
+                                 最大视频高度
+      --sout-transcode-vfilter <字符串型>
+                                 视频过滤器
+      --sout-transcode-croptop <整型>
+                                 视频修整(上方)
+      --sout-transcode-cropleft <整型>
+                                 视频修整(左方)
+      --sout-transcode-cropbottom <整型>
+                                 视频修整(下方)
+      --sout-transcode-cropright <整型>
+                                 视频修整(右方)
+      --sout-transcode-paddtop <整型>
+                                 视频填补(上方)
+      --sout-transcode-paddleft <整型>
+                                 视频填补(左方)
+      --sout-transcode-paddbottom <整型>
+                                 视频填补(下方)
+      --sout-transcode-paddright <整型>
+                                 视频填补(右方)
+      --sout-transcode-canvas-width <整型>
+                                 视频画布宽度
+      --sout-transcode-canvas-height <整型>
+                                 视频画布高度
+      --sout-transcode-canvas-aspect <字符串型>
+                                 视频画布纵横比
+      --sout-transcode-aenc <字符串型>
+                                 音频编码器
+      --sout-transcode-acodec <字符串型>
+                                 目的音频编码器
+      --sout-transcode-ab <整型>
+                                 音频位率
+      --sout-transcode-channels <整型>
+                                 音频频道
+      --sout-transcode-samplerate <整型>
+                                 音频采样率
+      --sout-transcode-audio-sync, --no-sout-transcode-audio-sync
+                                 在音轨上同步 (默认关闭)
+      --sout-transcode-senc <字符串型>
+                                 字幕编码器
+      --sout-transcode-scodec <字符串型>
+                                 目的字幕编码器
+      --sout-transcode-soverlay, --no-sout-transcode-soverlay
+                                 目的字幕编码器 (默认关闭)
+      --sout-transcode-sfilter <字符串型>
+                                 覆盖
+      --sout-transcode-osd, --no-sout-transcode-osd
+                                 OSD 菜单 (默认关闭)
+      --sout-transcode-threads <整型>
+                                 线程数量
+      --sout-transcode-high-priority, --no-sout-transcode-high-priority
+                                 高优先级 (默认关闭)
+
+ 字体字幕译码器
+      --subsdec-align {0 (居中), 1 (左), 2 (右)}
+                                 字幕对齐
+      --subsdec-encoding {Default,ASCII,UTF-8,,ISO-8859-1,CP1252,MacRoman,MacIceland,ISO-8859-15,,ISO-8859-2,CP1250,MacCentralEurope,MacCroatian,MacRomania,,ISO-8859-5,CP1251,MacCyrillic,MacUkraine,KOI8-R,KOI8-U,KOI8-RU,,ISO-8859-6,CP1256,MacArabic,,ISO-8859-7,CP1253,MacGreek,,ISO-8859-8,CP1255,MacHebrew,,ISO-8859-9,CP1254,MacTurkish,,ISO-8859-13,CP1257,,ISO-2022-JP,ISO-2022-JP-1,ISO-2022-JP-2,EUC-JP,SHIFT_JIS,,ISO-2022-CN,ISO-2022-CN-EXT,EUC-CN,EUC-TW,BIG5,BIG5-HKSCS,,ISO-2022-KR,EUC-KR,,MacThai,KOI8-T,,ISO-8859-3,ISO-8859-4,ISO-8859-10,ISO-8859-14,ISO-8859-16,,CP850,CP862,CP866,CP874,CP932,CP949,CP950,CP1133,CP1258,,Macintosh,,UTF-7,UTF-16,UTF-16BE,UTF-16LE,UTF-32,UTF-32BE,UTF-32LE,C99,JAVA,UCS-2,UCS-2BE,UCS-2LE,UCS-4,UCS-4BE,UCS-4LE,,HZ,GBK,GB18030,JOHAB,ARMSCII-8,Georgian-Academy,Georgian-PS,TIS-620,MuleLao-1,VISCII,TCVN,HPROMAN8,NEXTSTEP}
+                                 字幕字体编码
+      --subsdec-autodetect-utf8, --no-subsdec-autodetect-utf8
+                                 UTF-8 字幕自动侦测 (默认打开)
+      --subsdec-formatted, --no-subsdec-formatted
+                                 格式化字幕 (默认打开)
+
+ 文字字幕解释器
+      --sub-fps <浮点型>      帧每秒
+      --sub-delay <整型>       字幕延迟
+      --sub-type {auto,microdvd,subrip,subviewer,ssa1,ssa2-4,ass,vplayer,sami,dvdsubtitle}
+                                 字幕格式
+
+ Philips OGT (SVCD字幕)译码器
+      --svcdsub-debug <整型>   启用调试
+
+ VLM 遥控界面
+      --telnet-host <字符串型>
+                                 Host
+      --telnet-port <整型>     端口
+      --telnet-password <字符串型>
+                                 密码
+
+ Teletext subtitles decoder
+      --telx-override-page <整型>
+                                 Override page
+      --telx-ignore-subtitle-flag, --no-telx-ignore-subtitle-flag
+                                 Ignore subtitle flag (默认关闭)
+      --telx-french-workaround, --no-telx-french-workaround
+                                 Workaround for France (默认关闭)
+
+ Theora视频译码器
+      --sout-theora-quality <整型>
+                                 编码质量
+
+ 时间显示子过滤器
+      --time-format <字符串型>
+                                 时间格式串 (%Y%m%d %H%M%S)
+      --time-x <整型>          X 偏移量
+      --time-y <整型>          Y 偏移量
+      --time-position {0 (居中), 1 (左), 2 (右), 4 (顶部), 8 (底部), 5 (左上), 6 (右上), 9 (左下), 10 (右下)}
+                                 文字位置
+      --time-opacity <整型>    不透明
+      --time-color {-268435456 (默认), 0 (黑色), 8421504 (灰色), 12632256 (银色), 16777215 (白色), 8388608 (栗色), 16711680 (红色), 16711935 (紫红色), 16776960 (黄色), 8421376 (橄榄色), 32768 (绿色), 32896 (蓝绿色), 65280 (柠檬色), 8388736 (紫色), 128 (藏青色), 255 (蓝色), 65535 (浅绿色)}
+                                 色彩
+      --time-size <整型>       字号
+
+ 文件转换过滤器
+      --transform-type {90,180,270,hflip,vflip}
+                                 转换类型
+
+ MPEG 转码串流分离器
+      --ts-extra-pmt <字符串型>
+                                 Extra PMT
+      --ts-es-id-pid, --no-ts-es-id-pid
+                                 为 PID 设置 ES 的标识。 (默认打开)
+      --ts-out <字符串型>    Fast udp streaming
+      --ts-out-mtu <整型>      输出模式的 MTU
+      --ts-csa-ck <字符串型> CSA ck
+      --ts-csa-pkt <整型>      Packet size in bytes to decrypt
+      --ts-silent, --no-ts-silent
+                                 静音模式 (默认关闭)
+      --ts-dump-file <字符串型>
+                                 Filename of dump
+      --ts-dump-append, --no-ts-dump-append
+                                 添加 (默认关闭)
+      --ts-dump-size <整型>    Dump buffer size
+
+ libtwolame 音频编码器
+      --sout-twolame-quality <浮点型>
+                                 编码质量
+      --sout-twolame-mode {0 (立体声), 1 (双单声道), 2 (合成立体声)}
+                                 立体声模式
+      --sout-twolame-vbr, --no-sout-twolame-vbr
+                                 VBR 模式 (默认关闭)
+      --sout-twolame-psy <整型>
+                                 Psycho-acoustic model
+
+ VCD 输入
+      --vcd-caching <整型>     缓存值 (毫秒)
+
+ 可视化过滤器
+      --effect-list <字符串型>
+                                 效果清单
+      --effect-width <整型>    视频宽度
+      --effect-height <整型>   视频高度
+      --visual-nbbands <整型>  频带数量
+      --visual-separ <整型>    频带分离器
+      --visual-amp <整型>      放大率
+      --visual-peaks, --no-visual-peaks
+                                 打开峰值 (默认打开)
+      --spect-show-original, --no-spect-show-original
+                                 打开原始图形频谱 (默认关闭)
+      --spect-show-base, --no-spect-show-base
+                                 启用基准 (默认打开)
+      --spect-radius <整型>    基本像素半径
+      --spect-sections <整型>  光谱部分
+      --spect-color <整型>     V-平面颜色
+      --spect-show-bands, --no-spect-show-bands
+                                 打开频带 (默认打开)
+      --spect-nbbands <整型>   频带数量
+      --spect-separ <整型>     频带分离器
+      --spect-amp <整型>       放大率
+      --spect-show-peaks, --no-spect-show-peaks
+                                 打开峰值 (默认打开)
+      --spect-peak-width <整型>
+                                 额外峰宽度
+      --spect-peak-height <整型>
+                                 峰值高度
+
+ RTSP VoD 服务器
+      --rtsp-host <字符串型> RTSP 主机地址
+      --rtsp-throttle-users <整型>
+                                 最大连接数目
+
+ Vorbis音频译码器
+      --sout-vorbis-quality <整型>
+                                 编码质量
+      --sout-vorbis-max-bitrate <整型>
+                                 最大化编码位率
+      --sout-vorbis-min-bitrate <整型>
+                                 最小化编码位率
+      --sout-vorbis-cbr, --no-sout-vorbis-cbr
+                                 CBR编码 (默认关闭)
+
+ 墙视频过滤器
+      --wall-cols <整型>       列数
+      --wall-rows <整型>       行数
+      --wall-active <字符串型>
+                                 活动窗口
+      --wall-element-aspect <字符串型>
+                                 元素外观率
+
+ Win32 waveOut 扩展输出
+      --waveout-float32, --no-waveout-float32
+                                 使用float32输出 (默认打开)
+
+ wxWindows界面模块
+      --wx-embed, --no-wx-embed  在界面中嵌入视频 (默认打开)
+      --wx-bookmarks, --no-wx-bookmarks
+                                 书签对话框 (默认关闭)
+      --wx-taskbar, --no-wx-taskbar
+                                 任务栏 (默认打开)
+      --wx-extended, --no-wx-extended
+                                 扩展图形界面 (默认关闭)
+      --wx-minimal, --no-wx-minimal
+                                 最小界面 (默认关闭)
+      --wx-autosize, --no-wx-autosize
+                                 视频大小 (默认打开)
+      --wx-playlist-view {0 (正常), 1 (嵌入式), 2 (两个)}
+                                 播放列表视图
+      --wx-systray, --no-wx-systray
+                                 托盘图标 (默认关闭)
+      --wx-labels, --no-wx-labels
+                                 在工具栏上显示标签 (默认关闭)
+      --wx-config-last <字符串型>
+                                 last config
+
+ H.264/MPEG4 AVC encoder (using x264 library)
+      --sout-x264-keyint <整型>
+                                 GOP 最大尺寸
+      --sout-x264-min-keyint <整型>
+                                 最小 GOP 大小
+      --sout-x264-scenecut <整型>
+                                 Extra I-frames aggressivity
+      --sout-x264-bframes <整型>
+                                 I 帧和 P 帧之间的 B 帧的数目
+      --sout-x264-b-adapt, --no-sout-x264-b-adapt
+                                 Adaptive B-frame decision (默认打开)
+      --sout-x264-b-bias <整型>
+                                 影响 B-帧使用
+      --sout-x264-bpyramid, --no-sout-x264-bpyramid
+                                 Keep some B-frames as references
+                                 (默认关闭)
+      --sout-x264-cabac, --no-sout-x264-cabac
+                                 CABAC (默认打开)
+      --sout-x264-ref <整型>   参考帧的数目
+      --sout-x264-nf, --no-sout-x264-nf
+                                 跳过循环过滤器 (默认关闭)
+      --sout-x264-deblock <字符串型>
+                                 Loop filter AlphaC0 and Beta parameters
+                                 alpha:beta
+      --sout-x264-level <字符串型>
+                                 H.264 等级
+      --sout-x264-interlaced, --no-sout-x264-interlaced
+                                 交错模式 (默认关闭)
+      --sout-x264-qp <整型>    Set QP
+      --sout-x264-crf <整型>   基于质量的 VBR
+      --sout-x264-qpmin <整型> Min QP
+      --sout-x264-qpmax <整型> Max QP
+      --sout-x264-qpstep <整型>
+                                 Max QP step
+      --sout-x264-ratetol <浮点型>
+                                 平均比特率容忍度
+      --sout-x264-vbv-maxrate <整型>
+                                 最大本地位率
+      --sout-x264-vbv-bufsize <整型>
+                                 VBV 缓冲区
+      --sout-x264-vbv-init <浮点型>
+                                 初始 VBV 缓冲占有量
+      --sout-x264-ipratio <浮点型>
+                                 QP factor between I and P
+      --sout-x264-pbratio <浮点型>
+                                 QP factor between P and B
+      --sout-x264-chroma-qp-offset <整型>
+                                 QP difference between chroma and luma
+      --sout-x264-qcomp <浮点型>
+                                 QP curve compression
+      --sout-x264-cplxblur <浮点型>
+                                 Reduce fluctuations in QP
+      --sout-x264-qblur <浮点型>
+                                 Reduce fluctuations in QP
+      --sout-x264-partitions {none,fast,normal,slow,all}
+                                 Partitions to consider
+      --sout-x264-direct {none,spatial,temporal,auto}
+                                 直接 MV 预测模式
+      --sout-x264-direct-8x8 <整型>
+                                 直接预测大小
+      --sout-x264-weightb, --no-sout-x264-weightb
+                                 Weighted prediction for B-frames
+                                 (默认关闭)
+      --sout-x264-me {dia,hex,umh,esa}
+                                 Integer pixel motion estimation method
+      --sout-x264-merange <整型>
+                                 Maximum motion vector search range
+      --sout-x264-subme <整型> Subpixel motion estimation and partition
+                                 decision quality
+      --sout-x264-b-rdo, --no-sout-x264-b-rdo
+                                 RD based mode decision for B-frames
+                                 (默认关闭)
+      --sout-x264-mixed-refs, --no-sout-x264-mixed-refs
+                                 Decide references on a per partition basis
+                                 (默认关闭)
+      --sout-x264-chroma-me, --no-sout-x264-chroma-me
+                                 动作估计中的色度 (默认打开)
+      --sout-x264-bime, --no-sout-x264-bime
+                                 Jointly optimize both MVs in B-frames
+                                 (默认关闭)
+      --sout-x264-8x8dct, --no-sout-x264-8x8dct
+                                 Adaptive spatial transform size (默认关闭)
+      --sout-x264-trellis <整型>
+                                 Trellis RD quantization
+      --sout-x264-fast-pskip, --no-sout-x264-fast-pskip
+                                 Early SKIP detection on P-frames
+                                 (默认打开)
+      --sout-x264-dct-decimate, --no-sout-x264-dct-decimate
+                                 Coefficient thresholding on P-frames
+                                 (默认打开)
+      --sout-x264-nr <整型>    噪声消除
+      --sout-x264-deadzone-inter <整型>
+                                 Inter luma quantization deadzone
+      --sout-x264-deadzone-intra <整型>
+                                 Intra luma quantization deadzone
+      --sout-x264-asm, --no-sout-x264-asm
+                                 CPU 优化 (默认打开)
+      --sout-x264-psnr, --no-sout-x264-psnr
+                                 PSNR computation (默认关闭)
+      --sout-x264-ssim, --no-sout-x264-ssim
+                                 SSIM 计算 (默认关闭)
+      --sout-x264-quiet, --no-sout-x264-quiet
+                                 安静模式 (默认关闭)
+      --sout-x264-sps-id <整型>
+                                 SPS and PPS id numbers
+      --sout-x264-aud, --no-sout-x264-aud
+                                 Access unit delimiters (默认关闭)
+      --sout-x264-verbose, --no-sout-x264-verbose
+                                 Statistics (默认关闭)
+
+ DirectShow输入
+      --dshow-caching <整型>   缓存值 (毫秒)
+      --dshow-vdev {,none}       视频装置名称
+      --dshow-adev {,none}       音频装置名称
+      --dshow-size <字符串型>
+                                 视频大小
+      --dshow-chroma <字符串型>
+                                 视频输入彩度格式
+      --dshow-fps <浮点型>    视频输入帧率
+      --dshow-config, --no-dshow-config
+                                 设备属性 (默认关闭)
+      --dshow-tuner, --no-dshow-tuner
+                                 调谐器属性 (默认关闭)
+      --dshow-tuner-channel <整型>
+                                 调谐器 TV 频道
+      --dshow-tuner-country <整型>
+                                 调谐器国家代码
+      --dshow-tuner-input {0 (默认), 1 (缆线), 2 (天线)}
+                                 调谐器输入类型
+      --dshow-video-input <整型>
+                                 视频输入端
+      --dshow-audio-input <整型>
+                                 音频输入端
+      --dshow-video-output <整型>
+                                 视频输出端
+      --dshow-audio-output <整型>
+                                 音频输出 pin
+
+ 可面板化界面
+      --skins2-last <字符串型>
+                                 要使用的皮肤
+      --skins2-config <字符串型>
+                                 组态上一次使用的面板
+      --skins2-systray, --no-skins2-systray
+                                 托盘图标 (默认关闭)
+      --skins2-taskbar, --no-skins2-taskbar
+                                 在任务栏上显示 VLC (默认打开)
+      --skins2-transparency, --no-skins2-transparency
+                                 启用透明效果 (默认关闭)
+      --skinned-playlist, --no-skinned-playlist
+                                 Enable skinned playlist (默认打开)
+
+ DirectX视频输出
+      --directx-hw-yuv, --no-directx-hw-yuv
+                                 使用硬件 YUV->RGB 转换 (默认打开)
+      --directx-use-sysmem, --no-directx-use-sysmem
+                                 在系统内存中使用视频缓冲区
+                                 (默认关闭)
+      --directx-3buffering, --no-directx-3buffering
+                                 在 overlay 中使用三重缓存
+                                 (默认打开)
+      --directx-device {}        所要使用的显示设备
+      --directx-wallpaper, --no-directx-wallpaper
+                                 打开壁纸模式 (默认关闭)

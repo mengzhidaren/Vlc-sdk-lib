@@ -85,6 +85,12 @@ public class VLCOptions {
         /* XXX: why can't the default be fine ? #7792 */
         if (networkCaching > 0)
             options.add("--network-caching=" + networkCaching);
+
+  //      options.add("--no-hdtv-fix");
+
+        //options.add("--aspect-ratio");
+
+
         options.add("--androidwindow-chroma");
         if (AndroidUtil.isKitKatOrLater()) {
             options.add("RV32");

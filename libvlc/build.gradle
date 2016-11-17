@@ -17,8 +17,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 4
-        versionName "1.2.0"
+        versionCode 20161117
+        versionName "1.3.0"
     }
 
     sourceSets {
@@ -63,8 +63,8 @@ publish {
     userOrg = 'yuyunlongyyl' //用户所在组织
     groupId = 'com.yyl.vlc'// 包名
     artifactId = 'vlc-android-sdk' // library的名字
-    publishVersion = '1.2.0'// 版本
-    desc = 'vlc-android-lib 2.0.0   2016/10/10  suport x86_64   x86  armeabi-v7a  arm64-v8a' // 描述
+    publishVersion = '1.3.0'// 版本
+    desc = 'vlc-android-lib 2.0.0   2016/10/10  suport x86_64   x86  armeabi-v7a  arm64-v8a   mips   mips64' // 描述
     website = siteUrl
 }
 /*

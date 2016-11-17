@@ -193,7 +193,6 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
     }
 
     //根据播放状态 打开关闭旋转动画
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -202,6 +201,8 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
             return;
         }
         setKeepScreenOn(true);
+        if (videoMediaLogic != null)
+            videoMediaLogic.onAttachedToWindow(true);
     }
 
     @Override
@@ -212,6 +213,8 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
             return;
         }
         setKeepScreenOn(false);
+        if (videoMediaLogic != null)
+            videoMediaLogic.onAttachedToWindow(false);
     }
 
 
@@ -256,15 +259,10 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
     private int mVideoWidth, mVideoHeight;
 
     @Override
-    public void onVideoSizeChanged(int width, int height, boolean rotation) {
+    public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
         if (width * height == 0) return;
-        if (rotation) {
-            this.mVideoWidth = height;
-            this.mVideoHeight = width;
-        } else {
-            this.mVideoWidth = width;
-            this.mVideoHeight = height;
-        }
+        this.mVideoWidth = visibleWidth;
+        this.mVideoHeight = visibleHeight;
         post(new Runnable() {
             @Override
             public void run() {

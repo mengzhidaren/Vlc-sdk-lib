@@ -1,6 +1,5 @@
 package videolist.yyl.com.vlc_sdk_lib;
 
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -16,11 +15,11 @@ import org.videolan.vlc.listener.MediaPlayerControl;
 public class MediaControl implements MediaController.MediaPlayerControl, MediaListenerEvent {
     MediaPlayerControl mediaPlayer;
     final MediaController controller;
-    TextView info;
+    TextView logInfo;
 
-    public MediaControl(VlcVideoView mediaPlayer, TextView info) {
+    public MediaControl(VlcVideoView mediaPlayer, TextView logInfo) {
         this.mediaPlayer = mediaPlayer;
-        this.info = info;
+        this.logInfo = logInfo;
         controller = new MediaController(mediaPlayer.getContext());
         controller.setMediaPlayer(this);
         controller.setAnchorView(mediaPlayer);
@@ -94,30 +93,31 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
     @Override
     public void eventBuffing(float buffing, boolean show) {
         if (show)
-            info.setText("buffing=" + buffing);
+            logInfo.setText("buffing=" + buffing);
         else
-            info.setText("播放中");
+            logInfo.setText("播放中");
     }
 
     @Override
     public void eventPlayInit(boolean openClose) {
-        info.setText("加载中");
+        logInfo.setText("加载中");
     }
 
     @Override
     public void eventStop(boolean isPlayError) {
-        info.setText("Stop" + (isPlayError ? "  播放已停止   有错误" : ""));
+        logInfo.setText("Stop" + (isPlayError ? "  播放已停止   有错误" : ""));
 
     }
 
     @Override
     public void eventError(int error, boolean show) {
-        info.setText("地址 出错了 error=" + error);
+        logInfo.setText("地址 出错了 error=" + error);
     }
 
     @Override
     public void eventPlay(boolean isPlaying) {
-        controller.show();
+        if (isPlaying)
+            controller.show();
     }
 
 }

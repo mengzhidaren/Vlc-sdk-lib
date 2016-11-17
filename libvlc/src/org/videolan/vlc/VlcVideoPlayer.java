@@ -4,6 +4,7 @@ package org.videolan.vlc;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -99,6 +100,8 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
     private boolean isPlayError;
     private boolean isAttached;
     private boolean isAttachSurface;
+    private boolean isViewLife;
+
     private boolean othereMedia;
     private Context mContext;
 
@@ -148,6 +151,9 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
         }
     }
 
+    public void onAttachedToWindow(boolean isViewLife) {
+        this.isViewLife = isViewLife;
+    }
 
     @Override
     public void setLoop(boolean isLoop) {
@@ -163,8 +169,9 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (mediaListenerEvent != null)
+                if (isViewLife && mediaListenerEvent != null)
                     mediaListenerEvent.eventPlayInit(false);
+                isViewLife = false;
             }
         });
         mVideoHandler.obtainMessage(MSG_STOP).sendToTarget();
@@ -176,7 +183,7 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mediaListenerEvent != null)
+                    if (isViewLife && mediaListenerEvent != null)
                         mediaListenerEvent.eventError(2, true);
                 }
             });
@@ -225,7 +232,9 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
 
     }
 
-
+    /**
+     * android 6.0 软解会有黑边的bug 有空在解
+     */
     private void loadMedia() {
         if (isSaveState) {
             isSaveState = false;
@@ -244,14 +253,19 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
 
         if (path.contains("://")) {
             final Media media = new Media(libVLC, Uri.parse(path));
-            media.setHWDecoderEnabled(false, false);
+            if (Build.VERSION.SDK_INT < 23) {
+                media.setHWDecoderEnabled(false, false);
+            }
+
             media.setEventListener(mMediaListener);
             media.parseAsync(Media.Parse.FetchNetwork, 10 * 1000);
             mMediaPlayer.setMedia(media);
             media.release();
         } else {
             final Media media = new Media(libVLC, path);
-            media.setHWDecoderEnabled(false, false);
+            if (Build.VERSION.SDK_INT < 23) {
+                media.setHWDecoderEnabled(false, false);
+            }
             media.setEventListener(mMediaListener);
             //    media.parseAsync(Media.Parse.FetchLocal);
             mMediaPlayer.setMedia(media);
@@ -301,7 +315,8 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (mediaListenerEvent != null)
+                isViewLife = true;
+                if (isViewLife && mediaListenerEvent != null)
                     mediaListenerEvent.eventPlayInit(true);
             }
         });
@@ -322,7 +337,7 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mediaListenerEvent != null)
+                    if (isViewLife && mediaListenerEvent != null)
                         mediaListenerEvent.eventStop(isPlayError);
                 }
             });
@@ -389,7 +404,7 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (mediaListenerEvent != null)
+                        if (isViewLife && mediaListenerEvent != null)
                             mediaListenerEvent.eventError(1, true);
                     }
                 });
@@ -406,7 +421,7 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (mediaListenerEvent != null)
+                        if (isViewLife && mediaListenerEvent != null)
                             mediaListenerEvent.eventPlay(true);
                     }
                 });
@@ -426,7 +441,7 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (mediaListenerEvent != null)
+                        if (isViewLife && mediaListenerEvent != null)
                             mediaListenerEvent.eventPlay(false);
                     }
                 });
@@ -469,7 +484,7 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (mediaListenerEvent != null)
+                        if (isViewLife && mediaListenerEvent != null)
                             mediaListenerEvent.eventBuffing(event.getBuffering(), event.getBuffering() < 100f);
                     }
                 });
@@ -636,7 +651,7 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
     @Override
     public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
         if (videoSizeChange != null) {
-            videoSizeChange.onVideoSizeChanged(width, height, false);
+            videoSizeChange.onVideoSizeChanged(width, height, visibleWidth, visibleHeight, sarNum, sarDen);
         }
     }
 
