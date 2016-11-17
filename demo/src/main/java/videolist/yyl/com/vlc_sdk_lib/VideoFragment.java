@@ -18,8 +18,6 @@ import org.videolan.vlc.util.VLCInstance;
 
 
 /**
- * A fragment with a yyl +1 button.
- * create an instance of this fragment.
  */
 public class VideoFragment extends Fragment implements View.OnClickListener {
     String path = "http://img1.peiyinxiu.com/2014121211339c64b7fb09742e2c.mp4";
