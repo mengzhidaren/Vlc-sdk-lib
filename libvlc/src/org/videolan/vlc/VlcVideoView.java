@@ -216,36 +216,88 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         if (videoMediaLogic != null)
             videoMediaLogic.onAttachedToWindow(false);
     }
-
+    private boolean isRotation = true;
+    public boolean isRotation() {
+        return isRotation;
+    }
 
     private void adjustAspectRatio(int videoWidth, int videoHeight) {
-        if (videoWidth * videoHeight == 0) return;
-
+        if (videoWidth * videoHeight == 0) {
+            return;
+        }
+        if (videoWidth > videoHeight) {
+            isRotation = true;
+        } else {
+            isRotation = false;
+        }
         int viewWidth = getWidth();
         int viewHeight = getHeight();
-        double aspectRatio = (double) videoHeight / (double) videoWidth;
-
+        double videoRatio = (double) viewWidth / (double) viewHeight;//显示比例
+        double aspectRatio = (double) videoWidth / (double) videoHeight;//视频比例
         int newWidth, newHeight;
-        if (viewHeight > (int) (viewWidth * aspectRatio)) {
-            newWidth = viewWidth;
-            newHeight = (int) (viewWidth * aspectRatio);
-        } else {
-            newWidth = (int) (viewHeight / aspectRatio);
+        if (videoWidth > videoHeight) {//正常比例16：9
+            if (videoRatio > aspectRatio) {//16:9>16:10
+                newWidth = (int) (viewHeight * aspectRatio);
+                newHeight = viewHeight;
+            } else {//16:9<16:8
+                newWidth = viewWidth;
+                newHeight = (int) (viewWidth / aspectRatio);
+            }
+        } else {//非正常可能是 90度
+            //16:9>1:9
+            newWidth = (int) (viewHeight * aspectRatio);
             newHeight = viewHeight;
         }
-        int xoff = (viewWidth - newWidth) / 2;
-        int yoff = (viewHeight - newHeight) / 2;
-        LogUtils.i(tag, "video=" + videoWidth + "x" + videoHeight + " view="
-                + viewWidth + "x" + viewHeight + " newView=" + newWidth + "x"
-                + newHeight + " off=" + xoff + "," + yoff);
 
+
+//        if (visibleWidth > visibleHeight) {//正常比例16：9
+//            //最大的高  大于   要显示的高
+//            if (viewHeight >= (int) (viewWidth * aspectRatio)) {
+//                // limited by narrow width; restrict height
+//                newWidth = viewWidth;
+//                newHeight = (int) (viewWidth * aspectRatio);
+//            } else {
+//                // limited by short height; restrict width
+//                newWidth = (int) (viewHeight / aspectRatio);
+//                newHeight = viewHeight;
+//            }
+//        } else {//非正常可能是 90度
+//
+//        }
+
+
+//        if (viewHeight > (int) (viewWidth * aspectRatio)) {
+//            // limited by narrow width; restrict height
+//            newWidth = viewWidth;
+//            newHeight = (int) (viewWidth * aspectRatio);
+//        } else {
+//            // limited by short height; restrict width
+//            newWidth = (int) (viewHeight / aspectRatio);
+//            newHeight = viewHeight;
+//        }
+        //        if (videoWidth != visibleWidth || videoHeight != visibleHeight) {
+//            xoff = (videoWidth - visibleWidth) / 2;
+//            yoff = (videoHeight - visibleHeight) / 2;
+//            txform.setScale((float) newWidth / viewWidth, (float) newHeight
+//                    / viewHeight);
+//        } else {
+//            txform.setScale((float) newWidth / viewWidth, (float) newHeight
+//                    / viewHeight);
+//        }
+        float xoff = (viewWidth - newWidth) / 2f;
+        float yoff = (viewHeight - newHeight) / 2f;
         Matrix txform = new Matrix();
         getTransform(txform);
+
+
         txform.setScale((float) newWidth / viewWidth, (float) newHeight
                 / viewHeight);
         // txform.postRotate(10); // just for fun
         txform.postTranslate(xoff, yoff);
         setTransform(txform);
+        LogUtils.i(tag, "video=" + videoWidth + "x" + videoHeight + " view="
+                + viewWidth + "x" + viewHeight + " newView=" + newWidth + "x"
+                + newHeight + " off=" + xoff + "," + yoff);
     }
 
     @Override

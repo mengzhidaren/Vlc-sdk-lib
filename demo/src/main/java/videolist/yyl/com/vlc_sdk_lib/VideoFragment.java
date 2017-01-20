@@ -20,7 +20,9 @@ import org.videolan.vlc.util.VLCInstance;
 /**
  */
 public class VideoFragment extends Fragment implements View.OnClickListener {
-    String path = "http://img1.peiyinxiu.com/2014121211339c64b7fb09742e2c.mp4";
+   // String path = "http://img1.peiyinxiu.com/2014121211339c64b7fb09742e2c.mp4";
+   // String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
+    String path = "rtsp://139.199.159.71:554/easypusher_rtsp.sdp";
     //  @Bind(R.id.player)
     VlcVideoView vlcVideoView;
     //  @Bind(R.id.info)
@@ -31,6 +33,7 @@ public class VideoFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_video, container, false);
+        //为啥这么多人用不会用butterknife 要我注掉
         // ButterKnife.bind(this, view);
         vlcVideoView = (VlcVideoView) view.findViewById(R.id.player);
         logInfo = (TextView) view.findViewById(R.id.info);

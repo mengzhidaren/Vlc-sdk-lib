@@ -21,6 +21,8 @@ import org.videolan.vlc.listener.VideoSizeChange;
 import org.videolan.vlc.util.LogUtils;
 import org.videolan.vlc.util.VLCInstance;
 
+import static android.os.Build.VERSION_CODES.KITKAT;
+
 /**
  * Created by yyl on 2016/10/12/012.
  */
@@ -233,7 +235,6 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
     }
 
     /**
-     * android 6.0 软解会有黑边的bug 有空在解
      */
     private void loadMedia() {
         if (isSaveState) {
@@ -253,17 +254,17 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
 
         if (path.contains("://")) {
             final Media media = new Media(libVLC, Uri.parse(path));
-            if (Build.VERSION.SDK_INT < 23) {
+            if (Build.VERSION.SDK_INT <= KITKAT) {
                 media.setHWDecoderEnabled(false, false);
             }
 
             media.setEventListener(mMediaListener);
-            media.parseAsync(Media.Parse.FetchNetwork, 10 * 1000);
+            media.parseAsync(Media.Parse.FetchNetwork, 5 * 1000);
             mMediaPlayer.setMedia(media);
             media.release();
         } else {
             final Media media = new Media(libVLC, path);
-            if (Build.VERSION.SDK_INT < 23) {
+            if (Build.VERSION.SDK_INT <= KITKAT) {
                 media.setHWDecoderEnabled(false, false);
             }
             media.setEventListener(mMediaListener);
