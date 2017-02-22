@@ -1,18 +1,18 @@
 /*****************************************************************************
  * LibVLC.java
- * ****************************************************************************
+ *****************************************************************************
  * Copyright © 2010-2013 VLC authors and VideoLAN
- * <p>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -38,9 +38,6 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
         }
     }
 
-    /** Native crash handler */
-    private static OnNativeCrashListener sOnNativeCrashListener;
-
     /**
      * Create a LibVLC withs options
      *
@@ -55,7 +52,7 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
             for (String option : options) {
                 if (option.startsWith("--aout="))
                     setAout = false;
-                if (option.startsWith("--androidwindow-chroma"))
+                if (option.startsWith("--android-display-chroma"))
                     setChroma = false;
                 if (!setAout && !setChroma)
                     break;
@@ -74,7 +71,7 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
                     options.add("--aout=android_audiotrack");
             }
             if (setChroma) {
-                options.add("--androidwindow-chroma");
+                options.add("--android-display-chroma");
                 options.add("RV32");
             }
         }
@@ -117,19 +114,6 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
         nativeRelease();
     }
 
-    public interface OnNativeCrashListener {
-        void onNativeCrash();
-    }
-
-    public static void setOnNativeCrashListener(OnNativeCrashListener l) {
-        sOnNativeCrashListener = l;
-    }
-
-    private static void onNativeCrash() {
-        if (sOnNativeCrashListener != null)
-            sOnNativeCrashListener.onNativeCrash();
-    }
-
     /**
      * Sets the application name. LibVLC passes this as the user agent string
      * when a protocol requires it.
@@ -137,15 +121,13 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
      * @param name human-readable application name, e.g. "FooBar player 1.2.3"
      * @param http HTTP User Agent, e.g. "FooBar/1.2.3 Python/2.6.0"
      */
-    public void setUserAgent(String name, String http) {
+    public void setUserAgent(String name, String http){
         nativeSetUserAgent(name, http);
     }
 
     /* JNI */
     private native void nativeNew(String[] options, String homePath);
-
     private native void nativeRelease();
-
     private native void nativeSetUserAgent(String name, String http);
 
     private static boolean sLoaded = false;
@@ -156,7 +138,8 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
         sLoaded = true;
 
         System.loadLibrary("c++_shared");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             try {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB_MR1)
                     System.loadLibrary("anw.10");

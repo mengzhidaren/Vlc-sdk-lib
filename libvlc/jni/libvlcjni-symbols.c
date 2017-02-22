@@ -150,6 +150,7 @@ int libvlc_media_new_from_input_item(void);
 int libvlc_media_parse(void);
 int libvlc_media_parse_async(void);
 int libvlc_media_parse_with_options(void);
+int libvlc_media_parse_stop(void);
 int libvlc_media_player_add_slave(void);
 int libvlc_media_player_can_pause(void);
 int libvlc_media_player_program_scrambled(void);
@@ -220,6 +221,17 @@ int libvlc_media_tracks_release(void);
 int libvlc_new(void);
 int libvlc_playlist_play(void);
 int libvlc_release(void);
+int libvlc_renderer_item_name(void);
+int libvlc_renderer_item_type(void);
+int libvlc_renderer_item_icon_uri(void);
+int libvlc_renderer_item_flags(void);
+int libvlc_renderer_discoverer_event_manager(void);
+int libvlc_renderer_discoverer_list_get(void);
+int libvlc_renderer_discoverer_list_release(void);
+int libvlc_renderer_discoverer_new(void);
+int libvlc_renderer_discoverer_release(void);
+int libvlc_renderer_discoverer_start(void);
+int libvlc_renderer_discoverer_stop(void);
 int libvlc_retain(void);
 int libvlc_set_fullscreen(void);
 int libvlc_set_log_verbosity(void);
@@ -273,6 +285,8 @@ int libvlc_video_set_subtitle_file(void);
 int libvlc_video_set_teletext(void);
 int libvlc_video_set_track(void);
 int libvlc_video_take_snapshot(void);
+int libvlc_video_new_viewpoint(void);
+int libvlc_video_update_viewpoint(void);
 int libvlc_vlm_add_broadcast(void);
 int libvlc_vlm_add_vod(void);
 int libvlc_vlm_add_input(void);
@@ -451,6 +465,7 @@ const void *libvlc_functions[] = {
  libvlc_media_parse,
  libvlc_media_parse_async,
  libvlc_media_parse_with_options,
+ libvlc_media_parse_stop,
  libvlc_media_player_add_slave,
  libvlc_media_player_can_pause,
  libvlc_media_player_program_scrambled,
@@ -521,6 +536,17 @@ const void *libvlc_functions[] = {
  libvlc_new,
  libvlc_playlist_play,
  libvlc_release,
+ libvlc_renderer_item_name,
+ libvlc_renderer_item_type,
+ libvlc_renderer_item_icon_uri,
+ libvlc_renderer_item_flags,
+ libvlc_renderer_discoverer_event_manager,
+ libvlc_renderer_discoverer_list_get,
+ libvlc_renderer_discoverer_list_release,
+ libvlc_renderer_discoverer_new,
+ libvlc_renderer_discoverer_release,
+ libvlc_renderer_discoverer_start,
+ libvlc_renderer_discoverer_stop,
  libvlc_retain,
  libvlc_set_fullscreen,
  libvlc_set_log_verbosity,
@@ -574,6 +600,8 @@ const void *libvlc_functions[] = {
  libvlc_video_set_teletext,
  libvlc_video_set_track,
  libvlc_video_take_snapshot,
+ libvlc_video_new_viewpoint,
+ libvlc_video_update_viewpoint,
  libvlc_vlm_add_broadcast,
  libvlc_vlm_add_vod,
  libvlc_vlm_add_input,

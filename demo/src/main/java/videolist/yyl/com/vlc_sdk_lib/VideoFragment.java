@@ -4,8 +4,10 @@ package videolist.yyl.com.vlc_sdk_lib;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +23,15 @@ import org.videolan.vlc.util.VLCInstance;
  */
 public class VideoFragment extends Fragment implements View.OnClickListener {
    // String path = "http://img1.peiyinxiu.com/2014121211339c64b7fb09742e2c.mp4";
-   // String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
-    String path = "rtsp://139.199.159.71:554/easypusher_rtsp.sdp";
+    String path = "http://v.tiaooo.com/ljbmVx2MrnY2NiNk-cWsUh08480y";
+    // String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
+    //String path = "rtsp://139.199.159.71:554/easypusher_rtsp.sdp";
     //  @Bind(R.id.player)
     VlcVideoView vlcVideoView;
     //  @Bind(R.id.info)
     TextView logInfo;
 
+    String tag = "VideoFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +47,14 @@ public class VideoFragment extends Fragment implements View.OnClickListener {
 //        vlcVideoView.setMedia(media);
 
         vlcVideoView.setMediaListenerEvent(new MediaControl(vlcVideoView, logInfo));
-        vlcVideoView.startPlay(path);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(tag, "---------   start   ----------------");
+                vlcVideoView.startPlay(path);
+            }
+        }, 3000);
+
         return view;
     }
 

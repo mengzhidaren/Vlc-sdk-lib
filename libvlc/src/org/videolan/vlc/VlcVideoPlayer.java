@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
 
 
 import org.videolan.libvlc.IVLCVout;
@@ -20,6 +21,7 @@ import org.videolan.vlc.listener.MediaPlayerControl;
 import org.videolan.vlc.listener.VideoSizeChange;
 import org.videolan.vlc.util.LogUtils;
 import org.videolan.vlc.util.VLCInstance;
+import org.videolan.vlc.util.VLCOptions;
 
 import static android.os.Build.VERSION_CODES.KITKAT;
 
@@ -27,7 +29,7 @@ import static android.os.Build.VERSION_CODES.KITKAT;
  * Created by yyl on 2016/10/12/012.
  */
 
-public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout.Callback {
+public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout.OnNewVideoLayoutListener,IVLCVout.Callback {
     private static final HandlerThread sThread = new HandlerThread("VlcVideoPlayThread");
     private Handler mVideoHandler;
     private Handler mainHandler;
@@ -41,9 +43,14 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
 
     private static MediaPlayer getMediaPlayer(Context context) {
 
-        if (staticMediaPlayer == null) {
-            staticMediaPlayer = new MediaPlayer(VLCInstance.get(context));
+        if (isInstance) {
+            if (staticMediaPlayer == null) {
+                staticMediaPlayer = new MediaPlayer(VLCInstance.get(context));
+            }
+        } else {
+            return new MediaPlayer(VLCInstance.get(context));
         }
+
         return staticMediaPlayer;
     }
 
@@ -51,7 +58,7 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
         sThread.start();
     }
 
-    private static boolean isInstance = true;//是否单例播放   默认开
+    private static boolean isInstance;//是否单例播放   默认开
     private static boolean isSaveState;//跳转界面时 信息保存
 
     public void setInstance(boolean isInstance) {
@@ -199,12 +206,10 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
             libVLC = VLCInstance.get(mContext);
         }
         if (mMediaPlayer == null) {
-            if (isInstance) {
-                mMediaPlayer = getMediaPlayer(mContext);
-            } else {
-                mMediaPlayer = new MediaPlayer(VLCInstance.get(mContext));
-            }
+            mMediaPlayer = getMediaPlayer(mContext);
         }
+        mMediaPlayer.setAudioOutput(VLCOptions.getAout(PreferenceManager.getDefaultSharedPreferences(mContext)));
+        mMediaPlayer.setEqualizer(VLCOptions.getEqualizer(mContext));
         if (!isAttachSurface && mMediaPlayer.getVLCVout().areViewsAttached()) {
             mMediaPlayer.getVLCVout().detachViews();
         }
@@ -214,8 +219,10 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
         if (!mMediaPlayer.getVLCVout().areViewsAttached() && isAttached && surface != null) {
             isAttachSurface = true;
             mMediaPlayer.getVLCVout().setVideoSurface(surface);
-            mMediaPlayer.getVLCVout().attachViews();
             mMediaPlayer.getVLCVout().addCallback(this);
+            mMediaPlayer.getVLCVout().attachViews(this);
+            // mMediaPlayer.setEqualizer(VLCOptions.getEqualizer(this));
+            mMediaPlayer.setVideoTitleDisplay(MediaPlayer.Position.Disable, 0);
             LogUtils.i(tag, "setVideoSurface   attachViews");
         }
         mMediaPlayer.setEventListener(new MediaPlayer.EventListener() {
@@ -254,19 +261,18 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
 
         if (path.contains("://")) {
             final Media media = new Media(libVLC, Uri.parse(path));
-            if (Build.VERSION.SDK_INT <= KITKAT) {
-                media.setHWDecoderEnabled(false, false);
-            }
-
+//            if (Build.VERSION.SDK_INT <= KITKAT) {
+//                media.setHWDecoderEnabled(false, false);
+//            }
             media.setEventListener(mMediaListener);
-            media.parseAsync(Media.Parse.FetchNetwork, 5 * 1000);
+        //    media.parseAsync(Media.Parse.FetchNetwork, 5 * 1000);
             mMediaPlayer.setMedia(media);
             media.release();
         } else {
             final Media media = new Media(libVLC, path);
-            if (Build.VERSION.SDK_INT <= KITKAT) {
-                media.setHWDecoderEnabled(false, false);
-            }
+//            if (Build.VERSION.SDK_INT <= KITKAT) {
+//                media.setHWDecoderEnabled(false, false);
+//            }
             media.setEventListener(mMediaListener);
             //    media.parseAsync(Media.Parse.FetchLocal);
             mMediaPlayer.setMedia(media);
@@ -352,7 +358,6 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
         if (mMediaPlayer != null && isInitPlay) {
             LogUtils.i(tag, "release SaveState  isAttachSurface=" + isAttachSurface);
             isInitPlay = false;
-            mMediaPlayer.getVLCVout().removeCallback(this);
             if (isAttachSurface) {
                 isAttachSurface = false;
                 mMediaPlayer.getVLCVout().detachViews();
@@ -650,11 +655,12 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
     private VideoSizeChange videoSizeChange;
 
     @Override
-    public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+    public void onNewVideoLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
         if (videoSizeChange != null) {
             videoSizeChange.onVideoSizeChanged(width, height, visibleWidth, visibleHeight, sarNum, sarDen);
         }
     }
+
 
     @Override
     public void onSurfacesCreated(IVLCVout vlcVout) {

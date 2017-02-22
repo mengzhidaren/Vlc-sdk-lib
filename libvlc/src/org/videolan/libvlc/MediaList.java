@@ -1,18 +1,18 @@
 /*****************************************************************************
  * MediaList.java
- * ****************************************************************************
+ *****************************************************************************
  * Copyright © 2015 VLC authors, VideoLAN and VideoLabs
- * <p>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -28,11 +28,11 @@ public class MediaList extends VLCObject<MediaList.Event> {
 
     public static class Event extends VLCEvent {
 
-        public static final int ItemAdded = 0x200;
+        public static final int ItemAdded              = 0x200;
         //public static final int WillAddItem            = 0x201;
-        public static final int ItemDeleted = 0x202;
+        public static final int ItemDeleted            = 0x202;
         //public static final int WillDeleteItem         = 0x203;
-        public static final int EndReached = 0x204;
+        public static final int EndReached             = 0x204;
 
         /**
          * The media can be already released. If it's released, cached attributes are still
@@ -50,8 +50,7 @@ public class MediaList extends VLCObject<MediaList.Event> {
         }
     }
 
-    public interface EventListener extends VLCEvent.Listener<MediaList.Event> {
-    }
+    public interface EventListener extends VLCEvent.Listener<MediaList.Event> {}
 
     private int mCount = 0;
     private final SparseArray<Media> mMediaArray = new SparseArray<Media>();
@@ -126,23 +125,23 @@ public class MediaList extends VLCObject<MediaList.Event> {
         int index;
 
         switch (eventType) {
-            case Event.ItemAdded:
-                index = (int) arg1;
-                if (index != -1) {
-                    final Media media = insertMediaFromEvent(index);
-                    event = new Event(eventType, media, index);
-                }
-                break;
-            case Event.ItemDeleted:
-                index = (int) arg1;
-                if (index != -1) {
-                    final Media media = removeMediaFromEvent(index);
-                    event = new Event(eventType, media, index);
-                }
-                break;
-            case Event.EndReached:
-                event = new Event(eventType, null, -1);
-                break;
+        case Event.ItemAdded:
+            index = (int) arg1;
+            if (index != -1) {
+                final Media media = insertMediaFromEvent(index);
+                event = new Event(eventType, media, index);
+            }
+            break;
+        case Event.ItemDeleted:
+            index = (int) arg1;
+            if (index != -1) {
+                final Media media = removeMediaFromEvent(index);
+                event = new Event(eventType, media, index);
+            }
+            break;
+        case Event.EndReached:
+            event = new Event(eventType, null, -1);
+            break;
         }
         mLocked = false;
         return event;
@@ -200,16 +199,10 @@ public class MediaList extends VLCObject<MediaList.Event> {
 
     /* JNI */
     private native void nativeNewFromLibVlc(LibVLC libvlc);
-
     private native void nativeNewFromMediaDiscoverer(MediaDiscoverer md);
-
     private native void nativeNewFromMedia(Media m);
-
     private native void nativeRelease();
-
     private native int nativeGetCount();
-
     private native void nativeLock();
-
     private native void nativeUnlock();
 }

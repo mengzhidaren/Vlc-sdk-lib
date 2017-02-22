@@ -23,8 +23,6 @@
 
 package org.videolan.vlc.util;
 
-import android.annotation.TargetApi;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -35,7 +33,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import org.videolan.libvlc.util.AndroidUtil;
-import org.videolan.vlc.media.MediaWrapper;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -194,19 +191,19 @@ public class FileUtils {
         return ret;
     }
 
-
-    public static boolean canSave(MediaWrapper mw) {
-        if (mw == null || mw.getUri() == null)
-            return false;
-        String scheme = mw.getUri().getScheme();
-        if (TextUtils.equals(scheme, "file"))
-            return false;
-        return TextUtils.equals(scheme, "smb") ||
-                TextUtils.equals(scheme, "nfs") ||
-                TextUtils.equals(scheme, "ftp") ||
-                TextUtils.equals(scheme, "ftps") ||
-                TextUtils.equals(scheme, "sftp");
-    }
+//
+//    public static boolean canSave(MediaWrapper mw) {
+//        if (mw == null || mw.getUri() == null)
+//            return false;
+//        String scheme = mw.getUri().getScheme();
+//        if (TextUtils.equals(scheme, "file"))
+//            return false;
+//        return TextUtils.equals(scheme, "smb") ||
+//                TextUtils.equals(scheme, "nfs") ||
+//                TextUtils.equals(scheme, "ftp") ||
+//                TextUtils.equals(scheme, "ftps") ||
+//                TextUtils.equals(scheme, "sftp");
+//    }
 
 //    public static boolean canWrite(Uri uri) {
 //        if (uri == null)

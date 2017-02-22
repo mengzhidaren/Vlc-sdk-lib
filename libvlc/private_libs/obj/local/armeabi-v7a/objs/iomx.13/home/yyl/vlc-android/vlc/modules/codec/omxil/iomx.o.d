@@ -13,8 +13,8 @@ private_libs/obj/local/armeabi-v7a/objs/iomx.13//home/yyl/vlc-android/vlc/module
   /home/yyl/vlc-android/android-headers/13/frameworks/base/include/utils/SharedBuffer.h \
   /home/yyl/vlc-android/android-headers/13/frameworks/base/include/utils/Unicode.h \
   /home/yyl/vlc-android/android-headers/13/frameworks/base/include/utils/Vector.h \
-  /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/system/include/new \
-  /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/system/include/cstddef \
+  /home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/system/include/new \
+  /home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/system/include/cstddef \
   /home/yyl/vlc-android/android-headers/13/frameworks/base/include/utils/Log.h \
   /home/yyl/vlc-android/android-headers/13/system/core/include/cutils/log.h \
   /home/yyl/vlc-android/android-headers/13/system/core/include/cutils/uio.h \
@@ -78,9 +78,9 @@ private_libs/obj/local/armeabi-v7a/objs/iomx.13//home/yyl/vlc-android/vlc/module
 
 /home/yyl/vlc-android/android-headers/13/frameworks/base/include/utils/Vector.h:
 
-/home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/system/include/new:
+/home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/system/include/new:
 
-/home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/system/include/cstddef:
+/home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/system/include/cstddef:
 
 /home/yyl/vlc-android/android-headers/13/frameworks/base/include/utils/Log.h:
 

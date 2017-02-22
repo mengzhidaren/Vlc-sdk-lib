@@ -76,6 +76,7 @@ int vlc_entry__i422_i420 (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__opensles_android (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__packetizer_mlp (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__rotate (int (*)(void *, void *, int, ...), void *);
+int vlc_entry__textst (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__dolby_surround_decoder (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__rawdv (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__memory_keystore (int (*)(void *, void *, int, ...), void *);
@@ -93,7 +94,7 @@ int vlc_entry__normvol (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__extract (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__mkv (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__lpcm (int (*)(void *, void *, int, ...), void *);
-int vlc_entry__substtml (int (*)(void *, void *, int, ...), void *);
+int vlc_entry__a52 (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__packetizer_a52 (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__ftp (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__zvbi (int (*)(void *, void *, int, ...), void *);
@@ -125,7 +126,6 @@ int vlc_entry__udp (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__access_concat (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__audio_format (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__gain (int (*)(void *, void *, int, ...), void *);
-int vlc_entry__android_native_window (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__nuv (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__subtitle (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__araw (int (*)(void *, void *, int, ...), void *);
@@ -156,6 +156,7 @@ int vlc_entry__nsv (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__soxr (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__vc1 (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__integer_mixer (int (*)(void *, void *, int, ...), void *);
+int vlc_entry__adf (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__vmem (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__avcodec (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__h26x (int (*)(void *, void *, int, ...), void *);
@@ -179,7 +180,9 @@ int vlc_entry__dummy (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__ogg (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__packetizer_mpeg4video (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__i422_yuy2 (int (*)(void *, void *, int, ...), void *);
+int vlc_entry__packetizer_mpegaudio (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__jpeg (int (*)(void *, void *, int, ...), void *);
+int vlc_entry__android_display (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__stl (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__folder (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__simple_channel_mixer (int (*)(void *, void *, int, ...), void *);
@@ -214,10 +217,8 @@ int vlc_entry__cvdsub (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__fluidsynth (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__packetizer_dirac (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__i420_rgb (int (*)(void *, void *, int, ...), void *);
-int vlc_entry__liba52 (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__nsc (int (*)(void *, void *, int, ...), void *);
 int vlc_entry__theora (int (*)(void *, void *, int, ...), void *);
-int vlc_entry__mpeg_audio (int (*)(void *, void *, int, ...), void *);
 
 const void *vlc_static_modules[] = {
  vlc_entry__timecode,
@@ -296,6 +297,7 @@ const void *vlc_static_modules[] = {
  vlc_entry__opensles_android,
  vlc_entry__packetizer_mlp,
  vlc_entry__rotate,
+ vlc_entry__textst,
  vlc_entry__dolby_surround_decoder,
  vlc_entry__rawdv,
  vlc_entry__memory_keystore,
@@ -313,7 +315,7 @@ const void *vlc_static_modules[] = {
  vlc_entry__extract,
  vlc_entry__mkv,
  vlc_entry__lpcm,
- vlc_entry__substtml,
+ vlc_entry__a52,
  vlc_entry__packetizer_a52,
  vlc_entry__ftp,
  vlc_entry__zvbi,
@@ -345,7 +347,6 @@ const void *vlc_static_modules[] = {
  vlc_entry__access_concat,
  vlc_entry__audio_format,
  vlc_entry__gain,
- vlc_entry__android_native_window,
  vlc_entry__nuv,
  vlc_entry__subtitle,
  vlc_entry__araw,
@@ -376,6 +377,7 @@ const void *vlc_static_modules[] = {
  vlc_entry__soxr,
  vlc_entry__vc1,
  vlc_entry__integer_mixer,
+ vlc_entry__adf,
  vlc_entry__vmem,
  vlc_entry__avcodec,
  vlc_entry__h26x,
@@ -399,7 +401,9 @@ const void *vlc_static_modules[] = {
  vlc_entry__ogg,
  vlc_entry__packetizer_mpeg4video,
  vlc_entry__i422_yuy2,
+ vlc_entry__packetizer_mpegaudio,
  vlc_entry__jpeg,
+ vlc_entry__android_display,
  vlc_entry__stl,
  vlc_entry__folder,
  vlc_entry__simple_channel_mixer,
@@ -434,10 +438,8 @@ const void *vlc_static_modules[] = {
  vlc_entry__fluidsynth,
  vlc_entry__packetizer_dirac,
  vlc_entry__i420_rgb,
- vlc_entry__liba52,
  vlc_entry__nsc,
  vlc_entry__theora,
- vlc_entry__mpeg_audio,
  NULL
 };
 

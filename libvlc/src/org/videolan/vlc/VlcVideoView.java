@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.TextureView;
 
 
@@ -216,7 +217,9 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         if (videoMediaLogic != null)
             videoMediaLogic.onAttachedToWindow(false);
     }
+
     private boolean isRotation = true;
+
     public boolean isRotation() {
         return isRotation;
     }
@@ -312,6 +315,9 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
 
     @Override
     public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+        LogUtils.i(tag, "onVideoSizeChanged   video=" + width + "x" + width + " visible="
+                + visibleWidth + "x" + visibleHeight + "   sarNum=" + sarNum + "x"
+                + sarDen);
         if (width * height == 0) return;
         this.mVideoWidth = visibleWidth;
         this.mVideoHeight = visibleHeight;

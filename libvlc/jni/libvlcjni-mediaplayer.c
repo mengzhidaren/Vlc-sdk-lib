@@ -49,6 +49,7 @@ static const libvlc_event_type_t mp_events[] = {
 struct vlcjni_object_sys
 {
     jobject jwindow;
+    libvlc_video_viewpoint_t *p_vp;
 };
 
 static libvlc_equalizer_t *
@@ -177,6 +178,7 @@ Java_org_videolan_libvlc_MediaPlayer_nativeRelease(JNIEnv *env, jobject thiz)
     if (p_obj->p_sys && p_obj->p_sys->jwindow)
         (*env)->DeleteGlobalRef(env, p_obj->p_sys->jwindow);
 
+    free(p_obj->p_sys->p_vp);
     free(p_obj->p_sys);
 
     VLCJniObject_release(env, thiz, p_obj);
@@ -881,6 +883,98 @@ Java_org_videolan_libvlc_MediaPlayer_nativeSetSpuDelay(JNIEnv *env,
     return libvlc_video_set_spu_delay(p_obj->u.p_mp, delay) == 0 ? true : false;
 }
 
+float
+Java_org_videolan_libvlc_MediaPlayer_nativeGetScale(JNIEnv *env, jobject thiz)
+{
+    vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
+
+    if (!p_obj)
+        return 0.f;
+
+    return libvlc_video_get_scale(p_obj->u.p_mp);
+}
+
+void
+Java_org_videolan_libvlc_MediaPlayer_nativeSetScale(JNIEnv *env, jobject thiz,
+                                                    jfloat factor)
+{
+    vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
+
+    if (!p_obj)
+        return;
+
+    libvlc_video_set_scale(p_obj->u.p_mp, factor);
+}
+
+jstring
+Java_org_videolan_libvlc_MediaPlayer_nativeGetAspectRatio(JNIEnv *env,
+                                                          jobject thiz)
+{
+    vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
+
+    if (!p_obj)
+        return NULL;
+
+    char *psz_aspect = libvlc_video_get_aspect_ratio(p_obj->u.p_mp);
+    jstring jaspect = psz_aspect ? (*env)->NewStringUTF(env, psz_aspect) : NULL;
+    free(psz_aspect);
+    return jaspect;
+}
+
+void
+Java_org_videolan_libvlc_MediaPlayer_nativeSetAspectRatio(JNIEnv *env,
+                                                          jobject thiz,
+                                                          jstring jaspect)
+{
+    const char* psz_aspect;
+    vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
+
+    if (!p_obj)
+        return;
+
+    if (!jaspect)
+    {
+        libvlc_video_set_aspect_ratio(p_obj->u.p_mp, NULL);
+        return;
+    }
+    if (!(psz_aspect = (*env)->GetStringUTFChars(env, jaspect, 0)))
+    {
+        throw_IllegalArgumentException(env, "aspect invalid");
+        return;
+    }
+
+    libvlc_video_set_aspect_ratio(p_obj->u.p_mp, psz_aspect);
+    (*env)->ReleaseStringUTFChars(env, jaspect, psz_aspect);
+}
+
+jboolean
+Java_org_videolan_libvlc_MediaPlayer_nativeUpdateViewpoint(JNIEnv *env,
+                                                           jobject thiz,
+                                                           jfloat yaw,
+                                                           jfloat pitch,
+                                                           jfloat roll,
+                                                           jfloat fov,
+                                                           jboolean absolute)
+{
+    vlcjni_object *p_obj = VLCJniObject_getInstance(env, thiz);
+    if (!p_obj)
+        return false;
+
+    if (p_obj->p_sys->p_vp == NULL)
+    {
+        p_obj->p_sys->p_vp = libvlc_video_new_viewpoint();
+        if (p_obj->p_sys->p_vp == NULL)
+            return false;
+    }
+    p_obj->p_sys->p_vp->f_yaw = yaw;
+    p_obj->p_sys->p_vp->f_pitch = pitch;
+    p_obj->p_sys->p_vp->f_roll = roll;
+    p_obj->p_sys->p_vp->f_field_of_view = fov;
+
+    return libvlc_video_update_viewpoint(p_obj->u.p_mp, p_obj->p_sys->p_vp,
+                                         absolute) == 0 ? true : false;
+}
+
 jboolean
 Java_org_videolan_libvlc_MediaPlayer_nativeAddSlave(JNIEnv *env,
                                                     jobject thiz, jint type,
@@ -948,7 +1042,6 @@ Java_org_videolan_libvlc_MediaPlayer_00024Equalizer_nativeGetPresetName(JNIEnv *
     psz_name = libvlc_audio_equalizer_get_preset_name(index);
 
     return psz_name ? (*env)->NewStringUTF(env, psz_name) : NULL;
-
 }
 
 jint

@@ -1,20 +1,20 @@
 /*****************************************************************************
  * MediaPlayer.java
- * ****************************************************************************
+ *****************************************************************************
  * Copyright © 2015 VLC authors and VideoLAN
- * <p>
+ *
  * Authors  Jean-Baptiste Kempf <jb@videolan.org>
- * <p>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -40,7 +40,8 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.Map;
 
-public class MediaPlayer {
+public class MediaPlayer
+{
     public static final int MEDIA_ERROR_UNKNOWN = 1;
     public static final int MEDIA_ERROR_SERVER_DIED = 100;
     public static final int MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK = 200;
@@ -76,7 +77,7 @@ public class MediaPlayer {
     }
 
     public static MediaPlayer create(Context context, Uri uri) {
-        return create(context, uri, null);
+        return create (context, uri, null);
     }
 
     public static MediaPlayer create(Context context, Uri uri, SurfaceHolder holder) {
@@ -183,12 +184,12 @@ public class MediaPlayer {
 
     // This is of course, less precise than VLC
     public int getCurrentPosition() {
-        return (int) mMediaPlayer.getTime();
+        return (int)mMediaPlayer.getTime();
     }
 
     // This is of course, less precise than VLC
     public int getDuration() {
-        return (int) mMediaPlayer.getLength();
+        return (int)mMediaPlayer.getLength();
     }
 
     public void setNextMediaPlayer(MediaPlayer next) {
@@ -215,10 +216,10 @@ public class MediaPlayer {
     }
 
     public void setVolume(float leftVolume, float rightVolume) {
-        mMediaPlayer.setVolume((int) ((leftVolume + rightVolume) * 100 / 2));
+        mMediaPlayer.setVolume( (int)((leftVolume + rightVolume) * 100/2));
     }
 
-    public void setAudioSessionId(int sessionId) throws IllegalArgumentException, IllegalStateException {
+    public void setAudioSessionId(int sessionId)  throws IllegalArgumentException, IllegalStateException {
     }
 
     public int getAudioSessionId() {
@@ -247,7 +248,7 @@ public class MediaPlayer {
         }
 
         public String getLanguage() {
-            return "und";
+            return  "und";
         }
 
         public MediaFormat getFormat() {
@@ -304,59 +305,66 @@ public class MediaPlayer {
     }
 
     @Override
-    protected void finalize() {
-    }
+    protected void finalize() {}
 
-    public interface OnPreparedListener {
+    public interface OnPreparedListener
+    {
         void onPrepared(MediaPlayer mp);
     }
 
     public void setOnPreparedListener(OnPreparedListener listener) {
     }
 
-    public interface OnCompletionListener {
+    public interface OnCompletionListener
+    {
         void onCompletion(MediaPlayer mp);
     }
 
     public void setOnCompletionListener(OnCompletionListener listener) {
     }
 
-    public interface OnBufferingUpdateListener {
+    public interface OnBufferingUpdateListener
+    {
         void onBufferingUpdate(MediaPlayer mp, int percent);
     }
 
     public void setOnBufferingUpdateListener(OnBufferingUpdateListener listener) {
     }
 
-    public interface OnSeekCompleteListener {
+    public interface OnSeekCompleteListener
+    {
         public void onSeekComplete(MediaPlayer mp);
     }
 
     public void setOnSeekCompleteListener(OnSeekCompleteListener listener) {
     }
 
-    public interface OnVideoSizeChangedListener {
+    public interface OnVideoSizeChangedListener
+    {
         public void onVideoSizeChanged(MediaPlayer mp, int width, int height);
     }
 
     public void setOnVideoSizeChangedListener(OnVideoSizeChangedListener listener) {
     }
 
-    public interface OnTimedTextListener {
+    public interface OnTimedTextListener
+    {
         public void onTimedText(MediaPlayer mp, TimedText text);
     }
 
     public void setOnTimedTextListener(OnTimedTextListener listener) {
     }
 
-    public interface OnErrorListener {
+    public interface OnErrorListener
+    {
         boolean onError(MediaPlayer mp, int what, int extra);
     }
 
     public void setOnErrorListener(OnErrorListener listener) {
     }
 
-    public interface OnInfoListener {
+    public interface OnInfoListener
+    {
         boolean onInfo(MediaPlayer mp, int what, int extra);
     }
 

@@ -1,18 +1,18 @@
 /*****************************************************************************
  * LibVlcUtil.java
- * ****************************************************************************
+ *****************************************************************************
  * Copyright © 2011-2013 VLC authors and VideoLAN
- * <p>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -172,13 +172,11 @@ public class VLCUtil {
             if (br != null)
                 try {
                     br.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) {}
             if (fileReader != null)
                 try {
                     fileReader.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException e) {}
         }
         if (processors == 0)
             processors = 1; // possibly borked cpuinfo?
@@ -247,13 +245,11 @@ public class VLCUtil {
             if (br != null)
                 try {
                     br.close();
-                } catch (IOException ignored) {
-                }
+                } catch (IOException ignored) {}
             if (fileReader != null)
                 try {
                     fileReader.close();
-                } catch (IOException ignored) {
-                }
+                } catch (IOException ignored) {}
         }
 
         // Store into MachineSpecs
@@ -519,6 +515,56 @@ public class VLCUtil {
         } while ((c & 0x80) > 0);
 
         return ret;
+    }
+
+    private static final String URI_AUTHORIZED_CHARS = "!'()*";
+
+    /**
+     * VLC authorize only "-._~" in Mrl format, android Uri authorize "_-!.~'()*".
+     * Therefore, decode the characters authorized by Android Uri when creating an Uri from VLC.
+     */
+    public static Uri UriFromMrl(String mrl) {
+        final char array[] = mrl.toCharArray();
+        final StringBuilder sb = new StringBuilder(array.length);
+
+        for (int i = 0; i < array.length; ++i) {
+            final char c = array[i];
+            if (c == '%') {
+                if (array.length - i >= 3) {
+                    try {
+                        final int hex = Integer.parseInt(new String(array, i + 1, 2), 16);
+                        if (URI_AUTHORIZED_CHARS.indexOf(hex) != -1) {
+                            sb.append((char) hex);
+                            i += 2;
+                            continue;
+                        }
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
+
+            }
+            sb.append(c);
+        }
+
+        return Uri.parse(sb.toString());
+    }
+
+    /**
+     * VLC authorize only "-._~" in Mrl format, android Uri authorize "_-!.~'()*".
+     * Therefore, encode the characters authorized by Android Uri when creating a mrl from an Uri.
+     */
+    public static String locationFromUri(Uri uri) {
+        final char array[] = uri.toString().toCharArray();
+        final StringBuilder sb = new StringBuilder(array.length * 2);
+
+        for (final char c : array) {
+            if (URI_AUTHORIZED_CHARS.indexOf(c) != -1)
+                sb.append("%").append(Integer.toHexString(c));
+            else
+                sb.append(c);
+        }
+
+        return sb.toString();
     }
 
     /**

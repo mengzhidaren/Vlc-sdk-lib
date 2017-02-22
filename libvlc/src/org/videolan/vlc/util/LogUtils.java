@@ -2,14 +2,13 @@ package org.videolan.vlc.util;
 
 import android.util.Log;
 
-import org.videolan.BuildConfig;
 
 /**
- * Created by Administrator on 2016/10/12/012.
+ * Created by yyl on 2016/10/12/012.
  */
 
 public class LogUtils {
-    private static final boolean debug = BuildConfig.DEBUG;
+    private static final boolean debug = true;
 
     public static void i(String tag, String msg) {
         if (debug)

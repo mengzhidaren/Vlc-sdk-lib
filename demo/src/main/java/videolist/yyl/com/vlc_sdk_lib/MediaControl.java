@@ -1,5 +1,6 @@
 package videolist.yyl.com.vlc_sdk_lib;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
     MediaPlayerControl mediaPlayer;
     final MediaController controller;
     TextView logInfo;
+    String tag = "MediaControl";
 
     public MediaControl(VlcVideoView mediaPlayer, TextView logInfo) {
         this.mediaPlayer = mediaPlayer;
@@ -98,8 +100,14 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
             logInfo.setText("播放中");
     }
 
+    long time;
+
     @Override
     public void eventPlayInit(boolean openClose) {
+        if (openClose) {
+            Log.i(tag, "打开时间  00000");
+            time = System.currentTimeMillis();
+        }
         logInfo.setText("加载中");
     }
 
@@ -116,8 +124,11 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
 
     @Override
     public void eventPlay(boolean isPlaying) {
-        if (isPlaying)
+        if (isPlaying) {
             controller.show();
+            Log.i(tag, "打开时间是 time=" + (System.currentTimeMillis() - time));
+        }
+
     }
 
 }

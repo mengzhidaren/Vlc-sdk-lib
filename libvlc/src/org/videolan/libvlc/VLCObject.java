@@ -1,18 +1,18 @@
 /*****************************************************************************
  * VLCObject.java
- * ****************************************************************************
+ *****************************************************************************
  * Copyright © 2015 VLC authors, VideoLAN and VideoLabs
- * <p>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -112,7 +112,6 @@ abstract class VLCObject<T extends VLCEvent> {
     /* JNI */
     @SuppressWarnings("unused") /* Used from JNI */
     private long mInstance = 0;
-
     private synchronized void dispatchEventFromNative(int eventType, long arg1, float arg2) {
         if (isReleased())
             return;
@@ -126,7 +125,6 @@ abstract class VLCObject<T extends VLCEvent> {
                 this.listener = listener;
                 this.event = event;
             }
-
             @Override
             public void run() {
                 listener.onEvent(event);
@@ -136,7 +134,6 @@ abstract class VLCObject<T extends VLCEvent> {
         if (event != null && mEventListener != null && mHandler != null)
             mHandler.post(new EventRunnable(mEventListener, event));
     }
-
     private native void nativeDetachEvents();
 
     /* used only before API 7: substitute for NewWeakGlobalRef */
@@ -144,10 +141,9 @@ abstract class VLCObject<T extends VLCEvent> {
     private Object getWeakReference() {
         return new WeakReference<VLCObject>(this);
     }
-
     @SuppressWarnings("unchecked,unused") /* Used from JNI */
     private static void dispatchEventFromWeakNative(Object weak, int eventType, long arg1, float arg2) {
-        VLCObject obj = ((WeakReference<VLCObject>) weak).get();
+        VLCObject obj = ((WeakReference<VLCObject>)weak).get();
         if (obj != null)
             obj.dispatchEventFromNative(eventType, arg1, arg2);
     }

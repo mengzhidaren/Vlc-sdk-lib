@@ -1,11 +1,11 @@
 jni/obj/local/armeabi-v7a/objs-debug/vlcjni/libvlcjni-mediadiscoverer.o: \
   jni/libvlcjni-mediadiscoverer.c jni/libvlcjni-vlcobject.h \
+  /home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/llvm-libc++/include/stdbool.h \
+  /home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/llvm-libc++/include/__config \
   /home/yyl/vlc-android/vlc/include/vlc/vlc.h \
   /home/yyl/vlc-android/vlc/include/vlc/libvlc.h \
-  /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include/stdio.h \
-  /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include/wchar.h \
-  /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include/wctype.h \
-  /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include/xlocale.h \
+  /home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/llvm-libc++/include/stdio.h \
+  /home/yyl/vlc-android/vlc/include/vlc/libvlc_renderer_discoverer.h \
   /home/yyl/vlc-android/vlc/include/vlc/libvlc_media.h \
   /home/yyl/vlc-android/vlc/include/vlc/libvlc_media_player.h \
   /home/yyl/vlc-android/vlc/include/vlc/libvlc_media_list.h \
@@ -20,17 +20,17 @@ jni/obj/local/armeabi-v7a/objs-debug/vlcjni/libvlcjni-mediadiscoverer.o: \
 
 jni/libvlcjni-vlcobject.h:
 
+/home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/llvm-libc++/include/stdbool.h:
+
+/home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/llvm-libc++/include/__config:
+
 /home/yyl/vlc-android/vlc/include/vlc/vlc.h:
 
 /home/yyl/vlc-android/vlc/include/vlc/libvlc.h:
 
-/home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include/stdio.h:
+/home/yyl/sdk/android-sdk-linux/ndk-bundle/sources/cxx-stl/llvm-libc++/include/stdio.h:
 
-/home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include/wchar.h:
-
-/home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include/wctype.h:
-
-/home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include/xlocale.h:
+/home/yyl/vlc-android/vlc/include/vlc/libvlc_renderer_discoverer.h:
 
 /home/yyl/vlc-android/vlc/include/vlc/libvlc_media.h:
 

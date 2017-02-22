@@ -1,18 +1,18 @@
 /*****************************************************************************
  * Media.java
- * ****************************************************************************
+ *****************************************************************************
  * Copyright © 2015 VLC authors, VideoLAN and VideoLabs
- * <p>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
@@ -25,6 +25,7 @@ import android.support.annotation.Nullable;
 
 import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.libvlc.util.HWDecoderUtil;
+import org.videolan.libvlc.util.VLCUtil;
 
 import java.io.FileDescriptor;
 
@@ -44,7 +45,6 @@ public class Media extends VLCObject<Media.Event> {
         protected Event(int type) {
             super(type);
         }
-
         protected Event(int type, long arg1) {
             super(type, arg1);
         }
@@ -62,8 +62,7 @@ public class Media extends VLCObject<Media.Event> {
         }
     }
 
-    public interface EventListener extends VLCEvent.Listener<Media.Event> {
-    }
+    public interface EventListener extends VLCEvent.Listener<Media.Event> {}
 
     /**
      * libvlc_media_type_t
@@ -128,11 +127,11 @@ public class Media extends VLCObject<Media.Event> {
      * see libvlc_media_parse_flag_t
      */
     public static class Parse {
-        public static final int ParseLocal = 0;
+        public static final int ParseLocal   = 0;
         public static final int ParseNetwork = 0x01;
-        public static final int FetchLocal = 0x02;
+        public static final int FetchLocal   = 0x02;
         public static final int FetchNetwork = 0x04;
-        public static final int DoInteract = 0x08;
+        public static final int DoInteract   = 0x08;
     }
 
     /*
@@ -167,7 +166,7 @@ public class Media extends VLCObject<Media.Event> {
         public final String description;
 
         private Track(int type, String codec, String originalCodec, int id, int profile,
-                      int level, int bitrate, String language, String description) {
+                int level, int bitrate, String language, String description) {
             this.type = type;
             this.codec = codec;
             this.originalCodec = originalCodec;
@@ -188,8 +187,8 @@ public class Media extends VLCObject<Media.Event> {
         public final int rate;
 
         private AudioTrack(String codec, String originalCodec, int id, int profile,
-                           int level, int bitrate, String language, String description,
-                           int channels, int rate) {
+                int level, int bitrate, String language, String description,
+                int channels, int rate) {
             super(Type.Audio, codec, originalCodec, id, profile, level, bitrate, language, description);
             this.channels = channels;
             this.rate = rate;
@@ -198,8 +197,8 @@ public class Media extends VLCObject<Media.Event> {
 
     @SuppressWarnings("unused") /* Used from JNI */
     private static Track createAudioTrackFromNative(String codec, String originalCodec, int id, int profile,
-                                                    int level, int bitrate, String language, String description,
-                                                    int channels, int rate) {
+            int level, int bitrate, String language, String description,
+            int channels, int rate) {
         return new AudioTrack(codec, originalCodec, id, profile,
                 level, bitrate, language, description,
                 channels, rate);
@@ -209,16 +208,45 @@ public class Media extends VLCObject<Media.Event> {
      * see libvlc_video_track_t
      */
     public static class VideoTrack extends Track {
+        public static final class Orientation {
+            /** Top line represents top, left column left */
+            public static final int TopLeft = 0;
+            /** Flipped horizontally */
+            public static final int TopRight = 1;
+            /** Flipped vertically */
+            public static final int BottomLeft = 2;
+            /** Rotated 180 degrees */
+            public static final int BottomRight = 3;
+            /** Transposed */
+            public static final int LeftTop = 4;
+            /** Rotated 90 degrees clockwise (or 270 anti-clockwise) */
+            public static final int LeftBottom = 5;
+            /** Rotated 90 degrees anti-clockwise */
+            public static final int RightTop= 6;
+            /** Anti-transposed */
+            public static final int RightBottom = 7;
+        }
+
+        public static final class Projection {
+            public static final int Rectangular = 0;
+            /** 360 spherical */
+            public static final int EquiRectangular = 1;
+            public static final int CubemapLayoutStandard = 0x100;
+        }
+
         public final int height;
         public final int width;
         public final int sarNum;
         public final int sarDen;
         public final int frameRateNum;
         public final int frameRateDen;
+        public final int orientation;
+        public final int projection;
 
         private VideoTrack(String codec, String originalCodec, int id, int profile,
-                           int level, int bitrate, String language, String description,
-                           int height, int width, int sarNum, int sarDen, int frameRateNum, int frameRateDen) {
+                int level, int bitrate, String language, String description,
+                int height, int width, int sarNum, int sarDen, int frameRateNum, int frameRateDen,
+                int orientation, int projection) {
             super(Type.Video, codec, originalCodec, id, profile, level, bitrate, language, description);
             this.height = height;
             this.width = width;
@@ -226,16 +254,19 @@ public class Media extends VLCObject<Media.Event> {
             this.sarDen = sarDen;
             this.frameRateNum = frameRateNum;
             this.frameRateDen = frameRateDen;
+            this.orientation = orientation;
+            this.projection = projection;
         }
     }
 
     @SuppressWarnings("unused") /* Used from JNI */
     private static Track createVideoTrackFromNative(String codec, String originalCodec, int id, int profile,
-                                                    int level, int bitrate, String language, String description,
-                                                    int height, int width, int sarNum, int sarDen, int frameRateNum, int frameRateDen) {
+            int level, int bitrate, String language, String description,
+            int height, int width, int sarNum, int sarDen, int frameRateNum, int frameRateDen,
+            int orientation, int projection) {
         return new VideoTrack(codec, originalCodec, id, profile,
                 level, bitrate, language, description,
-                height, width, sarNum, sarDen, frameRateNum, frameRateDen);
+                height, width, sarNum, sarDen, frameRateNum, frameRateDen, orientation, projection);
     }
 
     /**
@@ -245,8 +276,8 @@ public class Media extends VLCObject<Media.Event> {
         public final String encoding;
 
         private SubtitleTrack(String codec, String originalCodec, int id, int profile,
-                              int level, int bitrate, String language, String description,
-                              String encoding) {
+                int level, int bitrate, String language, String description,
+                String encoding) {
             super(Type.Text, codec, originalCodec, id, profile, level, bitrate, language, description);
             this.encoding = encoding;
         }
@@ -254,8 +285,8 @@ public class Media extends VLCObject<Media.Event> {
 
     @SuppressWarnings("unused") /* Used from JNI */
     private static Track createSubtitleTrackFromNative(String codec, String originalCodec, int id, int profile,
-                                                       int level, int bitrate, String language, String description,
-                                                       String encoding) {
+            int level, int bitrate, String language, String description,
+            String encoding) {
         return new SubtitleTrack(codec, originalCodec, id, profile,
                 level, bitrate, language, description,
                 encoding);
@@ -367,10 +398,10 @@ public class Media extends VLCObject<Media.Event> {
                                                int sentBytes,
                                                float sendBitrate) {
         return new Stats(readBytes, inputBitrate, demuxReadBytes,
-                demuxBitrates, demuxCorrupted, demuxDiscontinuity,
-                decodedVideo, decodedAudio, displayedPictures,
-                lostPictures, playedAbuffers, lostAbuffers,
-                sentPackets, sentBytes, sendBitrate);
+                         demuxBitrates, demuxCorrupted, demuxDiscontinuity,
+                         decodedVideo, decodedAudio, displayedPictures,
+                         lostPictures, playedAbuffers, lostAbuffers,
+                         sentPackets, sentBytes, sendBitrate);
     }
 
     private static final int PARSE_STATUS_INIT = 0x00;
@@ -395,7 +426,7 @@ public class Media extends VLCObject<Media.Event> {
      */
     public Media(LibVLC libVLC, String path) {
         nativeNewFromPath(libVLC, path);
-        mUri = UriFromMrl(nativeGetMrl());
+        mUri = VLCUtil.UriFromMrl(nativeGetMrl());
     }
 
     /**
@@ -405,7 +436,7 @@ public class Media extends VLCObject<Media.Event> {
      * @param uri a valid RFC 2396 Uri
      */
     public Media(LibVLC libVLC, Uri uri) {
-        nativeNewFromLocation(libVLC, locationFromUri(uri));
+        nativeNewFromLocation(libVLC, VLCUtil.locationFromUri(uri));
         mUri = uri;
     }
 
@@ -417,7 +448,7 @@ public class Media extends VLCObject<Media.Event> {
      */
     public Media(LibVLC libVLC, FileDescriptor fd) {
         nativeNewFromFd(libVLC, fd);
-        mUri = UriFromMrl(nativeGetMrl());
+        mUri = VLCUtil.UriFromMrl(nativeGetMrl());
     }
 
     /**
@@ -431,57 +462,7 @@ public class Media extends VLCObject<Media.Event> {
         if (!ml.isLocked())
             throw new IllegalStateException("MediaList should be locked");
         nativeNewFromMediaList(ml, index);
-        mUri = UriFromMrl(nativeGetMrl());
-    }
-
-    private static final String URI_AUTHORIZED_CHARS = "!'()*";
-
-    /**
-     * VLC authorize only "-._~" in Mrl format, android Uri authorize "_-!.~'()*".
-     * Therefore, decode the characters authorized by Android Uri when creating an Uri from VLC.
-     */
-    private static Uri UriFromMrl(String mrl) {
-        final char array[] = mrl.toCharArray();
-        final StringBuilder sb = new StringBuilder(array.length);
-
-        for (int i = 0; i < array.length; ++i) {
-            final char c = array[i];
-            if (c == '%') {
-                if (array.length - i >= 3) {
-                    try {
-                        final int hex = Integer.parseInt(new String(array, i + 1, 2), 16);
-                        if (URI_AUTHORIZED_CHARS.indexOf(hex) != -1) {
-                            sb.append((char) hex);
-                            i += 2;
-                            continue;
-                        }
-                    } catch (NumberFormatException ignored) {
-                    }
-                }
-
-            }
-            sb.append(c);
-        }
-
-        return Uri.parse(sb.toString());
-    }
-
-    /**
-     * VLC authorize only "-._~" in Mrl format, android Uri authorize "_-!.~'()*".
-     * Therefore, encode the characters authorized by Android Uri when creating a mrl from an Uri.
-     */
-    protected static String locationFromUri(Uri uri) {
-        final char array[] = uri.toString().toCharArray();
-        final StringBuilder sb = new StringBuilder(array.length * 2);
-
-        for (final char c : array) {
-            if (URI_AUTHORIZED_CHARS.indexOf(c) != -1)
-                sb.append("%").append(Integer.toHexString(c));
-            else
-                sb.append(c);
-        }
-
-        return sb.toString();
+        mUri = VLCUtil.UriFromMrl(nativeGetMrl());
     }
 
     public void setEventListener(EventListener listener) {
@@ -491,21 +472,21 @@ public class Media extends VLCObject<Media.Event> {
     @Override
     protected synchronized Event onEventNative(int eventType, long arg1, float arg2) {
         switch (eventType) {
-            case Event.MetaChanged:
-                // either we update all metas (if first call) or we update a specific meta
-                int id = (int) arg1;
-                if (id >= 0 && id < Meta.MAX)
-                    mNativeMetas[id] = null;
-                return new Event(eventType, arg1);
-            case Event.DurationChanged:
-                mDuration = -1;
-                break;
-            case Event.ParsedChanged:
-                postParse();
-                return new Event(eventType, arg1);
-            case Event.StateChanged:
-                mState = -1;
-                break;
+        case Event.MetaChanged:
+            // either we update all metas (if first call) or we update a specific meta
+            int id = (int) arg1;
+            if (id >= 0 && id < Meta.MAX)
+                mNativeMetas[id] = null;
+            return new Event(eventType, arg1);
+        case Event.DurationChanged:
+            mDuration = -1;
+            break;
+        case Event.ParsedChanged:
+            postParse();
+            return new Event(eventType, arg1);
+        case Event.StateChanged:
+            mState = -1;
+            break;
         }
         return new Event(eventType);
     }
@@ -624,7 +605,7 @@ public class Media extends VLCObject<Media.Event> {
      * @param flags see {@link Parse}
      * @param timeout maximum time allowed to preparse the media. If -1, the
      * default "preparse-timeout" option will be used as a timeout. If 0, it will
-     * wait indefinitely.如果小于0, the timeout will be used (in milliseconds).
+     * wait indefinitely. If > 0, the timeout will be used (in milliseconds).
      * @return true in case of success, false otherwise.
      */
     public boolean parseAsync(int flags, int timeout) {
@@ -661,7 +642,7 @@ public class Media extends VLCObject<Media.Event> {
     /**
      * Get the type of the media
      *
-     * @return type
+     * @see {@link Type}
      */
     public int getType() {
         synchronized (this) {
@@ -858,38 +839,21 @@ public class Media extends VLCObject<Media.Event> {
 
     /* JNI */
     private native void nativeNewFromPath(LibVLC libVLC, String path);
-
     private native void nativeNewFromLocation(LibVLC libVLC, String location);
-
     private native void nativeNewFromFd(LibVLC libVLC, FileDescriptor fd);
-
     private native void nativeNewFromMediaList(MediaList ml, int index);
-
     private native void nativeRelease();
-
     private native boolean nativeParseAsync(int flags, int timeout);
-
     private native boolean nativeParse(int flags);
-
     private native String nativeGetMrl();
-
     private native int nativeGetState();
-
     private native String nativeGetMeta(int id);
-
     private native Track[] nativeGetTracks();
-
     private native long nativeGetDuration();
-
     private native int nativeGetType();
-
     private native void nativeAddOption(String option);
-
     private native void nativeAddSlave(int type, int priority, String uri);
-
     private native void nativeClearSlaves();
-
     private native Slave[] nativeGetSlaves();
-
     private native Stats nativeGetStats();
 }
