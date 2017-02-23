@@ -55,7 +55,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
 
     public void onDestory() {
         if (videoMediaLogic != null)
-            videoMediaLogic.setVideoSizeChange(null);
+            videoMediaLogic.onDestory();
         LogUtils.i(tag, "onDestory");
     }
 

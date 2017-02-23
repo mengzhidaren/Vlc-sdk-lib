@@ -21,9 +21,9 @@ import org.videolan.vlc.util.VLCInstance;
 
 /**
  */
-public class VideoFragment extends Fragment implements View.OnClickListener {
+public class VlcVideoFragment extends Fragment implements View.OnClickListener {
    // String path = "http://img1.peiyinxiu.com/2014121211339c64b7fb09742e2c.mp4";
-    String path = "http://v.tiaooo.com/ljbmVx2MrnY2NiNk-cWsUh08480y";
+  public static   String path = "http://v.tiaooo.com/ljbmVx2MrnY2NiNk-cWsUh08480y";
     // String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
     //String path = "rtsp://139.199.159.71:554/easypusher_rtsp.sdp";
     //  @Bind(R.id.player)
@@ -31,7 +31,7 @@ public class VideoFragment extends Fragment implements View.OnClickListener {
     //  @Bind(R.id.info)
     TextView logInfo;
 
-    String tag = "VideoFragment";
+    String tag = "VlcVideoFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,11 +53,16 @@ public class VideoFragment extends Fragment implements View.OnClickListener {
                 Log.i(tag, "---------   start   ----------------");
                 vlcVideoView.startPlay(path);
             }
-        }, 3000);
+        }, 1000);
 
         return view;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        vlcVideoView.onDestory();
+    }
 
     public boolean isFullscreen;
 

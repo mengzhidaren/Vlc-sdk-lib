@@ -1,12 +1,16 @@
 package videolist.yyl.com.vlc_sdk_lib;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import org.videolan.vlc.util.VLCInstance;
+
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,8 +35,19 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.i(tag, "什么破手机  不支持");
         }
-
+        new IjkMediaPlayer();
 
     }
 
+    public void myClick1(View view) {
+        startActivity(new Intent(this, IjkPlayerActivity.class));
+    }
+
+    public void myClick2(View view) {
+        startActivity(new Intent(this, VlcPlayerActivity.class));
+    }
+
+    public void myClick3(View view) {
+        startActivity(new Intent(this, TestActivity.class));
+    }
 }

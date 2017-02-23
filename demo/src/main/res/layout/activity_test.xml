@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_test"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="videolist.yyl.com.vlc_sdk_lib.TestActivity">
+    <fragment xmlns:tools="http://schemas.android.com/tools"
+        android:name="videolist.yyl.com.vlc_sdk_lib.VlcVideoFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tag="yylvideo"
+        tools:layout="@layout/fragment_video" />
+
+    <fragment xmlns:tools="http://schemas.android.com/tools"
+        android:name="videolist.yyl.com.vlc_sdk_lib.IjkFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tag="fragment_ijk"
+        tools:layout="@layout/fragment_ijk" />
+</LinearLayout>

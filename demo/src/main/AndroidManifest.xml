@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="videolist.yyl.com.vlc_sdk_lib">
+
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 允许读取手机状态的权限 -->
@@ -13,6 +14,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 程序可以读取设备外部存储空间（内置SDcard和外置SDCard）的文件 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,6 +30,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".IjkPlayerActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".VlcPlayerActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".TestActivity"></activity>
     </application>
 
 </manifest>

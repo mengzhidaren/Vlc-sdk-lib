@@ -29,7 +29,7 @@ import static android.os.Build.VERSION_CODES.KITKAT;
  * Created by yyl on 2016/10/12/012.
  */
 
-public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout.OnNewVideoLayoutListener,IVLCVout.Callback {
+public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout.OnNewVideoLayoutListener, IVLCVout.Callback {
     private static final HandlerThread sThread = new HandlerThread("VlcVideoPlayThread");
     private Handler mVideoHandler;
     private Handler mainHandler;
@@ -262,10 +262,10 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
         if (path.contains("://")) {
             final Media media = new Media(libVLC, Uri.parse(path));
 //            if (Build.VERSION.SDK_INT <= KITKAT) {
-//                media.setHWDecoderEnabled(false, false);
+                media.setHWDecoderEnabled(false, false);
 //            }
             media.setEventListener(mMediaListener);
-        //    media.parseAsync(Media.Parse.FetchNetwork, 5 * 1000);
+            //    media.parseAsync(Media.Parse.FetchNetwork, 5 * 1000);
             mMediaPlayer.setMedia(media);
             media.release();
         } else {
@@ -383,6 +383,8 @@ public class VlcVideoPlayer implements MediaPlayerControl, Handler.Callback, IVL
     }
 
     public void onDestory() {
+        videoSizeChange = null;
+        release();
         if (mMediaPlayer != null) {
             if (!mMediaPlayer.isReleased()) {
                 mMediaPlayer.release();
