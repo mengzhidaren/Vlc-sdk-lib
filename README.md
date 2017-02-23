@@ -1,6 +1,6 @@
 # Vlc-sdk-lib
 如果你想构建列表播放器
- 请到我的另一个项目有更多列表demo参考
+ 请到我的另一个项目有更多列表demo参考，虽然还没写完
   * [VlcPlayer] https://github.com/mengzhidaren/VlcPlayer
 
 ---
@@ -33,22 +33,11 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
    }
 ```
 
-
 目前支持的库： x86_64     x86    armeabi-v7a    arm64-v8a    mips    mips64
-
-*目前的功能：几乎所有格式文件的播放 buffing进度支持 多线程死锁的bug也修好了
-
-**[个人评价 比 ijk的播放器要好很多 应该是本人目前所知道的开源播放器 中最好的了]
-
-
-
-
-
-
+*目前的功能：几乎所有格式文件的播放(已知的.mov不支持)  具体请看官方更新日志
 
 ##Thanks
 * [vlc](https://www.videolan.org)
-
 
 ###V1.0.1
 1.提交第一版
@@ -74,8 +63,8 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 ```
 vlc-android的代码在
 linux  ubuntu64  16.4  中搭建编绎环境
-android-sdk 版本 api24
-ndk版本 r12
+android-sdk 版本 api25
+ndk版本 r13b
 java 版本 8
 vlc-android 版本 3.0.0-v2.1.0版本
 ```

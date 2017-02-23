@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //加载库文件
         if (VLCInstance.testCompatibleCPU(this)) {
             Log.i(tag, "支持 x86  armv7");
             setContentView(R.layout.activity_main);
