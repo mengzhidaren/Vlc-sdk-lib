@@ -12,7 +12,7 @@ def siteUrl = 'https://github.com/mengzhidaren'   // 项目的主页
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         minSdkVersion 14

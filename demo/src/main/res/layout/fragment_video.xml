@@ -2,10 +2,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.videolan.vlc.VlcVideoView
-        android:id="@+id/player"
+    <com.yyl.vlc.FrameLayoutScale
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp">
+
+        <org.videolan.vlc.VlcVideoView
+            android:id="@+id/player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.yyl.vlc.FrameLayoutScale>
 
     <TextView
         android:id="@+id/info"

@@ -2,14 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "videolist.yyl.com.vlc_sdk_lib"
+        applicationId "com.yyl.vlc"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        externalNativeBuild {
 //            cmake {
 //                cppFlags "-frtti -fexceptions"
@@ -39,7 +38,7 @@ dependencies {
 //        exclude group: 'com.android.support', module: 'support-annotations'
 //    })
     // compile 'com.jakewharton:butterknife:7.0.1'
-    // compile 'com.yyl.vlc:vlc-android-sdk:1.3.0'
+   // compile 'com.yyl.vlc:vlc-android-sdk:1.3.0'
     compile project(":libvlc")
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'tv.danmaku.ijk.media:ijkplayer-java:0.7.7.1'

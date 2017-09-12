@@ -4,10 +4,9 @@
     android:id="@+id/activity_test"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="videolist.yyl.com.vlc_sdk_lib.TestActivity">
+    android:orientation="vertical">
     <fragment xmlns:tools="http://schemas.android.com/tools"
-        android:name="videolist.yyl.com.vlc_sdk_lib.VlcVideoFragment"
+        android:name="com.yyl.vlc.vlc.VlcVideoFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -15,7 +14,7 @@
         tools:layout="@layout/fragment_video" />
 
     <fragment xmlns:tools="http://schemas.android.com/tools"
-        android:name="videolist.yyl.com.vlc_sdk_lib.IjkFragment"
+        android:name="com.yyl.vlc.ijk.IjkFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"

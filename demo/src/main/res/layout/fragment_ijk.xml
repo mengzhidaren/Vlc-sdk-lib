@@ -1,14 +1,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="videolist.yyl.com.vlc_sdk_lib.IjkFragment">
+    android:layout_height="match_parent">
 
     <!-- TODO: Update blank fragment layout -->
-    <videolist.yyl.com.vlc_sdk_lib.IjkPlayer
-        android:id="@+id/ijkplayer"
+
+
+    <com.yyl.vlc.FrameLayoutScale
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp">
+
+        <com.yyl.vlc.ijk.IjkPlayer
+            android:id="@+id/ijkplayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.yyl.vlc.FrameLayoutScale>
 
     <LinearLayout
         android:layout_width="wrap_content"

@@ -5,7 +5,11 @@ package org.videolan.vlc.listener;
  */
 public interface MediaListenerEvent {
 
-    void eventBuffing(float buffing, boolean show);
+    int EVENT_ERROR = 0;
+    int EVENT_ERROR_PATH = 2;
+    int EVENT_BUFFING = 1;
+
+    void eventBuffing(int event, float buffing);
 
     /**
      * 初始化开始加载
@@ -16,7 +20,7 @@ public interface MediaListenerEvent {
 
     void eventStop(boolean isPlayError);
 
-    void eventError(int error, boolean show);
+    void eventError(int event, boolean show);
 
     void eventPlay(boolean isPlaying);
 }

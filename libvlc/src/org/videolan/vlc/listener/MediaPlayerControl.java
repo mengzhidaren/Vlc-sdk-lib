@@ -49,7 +49,7 @@ public interface MediaPlayerControl {
     float getPlaybackSpeed();
 
     /**
-     * 循环    写的不是很好
+     * 循环    待优化
      */
     void setLoop(boolean isLoop);
 

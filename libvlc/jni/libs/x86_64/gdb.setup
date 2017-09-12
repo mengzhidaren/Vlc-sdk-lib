@@ -1,0 +1,2 @@
+set solib-search-path jni/obj/local/x86_64
+directory /home/yyl/sdk/NDK/android-ndk-r12b/platforms/android-21/arch-x86_64/usr/include /home/yyl/sdk/NDK/android-ndk-r12b/sources/android/support /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++ /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++abi /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/libcxx/include /home/yyl/sdk/NDK/android-ndk-r12b/sources/cxx-stl/llvm-libc++/../../android/support/include jni /home/yyl/vlc-android/vlc/include

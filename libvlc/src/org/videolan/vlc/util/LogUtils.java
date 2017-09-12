@@ -1,6 +1,9 @@
 package org.videolan.vlc.util;
 
+import android.os.Build;
 import android.util.Log;
+
+import org.videolan.BuildConfig;
 
 
 /**
@@ -8,7 +11,7 @@ import android.util.Log;
  */
 
 public class LogUtils {
-    private static final boolean debug = true;
+    private static final boolean debug =true;
 
     public static void i(String tag, String msg) {
         if (debug)

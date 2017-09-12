@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.TextureView;
 
 
@@ -21,7 +20,7 @@ import org.videolan.vlc.util.LogUtils;
  */
 
 public class VlcVideoView extends TextureView implements MediaPlayerControl, TextureView.SurfaceTextureListener, VideoSizeChange {
-    private VlcVideoPlayer videoMediaLogic;
+    private VlcPlayer videoMediaLogic;
     private final String tag = "VideoView";
 
     public VlcVideoView(Context context) {
@@ -60,7 +59,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
     }
 
     private void init(Context context) {
-        videoMediaLogic = new VlcVideoPlayer(context);
+        videoMediaLogic = new VlcPlayer(context);
         videoMediaLogic.setVideoSizeChange(this);
         setSurfaceTextureListener(this);
     }
@@ -176,7 +175,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         post(new Runnable() {
             @Override
             public void run() {
-                adjustAspectRatio(mVideoWidth, mVideoHeight);
+                adjustAspectRatio(mVideoWidth, mVideoHeight, rotation);
             }
         });
     }
@@ -185,7 +184,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         LogUtils.i(tag, "onSurfaceTextureDestroyed");
         videoMediaLogic.onSurfaceTextureDestroyed();
-        return true;
+        return false;
     }
 
     @Override
@@ -202,8 +201,6 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
             return;
         }
         setKeepScreenOn(true);
-        if (videoMediaLogic != null)
-            videoMediaLogic.onAttachedToWindow(true);
     }
 
     @Override
@@ -214,24 +211,11 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
             return;
         }
         setKeepScreenOn(false);
-        if (videoMediaLogic != null)
-            videoMediaLogic.onAttachedToWindow(false);
     }
 
-    private boolean isRotation = true;
-
-    public boolean isRotation() {
-        return isRotation;
-    }
-
-    private void adjustAspectRatio(int videoWidth, int videoHeight) {
+    private void adjustAspectRatio(int videoWidth, int videoHeight, int rotation) {
         if (videoWidth * videoHeight == 0) {
             return;
-        }
-        if (videoWidth > videoHeight) {
-            isRotation = true;
-        } else {
-            isRotation = false;
         }
         int viewWidth = getWidth();
         int viewHeight = getHeight();
@@ -251,48 +235,10 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
             newWidth = (int) (viewHeight * aspectRatio);
             newHeight = viewHeight;
         }
-
-
-//        if (visibleWidth > visibleHeight) {//正常比例16：9
-//            //最大的高  大于   要显示的高
-//            if (viewHeight >= (int) (viewWidth * aspectRatio)) {
-//                // limited by narrow width; restrict height
-//                newWidth = viewWidth;
-//                newHeight = (int) (viewWidth * aspectRatio);
-//            } else {
-//                // limited by short height; restrict width
-//                newWidth = (int) (viewHeight / aspectRatio);
-//                newHeight = viewHeight;
-//            }
-//        } else {//非正常可能是 90度
-//
-//        }
-
-
-//        if (viewHeight > (int) (viewWidth * aspectRatio)) {
-//            // limited by narrow width; restrict height
-//            newWidth = viewWidth;
-//            newHeight = (int) (viewWidth * aspectRatio);
-//        } else {
-//            // limited by short height; restrict width
-//            newWidth = (int) (viewHeight / aspectRatio);
-//            newHeight = viewHeight;
-//        }
-        //        if (videoWidth != visibleWidth || videoHeight != visibleHeight) {
-//            xoff = (videoWidth - visibleWidth) / 2;
-//            yoff = (videoHeight - visibleHeight) / 2;
-//            txform.setScale((float) newWidth / viewWidth, (float) newHeight
-//                    / viewHeight);
-//        } else {
-//            txform.setScale((float) newWidth / viewWidth, (float) newHeight
-//                    / viewHeight);
-//        }
         float xoff = (viewWidth - newWidth) / 2f;
         float yoff = (viewHeight - newHeight) / 2f;
         Matrix txform = new Matrix();
         getTransform(txform);
-
-
         txform.setScale((float) newWidth / viewWidth, (float) newHeight
                 / viewHeight);
         // txform.postRotate(10); // just for fun
@@ -300,18 +246,23 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         setTransform(txform);
         LogUtils.i(tag, "video=" + videoWidth + "x" + videoHeight + " view="
                 + viewWidth + "x" + viewHeight + " newView=" + newWidth + "x"
-                + newHeight + " off=" + xoff + "," + yoff);
+                + newHeight + " off=" + xoff + "," + yoff + "   isRotation=" + rotation);
+        if (rotation == 180) {
+            setRotation(180);
+        } else {
+            setRotation(0);
+        }
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
-            adjustAspectRatio(mVideoWidth, mVideoHeight);
+            adjustAspectRatio(mVideoWidth, mVideoHeight, 0);
         }
     }
 
-    private int mVideoWidth, mVideoHeight;
+    private int mVideoWidth, mVideoHeight, rotation = 0;
 
     @Override
     public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
@@ -324,7 +275,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         post(new Runnable() {
             @Override
             public void run() {
-                adjustAspectRatio(mVideoWidth, mVideoHeight);
+                adjustAspectRatio(mVideoWidth, mVideoHeight, rotation);
             }
         });
     }
