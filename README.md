@@ -1,8 +1,6 @@
 # Vlc-sdk-lib
-如果你想构建列表播放器
- 请到我的另一个项目有更多列表demo参考，虽然还没写完
-  * [VlcPlayer] https://github.com/mengzhidaren/VlcPlayer
-
+如果你想构建切换大小屏播放器 demo参考，
+  * [VideoHeaderView]https://github.com/mengzhidaren/RecylerViewMultiHeaderView
 ---
 
 # 实现的功能
@@ -11,8 +9,7 @@
 2,软硬解切换.支持ffmpeg指令  < transform:rotation=90>
 3,当前缓冲百分比    <MediaPlayer.Event.Buffering>
 4,视频(音频)播放速度可调,任意速度可调. (0.25-4)   < player.setRate(float rate); >
-5,加载字幕，设置镜面，A-B循环.<>
-6,播放器控件左滑动,右半屏滑动,横向滑动来完成调节亮度/声音/快进的功能.<正在完善----可查看我另一个项目vlcplayer>
+5,加载字幕，设置镜面<>
 ```
 # 使用方法
 ```
@@ -31,6 +28,13 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
      // jCenter
     compile 'com.yyl.vlc:vlc-android-sdk:1.3.0'
    }
+   
+   
+   可选 精简的库
+    ndk {
+               //支持的abi   , //'x86_64'//, 'arm64-v8a'
+               abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86'
+  }
 ```
 
 目前支持的库： x86_64     x86    armeabi-v7a    arm64-v8a    mips    mips64
@@ -44,8 +48,6 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 ###V1.2.0
 1更新播放控件
 发现bug或有好的建议欢迎[issue]
-我后期会时间会优化下库大小  和其它bug
-目前已知bug：  还没有   就是库文件有点大
 ###V1.3.0
 增加 mips   mips64  指令集的支持
 # DEMO效果预览
@@ -68,7 +70,7 @@ ndk版本 r13b
 java 版本 8
 vlc-android 版本 3.0.0-v2.1.0版本
 ```
-1.我在win10中安装的  VMware Workstation Pro  可以自已百度下载
+1.我在win10中安装的  VMware Workstation Pro
 安装ubuntu 64  16 的最新版
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/1.png)
 
