@@ -25,13 +25,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //加载库文件
         if (VLCInstance.testCompatibleCPU(this)) {
+            new IjkMediaPlayer();
             Log.i(tag, "支持 x86  armv7");
             setContentView(R.layout.activity_main);
         } else {
             Log.i(tag, "不支持");
         }
-        new IjkMediaPlayer();
-
     }
 
     public void myClick1(View view) {
