@@ -23,6 +23,7 @@ import org.videolan.vlc.util.VLCInstance;
 
 
 /**
+ * d
  */
 public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     public static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
