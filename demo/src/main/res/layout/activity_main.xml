@@ -27,4 +27,18 @@
         android:layout_height="wrap_content"
         android:onClick="myClick3"
         android:text="double player" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="myClick4"
+        android:text="thumbnail" />
+
+
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher" />
 </LinearLayout>

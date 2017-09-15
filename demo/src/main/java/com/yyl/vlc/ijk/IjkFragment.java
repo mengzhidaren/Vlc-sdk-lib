@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yyl.vlc.MainActivity;
 import com.yyl.vlc.R;
-import com.yyl.vlc.vlc.VlcVideoFragment;
 
 
 /**
@@ -36,7 +36,7 @@ public class IjkFragment extends Fragment {
             @Override
             public void run() {
                 Log.i(tag, "---------   start   ----------------");
-                ijkPlayer.setPath(VlcVideoFragment.path);
+                ijkPlayer.setPath(MainActivity.path);
             }
         }, 1000);
 

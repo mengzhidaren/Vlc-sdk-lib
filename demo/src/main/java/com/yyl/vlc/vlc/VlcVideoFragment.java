@@ -2,10 +2,8 @@ package com.yyl.vlc.vlc;
 
 
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,20 +12,17 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.yyl.vlc.MainActivity;
 import com.yyl.vlc.MediaControl;
 import com.yyl.vlc.R;
 
-import org.videolan.libvlc.Media;
 import org.videolan.vlc.VlcVideoView;
-import org.videolan.vlc.util.VLCInstance;
 
 
 /**
  * d
  */
 public class VlcVideoFragment extends Fragment implements View.OnClickListener {
-    public static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-    //public static final String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
     VlcVideoView vlcVideoView;
     TextView logInfo;
 
@@ -49,7 +44,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
             @Override
             public void run() {
                 Log.i(tag, "---------   start   ----------------");
-                vlcVideoView.startPlay(path);
+                vlcVideoView.startPlay(MainActivity.path);
             }
         }, 1000);
 
