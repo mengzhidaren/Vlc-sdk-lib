@@ -20,6 +20,14 @@
 VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  player.setMediaListenerEvent(new MediaListenerEvent());
                  player.startPlay(path);
+                 
+                 
+ thumbnail        
+ 截图方法   byte[] b = VLCUtil.getThumbnail(media, width, height);
+           if (b != null) {
+                 Bitmap thumbnail = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                 thumbnail.copyPixelsFromBuffer(ByteBuffer.wrap(b));
+           }
 ```
 
 #引用库文件
