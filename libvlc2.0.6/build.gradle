@@ -28,6 +28,5 @@ android {
 }
 
 dependencies {
-    androidTestCompile 'com.android.support.test:runner:0.5'
     compile 'com.android.support:appcompat-v7:24.2.1'
 }
