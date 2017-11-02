@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * 不推荐用vlc截图 不稳定 可以用TextureView的画布截取
+     * @param view
+     */
     public void myClick4(View view) {
         new Thread(new Runnable() {
             @Override
@@ -76,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 //  media.setHWDecoderEnabled(false, false);
                 media.parse(Media.Parse.ParseNetwork);
                 Log.i("yyl", "getTrackCount=" + media.getTrackCount());
-                Media.VideoTrack track = (Media.VideoTrack) media.getTrack(Media.Track.Type.Video);
+                Media.VideoTrack track = (Media.VideoTrack) media.getTrack(Media.Track.Type.Video);//获取video轨道的信息 可用ffmpeg查看
                 Log.i("yyl", "track=" + track.toString());
                 final Bitmap bitmap = ThumbnailUtils.getThumbnail(media, track.width / 2, track.height / 2);
                 Log.i("yyl", "bitmap=" + bitmap);

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "26.0.1"
+    compileSdkVersion Integer.valueOf(project.properties.get("compileSdkVersion"))
+    buildToolsVersion project.properties.get("buildToolsVersion")
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 22
-        versionCode 1
+        minSdkVersion Integer.valueOf(project.properties.get("minSdkVersion"))
+        targetSdkVersion Integer.valueOf(project.properties.get("targetSdkVersion"))
+        versionCode Integer.valueOf(project.properties.get("versionCode"))
         versionName "1.0"
     }
     sourceSets {
@@ -21,9 +21,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    testOptions {
-        unitTests.returnDefaultValues = true
     }
 }
 
