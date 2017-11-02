@@ -8,7 +8,7 @@ import org.videolan.libvlc.util.VLCUtil;
 import java.nio.ByteBuffer;
 
 /**
- * Created by yuyunlong on 2017/9/13/013.
+ * Created by yyl on 2017/11/02
  */
 
 public class ThumbnailUtils {

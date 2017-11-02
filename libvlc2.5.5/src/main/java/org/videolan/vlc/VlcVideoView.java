@@ -16,7 +16,7 @@ import org.videolan.vlc.listener.VideoSizeChange;
 import org.videolan.vlc.util.LogUtils;
 
 /**
- * Created by yyl on 2016/10/12/012.
+ * Created by yyl on 2017/11/02
  */
 
 public class VlcVideoView extends TextureView implements MediaPlayerControl, TextureView.SurfaceTextureListener, VideoSizeChange {

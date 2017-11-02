@@ -36,16 +36,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
+        setContentView(R.layout.activity_main);
         //加载库文件
         if (VLCInstance.testCompatibleCPU(this)) {
-            new IjkMediaPlayer();
             Log.i(tag, "support   cpu");
-            setContentView(R.layout.activity_main);
         } else {
             Log.i(tag, "not support  cpu");
         }
         thumbnail = (ImageView) findViewById(R.id.thumbnail);
-        context = this;
     }
 
     public void myClick1(View view) {
@@ -63,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 不推荐用vlc截图 不稳定 可以用TextureView的画布截取
+     *
      * @param view
      */
     public void myClick4(View view) {

@@ -23,7 +23,6 @@ task clean(type: Delete) {
 }
 ext {
     appCompatVersion = '25.2.0'
-    constraintLayoutVersion = '1.1.0-beta1'
     buildToolsVersion = "26.0.2"
     compileSdkVersion = 26
     minSdkVersion = 9

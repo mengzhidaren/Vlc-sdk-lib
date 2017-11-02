@@ -27,9 +27,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by yyl on 2016/10/12/012.
+ * Created by yyl on 2017/11/02
  */
-
 public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout.OnNewVideoLayoutListener, IVLCVout.Callback {
     private final String tag = "VlcPlayer";
     private final Handler theadsHandler;

@@ -86,5 +86,5 @@ tasks.withType(Javadoc) {
     options.encoding = "UTF-8"
 }
 dependencies {
-    compile 'com.android.support:support-annotations:24.2.1'
+    compile "com.android.support:support-annotations:$rootProject.ext.appCompatVersion"
 }
