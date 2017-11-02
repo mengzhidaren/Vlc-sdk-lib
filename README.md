@@ -26,12 +26,9 @@
  <org.videolan.vlc.VlcVideoView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  player.setMediaListenerEvent(new MediaListenerEvent());
                  player.startPlay(path);
-                 
-                 
  thumbnail        
  截图方法   byte[] b = VLCUtil.getThumbnail(media, width, height);
            if (b != null) {
@@ -43,15 +40,10 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
-     // jCenter
     compile 'com.yyl.vlc:vlc-android-sdk:1.3.0'
    }
-   
-   
-   可选 精简的库
     ndk {
-               //支持的abi 
-               abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86'
+               abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86' //支持的abi    可选 精简的库
          }
          
   目前支持的库： x86_64     x86    armeabi-v7a    arm64-v8a    mips    mips64
@@ -61,20 +53,19 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 版本libvlc 是我自已搭建环境编译的库尽量同步服务器  版本：3.0.0-2.1.0
 版本libvlc2.0.6 官方库文件 方便测试
 版本libvlc2.5.5 官方库文件 最新版本
-```
-####V1.0.1
+
+V1.0.1
 1.提交第一版
-####V1.2.0
+V1.2.0
 1更新播放控件
 发现bug或有好的建议欢迎[issue]
-####V1.3.0
+V1.3.0
 增加 mips   mips64  指令集的支持
-####V1.4.0
+V1.4.0
 可下载2.5.5代码引用至工程中 
-
+```
 
 ## Donate ##
-
 Alipay:<br>
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/yyl.png)
 <br>
