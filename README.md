@@ -1,15 +1,15 @@
 ### Vlc-sdk-lib
 
-####构建切换大小屏播放器  参考，
+构建切换大小屏播放器  参考<br>
 
-  * [VideoHeaderView]https://github.com/mengzhidaren/RecylerViewMultiHeaderView
-####转码视频的命令行工具  参考
+  * [VideoHeaderView]https://github.com/mengzhidaren/RecylerViewMultiHeaderView <br>
 
-  * [FFmpegCmdSdk]https://github.com/mengzhidaren/FFmpegCmdSdk
+转码视频的命令行工具  参考<br>
+
+  * [FFmpegCmdSdk]https://github.com/mengzhidaren/FFmpegCmdSdk <br>
   
-####在RecyclerView中播放器的实现  参考
-
-  * [VlcPlayer]https://github.com/mengzhidaren/VlcPlayer
+在RecyclerView中播放器的实现  参考<br>
+  * [VlcPlayer]https://github.com/mengzhidaren/VlcPlayer <br>
 
 ---
 
@@ -75,13 +75,10 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 
 ## Donate ##
 
-Alipay:
-``
-``
+Alipay:<br>
 ![](https://raw.githubusercontent.com/mengzhidaren/Vlc-sdk-lib/master/screenshots/yyl.png)
-``
-``
-谢谢支持我会和官方同步更新
+<br>
+谢谢支持我会和官方同步更新<br>
 
 
 ### 官方网站 ###
