@@ -46,7 +46,7 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
                abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86' //支持的abi    可选 精简的库
          }
          
-  目前支持的库： x86_64     x86    armeabi-v7a    arm64-v8a    mips    mips64
+  目前支持的库 ： x86_64     x86    armeabi-v7a    arm64-v8a    mips    mips64
 ```
 ### 说明 ###
 ```
