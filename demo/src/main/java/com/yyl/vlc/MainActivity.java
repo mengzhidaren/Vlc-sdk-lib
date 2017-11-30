@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.danikula.videocache.CacheListener;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.yyl.vlc.ijk.IjkPlayerActivity;
 import com.yyl.vlc.vlc.VlcPlayerActivity;
 
@@ -20,17 +22,23 @@ import org.videolan.libvlc.Media;
 import org.videolan.vlc.ThumbnailUtils;
 import org.videolan.vlc.util.VLCInstance;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    private static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     // public static final String path = "http://192.168.1.27/demo2.mp4";
     //public static final String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
     String tag = "MainActivity";
     private ImageView thumbnail;
     Context context;
+
+
+    public static String getUrl(Context context){
+        return App.getProxy(context).getProxyUrl(path,true);
+    }
 
 
     @Override
@@ -45,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
             Log.i(tag, "not support  cpu");
         }
         thumbnail = (ImageView) findViewById(R.id.thumbnail);
+        App.getProxy(context).registerCacheListener(new CacheListener() {
+            @Override
+            public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
+                Log.i(tag, "support   percentsAvailable="+percentsAvailable);
+            }
+        },path);
     }
 
     public void myClick1(View view) {
@@ -96,4 +110,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
     }
+
+
+
 }

@@ -29,7 +29,9 @@
 VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  player.setMediaListenerEvent(new MediaListenerEvent());
                  player.startPlay(path);
- thumbnail        
+ thumbnail 
+ 不是很推荐用这个方法，不稳定
+ 如果你有截图需求最好用我写的ffmpeg截图       
  截图方法   byte[] b = VLCUtil.getThumbnail(media, width, height);
            if (b != null) {
                  Bitmap thumbnail = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -40,19 +42,26 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
-    compile 'com.yyl.vlc:vlc-android-sdk:1.3.0'
+   
+   过期了 //compile 'com.yyl.vlc:vlc-android-sdk:1.3.0'
+   
+   最好下载我整理的官方的库
+   推荐使用  2.5.12 library 配合videoCache使用
+   具体看demo
    }
     ndk {
                abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86' //支持的abi    可选 精简的库
-         }
+    }
          
   目前支持的库 ： x86_64     x86    armeabi-v7a    arm64-v8a    mips    mips64
 ```
 ### 说明 ###
 ```
 版本libvlc 是我自已搭建环境编译的库尽量同步服务器  版本：3.0.0-2.1.0
+版本libvlc2.0.0 我自已编译修改的库文件
 版本libvlc2.0.6 官方库文件 方便测试
-版本libvlc2.5.5 官方库文件 最新版本
+版本libvlc2.5.5 官方库文件
+版本libvlc2.5.12 官方库文件 最新版本 推荐
 
 V1.0.1
 1.提交第一版
@@ -61,8 +70,8 @@ V1.2.0
 发现bug或有好的建议欢迎[issue]
 V1.3.0
 增加 mips   mips64  指令集的支持
-V1.4.0
-可下载2.5.5代码引用至工程中 
+V1.4.0 //有空在更新
+可下载2.5.12代码引用至工程中 
 ```
 
 ## Donate ##

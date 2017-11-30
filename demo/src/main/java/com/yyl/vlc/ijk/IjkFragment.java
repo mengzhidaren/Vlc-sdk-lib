@@ -36,7 +36,7 @@ public class IjkFragment extends Fragment {
             @Override
             public void run() {
                 Log.i(tag, "---------   start   ----------------");
-                ijkPlayer.setPath(MainActivity.path);
+                ijkPlayer.setPath(MainActivity.getUrl(getContext()));
             }
         }, 1000);
 

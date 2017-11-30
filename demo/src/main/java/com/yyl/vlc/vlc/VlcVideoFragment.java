@@ -12,11 +12,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.danikula.videocache.CacheListener;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.yyl.vlc.MainActivity;
 import com.yyl.vlc.MediaControl;
 import com.yyl.vlc.R;
 
 import org.videolan.vlc.VlcVideoView;
+
+import java.io.File;
 
 
 /**
@@ -38,13 +42,13 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
 //        Media media = new Media(VLCInstance.get(getContext()), Uri.parse(path));
 //        media.setHWDecoderEnabled(false, false);
 //        vlcVideoView.setMedia(media);
-
         vlcVideoView.setMediaListenerEvent(new MediaControl(vlcVideoView, logInfo));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Log.i(tag, "---------   start   ----------------");
-                vlcVideoView.startPlay(MainActivity.path);
+                vlcVideoView.startPlay(MainActivity.getUrl(getContext()));
+             //   vlcVideoView.startPlay(MainActivity.path);
             }
         }, 1000);
 

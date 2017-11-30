@@ -47,5 +47,5 @@ dependencies {
     compile "com.android.support:support-v4:${project.properties.get("support")}"
     compile 'tv.danmaku.ijk.media:ijkplayer-java:0.7.7.1'
     compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.7.7.1'
-    testCompile 'junit:junit:4.12'
+    compile 'com.danikula:videocache:2.7.0'
 }
