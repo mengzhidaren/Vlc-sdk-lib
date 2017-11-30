@@ -1,3 +1,5 @@
-include ':demo','libvlc'
+include ':demo'
+include 'libvlc2.0.0'
 include 'libvlc2.0.6'
 include 'libvlc2.5.5'
+include 'libvlc2.5.12'
