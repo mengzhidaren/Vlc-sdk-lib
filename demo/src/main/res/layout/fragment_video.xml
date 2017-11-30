@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.yyl.vlc.FrameLayoutScale
+    <com.yyl.vlc.view.FrameLayoutScale
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="30dp">
@@ -11,7 +11,7 @@
             android:id="@+id/player"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </com.yyl.vlc.FrameLayoutScale>
+    </com.yyl.vlc.view.FrameLayoutScale>
 
     <TextView
         android:id="@+id/info"

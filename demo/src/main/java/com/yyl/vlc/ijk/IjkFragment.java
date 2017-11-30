@@ -15,11 +15,9 @@ import com.yyl.vlc.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
  */
 public class IjkFragment extends Fragment {
     IjkPlayer ijkPlayer;
-    String tag = "IjkFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,27 +29,10 @@ public class IjkFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ijkPlayer = (IjkPlayer) view.findViewById(R.id.ijkplayer);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(tag, "---------   start   ----------------");
-                ijkPlayer.setPath(MainActivity.getUrl(getContext()));
-            }
-        }, 1000);
-
-        view.findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-
+        ijkPlayer.setPath(MainActivity.getUrl(getContext()));
     }
+
+
 
     @Override
     public void onDetach() {

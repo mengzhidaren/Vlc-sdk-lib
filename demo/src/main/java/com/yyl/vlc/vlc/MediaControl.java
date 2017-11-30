@@ -1,4 +1,4 @@
-package com.yyl.vlc;
+package com.yyl.vlc.vlc;
 
 import android.util.Log;
 import android.view.View;

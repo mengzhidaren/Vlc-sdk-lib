@@ -1,4 +1,4 @@
-package com.yyl.vlc;
+package com.yyl.vlc.view;
 
 import android.content.Context;
 import android.content.res.Configuration;

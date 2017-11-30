@@ -5,7 +5,7 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-    <com.yyl.vlc.FrameLayoutScale
+    <com.yyl.vlc.view.FrameLayoutScale
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="30dp">
@@ -14,7 +14,7 @@
             android:id="@+id/ijkplayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </com.yyl.vlc.FrameLayoutScale>
+    </com.yyl.vlc.view.FrameLayoutScale>
 
     <LinearLayout
         android:layout_width="wrap_content"

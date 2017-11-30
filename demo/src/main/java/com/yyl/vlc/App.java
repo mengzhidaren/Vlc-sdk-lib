@@ -2,8 +2,11 @@ package com.yyl.vlc;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+
+import org.videolan.vlc.util.VLCInstance;
 
 /**
  * Created by yyl on 2017/11/30.

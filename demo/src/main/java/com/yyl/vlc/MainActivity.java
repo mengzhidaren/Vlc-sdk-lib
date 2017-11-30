@@ -36,29 +36,38 @@ public class MainActivity extends AppCompatActivity {
     Context context;
 
 
-    public static String getUrl(Context context){
-        return App.getProxy(context).getProxyUrl(path,true);
+    public static String getUrl(Context context) {
+        return App.getProxy(context).getProxyUrl(path, true);
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
         setContentView(R.layout.activity_main);
+        context = this;
+        thumbnail = (ImageView) findViewById(R.id.thumbnail);
+        init();
+        test();
+    }
+
+
+    private void init() {
         //加载库文件
         if (VLCInstance.testCompatibleCPU(this)) {
             Log.i(tag, "support   cpu");
         } else {
             Log.i(tag, "not support  cpu");
         }
-        thumbnail = (ImageView) findViewById(R.id.thumbnail);
+    }
+
+    private void test() {
         App.getProxy(context).registerCacheListener(new CacheListener() {
             @Override
             public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
-                Log.i(tag, "support   percentsAvailable="+percentsAvailable);
+                Log.i(tag, "support   percentsAvailable=" + percentsAvailable);
             }
-        },path);
+        }, path);
     }
 
     public void myClick1(View view) {
@@ -110,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
     }
-
 
 
 }
