@@ -60,16 +60,6 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
   目前支持的库 ： x86_64     x86    armeabi-v7a    arm64-v8a   
    注意 mips  mips64 只有libvlc2.0.0 官方好像不打算支持了
 ```
-### 说明 ###
-```
-版本libvlc2.0.0 我自已搭建环境编译定制修改过的库文件(不推荐)
-版本libvlc2.0.6 官方库文件 方便测试
-版本libvlc2.5.5 官方库文件
-版本libvlc2.5.12 官方库文件
-版本libvlc2.5.14 官方库文件 最新版本 推荐
-
-
-```
 
 ## Donate ##
 Alipay:<br>

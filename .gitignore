@@ -6,7 +6,6 @@
 .DS_Store
 /build
 /captures
-.externalNativeBuild
 /.gradle/
 /.idea/
 .idea

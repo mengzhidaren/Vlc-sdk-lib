@@ -1,7 +1,7 @@
 bin/
 gen/
 libs/
-obj/
+build/intermediates/rs/androidTest/debug/obj/
 jni/libvlcjni-modules.c
 jni/libvlcjni-symbols.c
 .settings
