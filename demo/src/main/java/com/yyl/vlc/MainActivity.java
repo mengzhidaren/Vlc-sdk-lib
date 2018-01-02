@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     // public static final String path = "http://192.168.1.27/demo2.mp4";
     //public static final String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
-    String tag = "MainActivity";
+    private final String tag = "MainActivity";
     private ImageView thumbnail;
-    Context context;
+    private Context context;
 
 
     public static String getUrl(Context context) {
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-        thumbnail = (ImageView) findViewById(R.id.thumbnail);
+        thumbnail = findViewById(R.id.thumbnail);
         init();
         test();
     }
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * 不推荐用vlc截图 不稳定 可以用TextureView的画布截取
+     * 不推荐用vlc截图 不稳定 可以用TextureView的 surface cache中截取
      *
      * @param view
      */

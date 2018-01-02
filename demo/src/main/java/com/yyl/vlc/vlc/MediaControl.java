@@ -97,7 +97,6 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
 
     @Override
     public void eventBuffing(int event, float buffing) {
-
     }
 
     @Override
@@ -106,7 +105,7 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
             Log.i(tag, "打开时间  00000");
             time = System.currentTimeMillis();
         }
-        logInfo.setText("加载中");
+        logInfo.setText("加载");
     }
 
     @Override
@@ -125,6 +124,9 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
         if (isPlaying) {
             controller.show();
             Log.i(tag, "打开时间是 time=" + (System.currentTimeMillis() - time));
+            logInfo.setText("播放");
+        }else{
+            logInfo.setText("暂停");
         }
 
     }

@@ -8,6 +8,13 @@ import android.os.Bundle;
 import com.yyl.vlc.R;
 
 public class VlcPlayerActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_vlc_player);
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -17,9 +24,5 @@ public class VlcPlayerActivity extends AppCompatActivity {
             getSupportActionBar().show();
         }
     }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vlc_player);
-    }
+
 }

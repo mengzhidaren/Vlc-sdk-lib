@@ -18,7 +18,7 @@ import org.videolan.vlc.VlcVideoView;
 
 
 /**
- * d
+ * 有间题留言给我 https://github.com/mengzhidaren
  */
 public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     private VlcVideoView vlcVideoView;

@@ -15,20 +15,26 @@
 
 # 实现的功能
 ```
-能支持MP4,FLV,AVI,TS,3GP,RMVB,WM,WMV等格式还有网络流 http,rtsp,rtmp,mms,m3u8.
+能支持大部分主流格式
 软硬解切换.支持vlc指令  < transform:rotation=90>
-当前缓冲百分比    <MediaPlayer.Event.Buffering>
+当前缓冲百分比 
 视频(音频)播放速度可调,任意速度可调. (0.25-4)   < player.setRate(float rate); >
-加载字幕，设置镜面<>
+加载字幕，设置镜面等
 ```
 # 使用方法
 ```
+<xml>
+//高度需要自已设置调整
  <org.videolan.vlc.VlcVideoView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+        
+<java>
 VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  player.setMediaListenerEvent(new MediaListenerEvent());
                  player.startPlay(path);
+
+<其它>
  thumbnail 
  不是很推荐用这个方法，不稳定
  如果你有截图需求最好用我写的ffmpeg截图       
@@ -42,36 +48,27 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
+   //配合videoCache使用 具体看demo
+   compile 'com.yyl.vlc:vlc-android-sdk:2.5.14'
    
-   过期了 //compile 'com.yyl.vlc:vlc-android-sdk:1.3.0'
-   
-   最好下载我整理的官方的库
-   推荐使用  2.5.12 library 配合videoCache使用
-   具体看demo
    }
     ndk {
-               abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86' //支持的abi    可选 精简的库
+        //支持的abi    可选 精简的库
+        abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86'
     }
          
-  目前支持的库 ： x86_64     x86    armeabi-v7a    arm64-v8a    mips    mips64
+  目前支持的库 ： x86_64     x86    armeabi-v7a    arm64-v8a   
+   注意 mips  mips64 只有libvlc2.0.0 官方好像不打算支持了
 ```
 ### 说明 ###
 ```
-版本libvlc 是我自已搭建环境编译的库尽量同步服务器  版本：3.0.0-2.1.0
-版本libvlc2.0.0 我自已编译修改的库文件
+版本libvlc2.0.0 我自已搭建环境编译定制修改过的库文件(不推荐)
 版本libvlc2.0.6 官方库文件 方便测试
 版本libvlc2.5.5 官方库文件
-版本libvlc2.5.12 官方库文件 最新版本 推荐
+版本libvlc2.5.12 官方库文件
+版本libvlc2.5.14 官方库文件 最新版本 推荐
 
-V1.0.1
-1.提交第一版
-V1.2.0
-1更新播放控件
-发现bug或有好的建议欢迎[issue]
-V1.3.0
-增加 mips   mips64  指令集的支持
-V1.4.0 //有空在更新
-可下载2.5.12代码引用至工程中 
+
 ```
 
 ## Donate ##

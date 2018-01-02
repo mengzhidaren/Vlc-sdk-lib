@@ -9,13 +9,8 @@ android {
         targetSdkVersion Integer.valueOf(project.properties.get("targetSdkVersion"))
         versionCode 1
         versionName "1.0"
-//        externalNativeBuild {
-//            cmake {
-//                cppFlags "-frtti -fexceptions"
-//            }
-//        }
         ndk {
-            //支持的abi   , //'x86_64'//, 'arm64-v8a'
+            //支持的abi
             abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86'
         }
     }
@@ -25,24 +20,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-//    externalNativeBuild {
-//        cmake {
-//            path "CMakeLists.txt"
-//        }
-//    }
 }
 
 dependencies {
-    // compile fileTree(dir: 'libs', include: ['*.jar'])
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    })
-    // compile 'com.jakewharton:butterknife:7.0.1'
-   // compile 'com.yyl.vlc:vlc-android-sdk:1.3.0'
-   // compile project(":libvlc")
-  //  compile project(":libvlc2.0.6")
-  //  compile project(":libvlc2.5.5")
-    compile project(":libvlc2.5.12")
+    compile 'com.yyl.vlc:vlc-android-sdk:2.5.14'
+//    compile project(":libvlc2.5.14")
     compile "com.android.support:appcompat-v7:${project.properties.get("support")}"
     compile "com.android.support:support-v4:${project.properties.get("support")}"
     compile 'tv.danmaku.ijk.media:ijkplayer-java:0.7.7.1'
