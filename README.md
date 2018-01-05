@@ -49,7 +49,7 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 ```
    dependencies {
    //配合videoCache使用 具体看demo
-   compile 'com.yyl.vlc:vlc-android-sdk:2.5.14'
+   compile 'com.yyl.vlc:vlc-android-sdk:2.5.15'
    
    }
     ndk {

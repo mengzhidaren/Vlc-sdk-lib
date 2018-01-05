@@ -39,9 +39,22 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vlcVideoView.startPlay(MainActivity.getUrl(getContext()));
+   //    vlcVideoView.startPlay(MainActivity.path);
 //        Media media = new Media(VLCInstance.get(getContext()), Uri.parse(path));
 //        media.setHWDecoderEnabled(true, false);//打开硬件加速
 //        vlcVideoView.setMedia(media);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        vlcVideoView.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        vlcVideoView.pause();
     }
 
     @Override

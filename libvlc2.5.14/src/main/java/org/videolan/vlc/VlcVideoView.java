@@ -47,10 +47,16 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         return videoMediaLogic.canControl();
     }
 
+    /**
+     * 关闭avtivity时 停止时用
+     */
     public void onStop() {
         videoMediaLogic.onStop();
     }
 
+    /**
+     * 退出应用时回收
+     */
     public void onDestory() {
         if (videoMediaLogic != null)
             videoMediaLogic.onDestory();
@@ -243,9 +249,6 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         // txform.postRotate(10); // just for fun
         txform.postTranslate(xoff, yoff);
         setTransform(txform);
-        LogUtils.i(tag, "video=" + videoWidth + "x" + videoHeight + " view="
-                + viewWidth + "x" + viewHeight + " newView=" + newWidth + "x"
-                + newHeight + " off=" + xoff + "," + yoff + "   isRotation=" + rotation);
         if (rotation == 180) {
             setRotation(180);
         } else {
@@ -261,16 +264,23 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         }
     }
 
-    private int mVideoWidth, mVideoHeight, rotation = 0;
+    private int mVideoWidth;
+    private int mVideoHeight;
+
+    public int getVideoRotation() {
+        return rotation;
+    }
+
+    private int rotation = 0;
 
     @Override
-    public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+    public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int orientation) {
         LogUtils.i(tag, "onVideoSizeChanged   video=" + width + "x" + width + " visible="
-                + visibleWidth + "x" + visibleHeight + "   sarNum=" + sarNum + "x"
-                + sarDen);
+                + visibleWidth + "x" + visibleHeight + "   orientation=" + orientation);
         if (width * height == 0) return;
         this.mVideoWidth = visibleWidth;
         this.mVideoHeight = visibleHeight;
+        this.rotation = orientation;
         post(new Runnable() {
             @Override
             public void run() {
