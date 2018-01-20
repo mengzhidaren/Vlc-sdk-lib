@@ -54,8 +54,8 @@ public class Media extends VLCObject<Media.Event> {
         }
 
         /**
-         * Get the ParsedStatus in case of {@link Event#ParsedChanged} event
-         * @return {@link Media.ParsedStatus}
+         * Get the ParsedStatus in case of {link Event#ParsedChanged} event
+         * @return {Media.ParsedStatus}
          */
         public int getParsedStatus() {
             return (int) arg1;
@@ -579,7 +579,7 @@ public class Media extends VLCObject<Media.Event> {
     /**
      * Get the subItems MediaList associated with the Media. This Media should be alive (not released).
      *
-     * @return subItems as a MediaList. This MediaList should be released with {@link #release()}.
+     * @return subItems as a MediaList. This MediaList should be released with { link #release()}.
      */
     public MediaList subItems() {
         synchronized (this) {
@@ -611,7 +611,7 @@ public class Media extends VLCObject<Media.Event> {
     /**
      * Parse the media synchronously with a flag. This Media should be alive (not released).
      *
-     * @param flags see {@link Parse}
+     * @param flags see { link Parse}
      * @return true in case of success, false otherwise.
      */
     public boolean parse(int flags) {
@@ -641,13 +641,13 @@ public class Media extends VLCObject<Media.Event> {
     /**
      * Parse the media asynchronously with a flag. This Media should be alive (not released).
      *
-     * To track when this is over you can listen to {@link Event#ParsedChanged}
+     * To track when this is over you can listen to { link Event#ParsedChanged}
      * event (only if this methods returned true).
      *
-     * @param flags see {@link Parse}
+     * @param flags see { link Parse}
      * @param timeout maximum time allowed to preparse the media. If -1, the
      * default "preparse-timeout" option will be used as a timeout. If 0, it will
-     * wait indefinitely. If > 0, the timeout will be used (in milliseconds).
+     * wait indefinitely
      * @return true in case of success, false otherwise.
      */
     public boolean parseAsync(int flags, int timeout) {
@@ -684,7 +684,6 @@ public class Media extends VLCObject<Media.Event> {
     /**
      * Get the type of the media
      *
-     * @see {@link Type}
      */
     public int getType() {
         synchronized (this) {
@@ -724,7 +723,7 @@ public class Media extends VLCObject<Media.Event> {
 
     /**
      * Get a Track
-     * The Track can be casted to {@link AudioTrack}, {@link VideoTrack} or {@link SubtitleTrack} in function of the {@link Track.Type}.
+     * The Track can be casted to { link AudioTrack}, { link VideoTrack} or { link SubtitleTrack} in function of the { link Track.Type}.
      *
      * @param idx index of the track
      * @return Track or null if not idx is not valid
@@ -740,7 +739,6 @@ public class Media extends VLCObject<Media.Event> {
     /**
      * Get a Meta.
      *
-     * @param id see {@link Meta}
      * @return meta or null if not found
      */
     public String getMeta(int id) {
@@ -841,15 +839,12 @@ public class Media extends VLCObject<Media.Event> {
      * A slave is an external input source that may contains an additional subtitle
      * track (like a .srt) or an additional audio track (like a .ac3).
      *
-     * This function must be called before the media is parsed (via {@link #parseAsync(int)}} or
-     * before the media is played (via {@link MediaPlayer#play()})
      */
     public void addSlave(Slave slave) {
         nativeAddSlave(slave.type, slave.priority, slave.uri);
     }
 
     /**
-     * Clear all slaves previously added by {@link #addSlave(Slave)} or internally.
      */
     public void clearSlaves() {
         nativeClearSlaves();
@@ -859,7 +854,7 @@ public class Media extends VLCObject<Media.Event> {
      * Get a media's slave list
      *
      * The list will contain slaves parsed by VLC or previously added by
-     * {@link #addSlave(Slave)}. The typical use case of this function is to save
+     * {#addSlave(Slave)}. The typical use case of this function is to save
      * a list of slave in a database for a later use.
      */
     @Nullable
