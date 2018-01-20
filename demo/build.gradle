@@ -23,11 +23,11 @@ android {
 }
 
 dependencies {
-    compile 'com.yyl.vlc:vlc-android-sdk:2.5.15'
-    //compile project(":libvlc2.5.14")
+    //compile 'com.yyl.vlc:vlc-android-sdk:2.5.15'
+    compile project(":libvlc2.5.17")
     compile "com.android.support:appcompat-v7:${project.properties.get("support")}"
     compile "com.android.support:support-v4:${project.properties.get("support")}"
-    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.7.7.1'
-    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.7.7.1'
+    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'
+    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
     compile 'com.danikula:videocache:2.7.0'
 }

@@ -13,17 +13,16 @@ import org.videolan.vlc.listener.MediaPlayerControl;
  * Created by yyl on 2016/11/3/003.
  */
 
-public class MediaControl implements MediaController.MediaPlayerControl, MediaListenerEvent {
-    MediaPlayerControl mediaPlayer;
-    final MediaController controller;
-    TextView logInfo;
-    String tag = "MediaControl";
+public class MediaControl implements MediaListenerEvent {
+    private final MediaController controller;
+    private TextView logInfo;
+    private String tag = "MediaControl";
+    private long time;
 
     public MediaControl(VlcVideoView mediaPlayer, TextView logInfo) {
-        this.mediaPlayer = mediaPlayer;
         this.logInfo = logInfo;
         controller = new MediaController(mediaPlayer.getContext());
-        controller.setMediaPlayer(this);
+        controller.setMediaPlayer(mediaPlayer);
         controller.setAnchorView(mediaPlayer);
         mediaPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,71 +37,12 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
 
 
     @Override
-    public void start() {
-        mediaPlayer.start();
-    }
-
-    @Override
-    public void pause() {
-        mediaPlayer.pause();
-    }
-
-    @Override
-    public int getDuration() {
-        return (int) mediaPlayer.getDuration();
-    }
-
-    @Override
-    public int getCurrentPosition() {
-        return (int) mediaPlayer.getCurrentPosition();
-    }
-
-    @Override
-    public void seekTo(int pos) {
-        mediaPlayer.seekTo(pos);
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
-    }
-
-    @Override
-    public int getBufferPercentage() {
-        return mediaPlayer.getBufferPercentage();
-    }
-
-    @Override
-    public boolean canPause() {
-        return mediaPlayer.isPrepare();
-    }
-
-    @Override
-    public boolean canSeekBackward() {//快退
-        return true;
-    }
-
-    @Override
-    public boolean canSeekForward() {//快进
-        return true;
-    }
-
-    @Override
-    public int getAudioSessionId() {
-        return 0;
-    }
-
-
-    long time;
-
-    @Override
     public void eventBuffing(int event, float buffing) {
     }
 
     @Override
     public void eventPlayInit(boolean openClose) {
         if (openClose) {
-            Log.i(tag, "打开时间  00000");
             time = System.currentTimeMillis();
         }
         logInfo.setText("加载");
@@ -123,10 +63,10 @@ public class MediaControl implements MediaController.MediaPlayerControl, MediaLi
     public void eventPlay(boolean isPlaying) {
         if (isPlaying) {
             controller.show();
-            Log.i(tag, "打开时间是 time=" + (System.currentTimeMillis() - time));
-            logInfo.setText("播放");
-        }else{
-            logInfo.setText("暂停");
+            Log.i(tag, "加载耗时  time=" + (System.currentTimeMillis() - time));
+            logInfo.setText("播放中");
+        } else {
+            logInfo.setText("暂停中");
         }
 
     }

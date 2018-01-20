@@ -24,7 +24,7 @@ public class App extends Application {
     }
 
     /**
-     * 注意被app 安全软件禁网后 127.0.0.1 的getLocalPort 会被限制权限 从而闪退
+     * 注意被app 安全软件禁网后 127.0.0.1 的getLocalPort 会被限制权限 而闪退
      *
      */
     private HttpProxyCacheServer newProxy() {

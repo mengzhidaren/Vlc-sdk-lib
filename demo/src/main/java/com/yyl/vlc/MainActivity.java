@@ -28,16 +28,20 @@ import java.util.ArrayList;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    private static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     // public static final String path = "http://192.168.1.27/demo2.mp4";
     //public static final String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
     private final String tag = "MainActivity";
     private ImageView thumbnail;
     private Context context;
-
+    public static boolean testNetWork = true;
 
     public static String getUrl(Context context) {
-        return App.getProxy(context).getProxyUrl(path, true);
+        if (testNetWork) {
+            return path;
+        } else {
+            return App.getProxy(context).getProxyUrl(path, true);
+        }
     }
 
 
@@ -103,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 //  media.setHWDecoderEnabled(false, false);
                 media.parse(Media.Parse.ParseNetwork);
                 Log.i("yyl", "getTrackCount=" + media.getTrackCount());
-                Media.VideoTrack track = (Media.VideoTrack) media.getTrack(Media.Track.Type.Video);//获取video轨道的信息 可用ffmpeg查看
+                Media.VideoTrack track = (Media.VideoTrack) media.getTrack(Media.Track.Type.Video);//获取video轨道1的信息 可用ffmpeg查看
                 Log.i("yyl", "track=" + track.toString());
                 final Bitmap bitmap = ThumbnailUtils.getThumbnail(media, track.width / 2, track.height / 2);
                 Log.i("yyl", "bitmap=" + bitmap);

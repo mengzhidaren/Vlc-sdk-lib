@@ -2,6 +2,7 @@ package com.yyl.vlc.vlc;
 
 
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,11 +15,17 @@ import android.widget.TextView;
 import com.yyl.vlc.MainActivity;
 import com.yyl.vlc.R;
 
+import org.videolan.libvlc.LibVLC;
+import org.videolan.libvlc.Media;
+import org.videolan.libvlc.MediaPlayer;
 import org.videolan.vlc.VlcVideoView;
+import org.videolan.vlc.util.VLCInstance;
+
+import java.util.ArrayList;
 
 
 /**
- * 有间题留言给我 https://github.com/mengzhidaren
+ * 有问题留言给我 https://github.com/mengzhidaren
  */
 public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     private VlcVideoView vlcVideoView;
@@ -39,10 +46,21 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vlcVideoView.startPlay(MainActivity.getUrl(getContext()));
-   //    vlcVideoView.startPlay(MainActivity.path);
-//        Media media = new Media(VLCInstance.get(getContext()), Uri.parse(path));
+
+
+//        Media media = new Media(VLCInstance.get(getContext()), Uri.parse(MainActivity.getUrl(getContext())));
 //        media.setHWDecoderEnabled(true, false);//打开硬件加速
+//        vlcVideoView.startPlay(null);
+//-----------------------------日志-------------------------------------
+//        ArrayList<String> options = new ArrayList<>();
+//        options.add("-vvv");//显示全部调试日志
+//        LibVLC libVLC = new LibVLC(getContext(), options);
+//        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
+////        MediaPlayer mediaPlayer=new MediaPlayer(media);
+////        vlcVideoView.setMediaPlayer(mediaPlayer);
 //        vlcVideoView.setMedia(media);
+//        vlcVideoView.startPlay(null);
+
     }
 
     @Override
