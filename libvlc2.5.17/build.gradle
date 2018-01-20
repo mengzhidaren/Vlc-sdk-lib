@@ -33,28 +33,28 @@ dependencies {
     implementation "com.android.support:support-v4:$rootProject.ext.appCompatVersion"
 }
 
-apply plugin: 'com.novoda.bintray-release'
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}
-tasks.withType(Javadoc) {
-    options.encoding = "UTF-8"
-}
-publish {
-    userOrg = 'yuyunlongyyl' //用户所在组织
-    groupId = 'com.yyl.vlc'// 包名
-    artifactId = 'vlc-android-sdk' // library的名字
-    publishVersion = '2.5.17'// 版本
-    desc = 'vlc-android-lib 3.0.0   2018/1/20  suport x86_64   x86  armeabi-v7a  arm64-v8a'
-    // 描述
-    website = 'https://github.com/mengzhidaren'   // 项目的主页
-}
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.8.0'
-    }
-}
+//apply plugin: 'com.novoda.bintray-release'
+//tasks.withType(JavaCompile) {
+//    options.encoding = "UTF-8"
+//}
+//tasks.withType(Javadoc) {
+//    options.encoding = "UTF-8"
+//}
+//publish {
+//    userOrg = 'yuyunlongyyl' //用户所在组织
+//    groupId = 'com.yyl.vlc'// 包名
+//    artifactId = 'vlc-android-sdk' // library的名字
+//    publishVersion = '2.5.17'// 版本
+//    desc = 'vlc-android-lib 3.0.0   2018/1/20  suport x86_64   x86  armeabi-v7a  arm64-v8a'
+//    // 描述
+//    website = 'https://github.com/mengzhidaren'   // 项目的主页
+//}
+//
+//buildscript {
+//    repositories {
+//        jcenter()
+//    }
+//    dependencies {
+//        classpath 'com.novoda:bintray-release:0.8.0'
+//    }
+//}
