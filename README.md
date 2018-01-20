@@ -36,7 +36,6 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 
 <其它>
  thumbnail 
- 不是很推荐用这个方法，不稳定
  如果你有截图需求最好用我写的ffmpeg截图       
  截图方法   byte[] b = VLCUtil.getThumbnail(media, width, height);
            if (b != null) {
@@ -48,8 +47,7 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
-   //配合videoCache使用 具体看demo
-   compile 'com.yyl.vlc:vlc-android-sdk:2.5.15'
+   compile 'com.yyl.vlc:vlc-android-sdk:2.5.17'
    
    }
     ndk {
@@ -58,7 +56,7 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
     }
          
   目前支持的库 ： x86_64     x86    armeabi-v7a    arm64-v8a   
-   注意 mips  mips64 只有libvlc2.0.0 官方好像不打算支持了
+
 ```
 
 ## Donate ##
