@@ -166,6 +166,15 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
         public boolean isInteractive() {
             return (this.flags & Flags.INTERACTIVE) != 0;
         }
+
+        @Override
+        public String toString() {
+            return "Title{" +
+                    "duration=" + duration +
+                    ", name='" + name + '\'' +
+                    ", flags=" + flags +
+                    '}';
+        }
     }
 
     @SuppressWarnings("unused") /* Used from JNI */
@@ -208,6 +217,14 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
         private TrackDescription(int id, String name) {
             this.id = id;
             this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "TrackDescription{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    '}';
         }
     }
 

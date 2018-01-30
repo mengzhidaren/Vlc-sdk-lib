@@ -7,8 +7,6 @@ import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
 import android.view.TextureView;
 
-
-import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.vlc.listener.MediaListenerEvent;
@@ -61,7 +59,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
     }
 
     /**
-     * 退出应用时回收
+     * 退出应用进程时回收
      */
     public void onDestory() {
         if (videoMediaLogic != null)
@@ -298,6 +296,19 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
 
     public void setMedia(Media media) {
         videoMediaLogic.setMedia(media);
+    }
+
+    /**
+     * 字幕画布
+     *
+     * @param surfaceSubtitlesView
+     */
+    public void setSurfaceSubtitlesView(TextureView surfaceSubtitlesView) {
+        videoMediaLogic.setSurfaceSubtitlesView(surfaceSubtitlesView);
+    }
+
+    public void setAddSlave(String addSlave) {
+        videoMediaLogic.setAddSlave(addSlave);
     }
 
     public void setMediaPlayer(MediaPlayer mediaPlayer) {

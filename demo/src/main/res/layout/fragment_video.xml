@@ -4,28 +4,48 @@
 
     <com.yyl.vlc.view.FrameLayoutScale
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp">
+        android:layout_height="match_parent">
 
         <org.videolan.vlc.VlcVideoView
             android:id="@+id/player"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
+
+        <TextureView
+            android:id="@+id/surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </com.yyl.vlc.view.FrameLayoutScale>
 
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="testDemo"
-        android:textColor="@color/colorAccent"
-        android:textSize="16sp" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/change"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="change"
-        android:visibility="visible" />
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="testDemo"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="change"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/changeSlave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="字幕切换"
+            android:visibility="visible" />
+    </FrameLayout>
+
 </FrameLayout>

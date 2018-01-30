@@ -19,7 +19,7 @@
 软硬解切换.支持vlc指令  < transform:rotation=90>
 当前缓冲百分比 
 视频(音频)播放速度可调,任意速度可调. (0.25-4)   < player.setRate(float rate); >
-加载字幕，设置镜面等
+加载字幕(addSlave)，设置镜面等
 ```
 # 使用方法
 ```
@@ -42,6 +42,9 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  Bitmap thumbnail = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                  thumbnail.copyPixelsFromBuffer(ByteBuffer.wrap(b));
            }
+  好多人留言字幕功能 请用这个方法 或者参考demo里也写了
+  mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, "字幕文件地址", true);
+          
 ```
 
 #引用库文件

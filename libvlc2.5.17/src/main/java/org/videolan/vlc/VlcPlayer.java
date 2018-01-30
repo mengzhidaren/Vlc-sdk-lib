@@ -10,10 +10,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-
+import android.view.TextureView;
 
 import org.videolan.libvlc.IVLCVout;
-import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.vlc.listener.MediaListenerEvent;
@@ -231,6 +230,9 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         if (!mMediaPlayer.getVLCVout().areViewsAttached() && isAttached && surfaceTexture != null) {
             isAttachedSurface = true;
             mMediaPlayer.getVLCVout().setVideoSurface(surfaceTexture);
+            if (surfaceSubtitlesView2 != null) {//加载字幕时的画布
+                mMediaPlayer.getVLCVout().setSubtitlesSurface(surfaceSubtitlesView2.getSurfaceTexture());
+            }
             mMediaPlayer.getVLCVout().addCallback(this);//没添加的才能加进去也省了remove了
             mMediaPlayer.getVLCVout().attachViews(this);
             mMediaPlayer.setVideoTitleDisplay(MediaPlayer.Position.Disable, 0);
@@ -407,6 +409,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
                 canReadInfo = true;
                 speed = 1f;
                 mMediaPlayer.setRate(1f);
+                loadSlave();
                 break;
             case MediaPlayer.Event.Playing:
                 LogUtils.i(tag, "Playing");
@@ -677,6 +680,39 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         othereMedia = true;
         if (mMediaPlayer == null) mMediaPlayer = getMediaPlayer(mContext);
         mMediaPlayer.setMedia(media);
+    }
+
+    //字幕画布
+    private TextureView surfaceSubtitlesView2;
+    //字幕文件
+    private String addSlave;
+//    private SurfaceView surfaceSubtitlesView;
+//    public void setSurfaceSubtitlesView(SurfaceView surfaceSubtitlesView) {
+//        this.surfaceSubtitlesView = surfaceSubtitlesView;
+//    }
+
+    /**
+     * 字幕画布
+     */
+    public void setSurfaceSubtitlesView(TextureView textureView) {
+        this.surfaceSubtitlesView2 = textureView;
+        surfaceSubtitlesView2.setOpaque(false);//透明背景
+    }
+
+    public void setAddSlave(String addSlave) {
+        this.addSlave = addSlave;
+    }
+
+    //加载字幕
+    private void loadSlave() {
+        if (!TextUtils.isEmpty(addSlave)) {
+            if (addSlave.contains("://")) {
+                mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, Uri.parse(addSlave), true);
+            } else {
+                mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, addSlave, true);
+            }
+        }
+
     }
 
 }

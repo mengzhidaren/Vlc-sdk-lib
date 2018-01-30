@@ -33,13 +33,14 @@ import android.view.SurfaceView;
 import android.view.TextureView;
 
 import org.videolan.libvlc.util.AndroidUtil;
+import org.videolan.vlc.util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("WeakerAccess")
 public class AWindow implements IVLCVout {
-    private static final String TAG = "AWindow";
+    private static final String tag = "AWindow";
 
     private static final int ID_VIDEO = 0;
     private static final int ID_SUBTITLES = 1;
@@ -48,6 +49,7 @@ public class AWindow implements IVLCVout {
     interface SurfaceCallback {
         @MainThread
         void onSurfacesCreated(AWindow vout);
+
         @MainThread
         void onSurfacesDestroyed(AWindow vout);
     }
@@ -83,8 +85,10 @@ public class AWindow implements IVLCVout {
 
         private void setSurface(Surface surface) {
             if (surface.isValid() && getNativeSurface(mId) == null) {
+                LogUtils.i(tag, "setSurface = " + mId);
                 mSurface = surface;
                 setNativeSurface(mId, mSurface);
+                if (mId == 1) return;
                 onSurfaceCreated();
             }
         }
@@ -132,7 +136,7 @@ public class AWindow implements IVLCVout {
         }
 
         public boolean isReady() {
-            return mSurfaceView == null || mSurface != null;
+            return mSurface != null;
         }
 
         public Surface getSurface() {
@@ -211,9 +215,10 @@ public class AWindow implements IVLCVout {
 
     /**
      * Create an AWindow
-     *
+     * <p>
      * You call this directly only if you use the libvlc_media_player native API (and not the Java
      * MediaPlayer class).
+     *
      * @param surfaceCallback
      */
     public AWindow(SurfaceCallback surfaceCallback) {
@@ -375,14 +380,15 @@ public class AWindow implements IVLCVout {
     @MainThread
     private void onSurfaceCreated() {
         if (mSurfacesState.get() != SURFACE_STATE_ATTACHED)
-            throw new IllegalArgumentException("invalid state");
+            throw new IllegalArgumentException("invalid state =" + mSurfacesState.get());
 
         final SurfaceHelper videoHelper = mSurfaceHelpers[ID_VIDEO];
         final SurfaceHelper subtitlesHelper = mSurfaceHelpers[ID_SUBTITLES];
         if (videoHelper == null)
             throw new NullPointerException("videoHelper shouldn't be null here");
-
-        if (videoHelper.isReady() && (subtitlesHelper == null || subtitlesHelper.isReady())) {
+        boolean isReady = (subtitlesHelper == null || subtitlesHelper.isReady());
+        if (videoHelper.isReady() && isReady) {
+            LogUtils.i(tag, "onSurfaceCreated=" + isReady);
             mSurfacesState.set(SURFACE_STATE_READY);
             for (IVLCVout.Callback cb : mIVLCVoutCallbacks)
                 cb.onSurfacesCreated(this);
@@ -439,6 +445,7 @@ public class AWindow implements IVLCVout {
         private boolean buffersGeometryConfigured = false;
         private boolean buffersGeometryAbort = false;
     }
+
     private final NativeLock mNativeLock = new NativeLock();
 
     @Override
@@ -456,10 +463,10 @@ public class AWindow implements IVLCVout {
      * Callback called from {@link IVLCVout#sendMouseEvent}.
      *
      * @param nativeHandle handle passed by {@link #registerNative(long)}.
-     * @param action see ACTION_* in {@link android.view.MotionEvent}.
-     * @param button see BUTTON_* in {@link android.view.MotionEvent}.
-     * @param x x coordinate.
-     * @param y y coordinate.
+     * @param action       see ACTION_* in {@link android.view.MotionEvent}.
+     * @param button       see BUTTON_* in {@link android.view.MotionEvent}.
+     * @param x            x coordinate.
+     * @param y            y coordinate.
      */
     @SuppressWarnings("JniMissingFunction")
     private static native void nativeOnMouseEvent(long nativeHandle, int action, int button, int x, int y);
@@ -468,8 +475,8 @@ public class AWindow implements IVLCVout {
      * Callback called from {@link IVLCVout#setWindowSize}.
      *
      * @param nativeHandle handle passed by {@link #registerNative(long)}.
-     * @param width width of the window.
-     * @param height height of the window.
+     * @param width        width of the window.
+     * @param height       height of the window.
      */
     @SuppressWarnings("JniMissingFunction")
     private static native void nativeOnWindowSize(long nativeHandle, int width, int height);
@@ -539,9 +546,9 @@ public class AWindow implements IVLCVout {
      * It is synchronous.
      *
      * @param surface surface returned by getVideoSurface or getSubtitlesSurface
-     * @param width surface width
-     * @param height surface height
-     * @param format color format (or PixelFormat)
+     * @param width   surface width
+     * @param height  surface height
+     * @param format  color format (or PixelFormat)
      * @return true if buffersGeometry were set (only before ICS)
      */
     @SuppressWarnings("unused") /* used by JNI */
@@ -550,7 +557,7 @@ public class AWindow implements IVLCVout {
             return false;
         if (width * height == 0)
             return false;
-        Log.d(TAG, "configureSurface: " + width + "x" + height);
+        Log.i(tag, "configureSurface: " + width + "x" + height);
 
         synchronized (mNativeLock) {
             if (mNativeLock.buffersGeometryConfigured || mNativeLock.buffersGeometryAbort)
@@ -604,12 +611,12 @@ public class AWindow implements IVLCVout {
      * This call will result of{@link IVLCVout.OnNewVideoLayoutListener#onNewVideoLayout(IVLCVout, int, int, int, int, int, int)}
      * being called from the main thread.
      *
-     * @param width Frame width
-     * @param height Frame height
-     * @param visibleWidth Visible frame width
+     * @param width         Frame width
+     * @param height        Frame height
+     * @param visibleWidth  Visible frame width
      * @param visibleHeight Visible frame height
-     * @param sarNum Surface aspect ratio numerator
-     * @param sarDen Surface aspect ratio denominator
+     * @param sarNum        Surface aspect ratio numerator
+     * @param sarDen        Surface aspect ratio denominator
      */
     @SuppressWarnings("unused") /* used by JNI */
     private void setVideoLayout(final int width, final int height, final int visibleWidth,

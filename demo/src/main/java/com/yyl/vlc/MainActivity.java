@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private final String tag = "MainActivity";
     private ImageView thumbnail;
     private Context context;
-    public static boolean testNetWork = true;
+    public static boolean testNetWork = false;
 
     public static String getUrl(Context context) {
         if (testNetWork) {
