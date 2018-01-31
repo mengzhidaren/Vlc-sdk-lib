@@ -186,7 +186,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         LogUtils.i(tag, "onSurfaceTextureDestroyed");
-        videoMediaLogic.onSurfaceTextureDestroyed();
+        videoMediaLogic.onSurfaceTextureDestroyedUI();
         return false;
     }
 

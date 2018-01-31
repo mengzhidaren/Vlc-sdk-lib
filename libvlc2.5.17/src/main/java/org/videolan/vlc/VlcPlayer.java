@@ -131,7 +131,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     /**
      * surface线程  可能有延迟
      */
-    public void setSurface(SurfaceTexture surface) {
+    public synchronized void setSurface(SurfaceTexture surface) {
         this.surfaceTexture = surface;
         isAttached = true;
         if (isSufaceDelayerPlay && !isAttachedSurface) {//surface未创建时延迟加载播放
@@ -146,7 +146,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         }
     }
 
-    public void onSurfaceTextureDestroyed() {
+    public synchronized void onSurfaceTextureDestroyedUI() {
         isAttached = false;
         this.surfaceTexture = null;
         if (isAttachedSurface && isInitPlay) {
@@ -228,9 +228,10 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
 
     private void attachSurface() {
         if (!mMediaPlayer.getVLCVout().areViewsAttached() && isAttached && surfaceTexture != null) {
+            if (surfaceSubtitlesView2 != null && !isSubtitleAttach) return;//等字字幕画布完成准备工作
             isAttachedSurface = true;
             mMediaPlayer.getVLCVout().setVideoSurface(surfaceTexture);
-            if (surfaceSubtitlesView2 != null) {//加载字幕时的画布
+            if (surfaceSubtitlesView2 != null && isSubtitleAttach) {//加载字幕时的画布
                 mMediaPlayer.getVLCVout().setSubtitlesSurface(surfaceSubtitlesView2.getSurfaceTexture());
             }
             mMediaPlayer.getVLCVout().addCallback(this);//没添加的才能加进去也省了remove了
@@ -684,6 +685,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
 
     //字幕画布
     private TextureView surfaceSubtitlesView2;
+    private boolean isSubtitleAttach;
     //字幕文件
     private String addSlave;
 //    private SurfaceView surfaceSubtitlesView;
@@ -696,7 +698,32 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
      */
     public void setSurfaceSubtitlesView(TextureView textureView) {
         this.surfaceSubtitlesView2 = textureView;
+        isSubtitleAttach = textureView.isAvailable();
         surfaceSubtitlesView2.setOpaque(false);//透明背景
+        surfaceSubtitlesView2.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                isSubtitleAttach = true;
+                setSurface(surfaceTexture);
+            }
+
+            @Override
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
+            }
+
+            @Override
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                isSubtitleAttach = false;
+                onSurfaceTextureDestroyedUI();
+                return false;
+            }
+
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+            }
+        });
     }
 
     public void setAddSlave(String addSlave) {

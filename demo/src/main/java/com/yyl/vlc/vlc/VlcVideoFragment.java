@@ -72,6 +72,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     //这里仅供参考
     // 更多方法参考官方APP
     private void startPlay0() {
+        surface.setVisibility(View.VISIBLE);
         vlcVideoView.setSurfaceSubtitlesView(surface);
         vlcVideoView.setAddSlave(alaveFile.getAbsolutePath());
     //    vlcVideoView.setAddSlave("android:resource://"+getActivity().getPackageName()+"/"+R.raw.test2);
@@ -147,6 +148,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
         vlcVideoView.setMediaPlayer(new MediaPlayer(libVLC));
         vlcVideoView.setMedia(media);
+        surface.setVisibility(View.VISIBLE);
         vlcVideoView.setSurfaceSubtitlesView(surface);
         //字幕
         vlcVideoView.setAddSlave(alaveFile.getAbsolutePath());
