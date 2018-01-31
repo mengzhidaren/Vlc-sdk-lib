@@ -51,6 +51,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         logInfo = view.findViewById(R.id.info);
         view.findViewById(R.id.change).setOnClickListener(this);
         view.findViewById(R.id.changeSlave).setOnClickListener(this);
+        view.findViewById(R.id.change2).setOnClickListener(this);
         vlcVideoView.setMediaListenerEvent(new MediaControl(vlcVideoView, logInfo));
         return view;
     }
@@ -75,7 +76,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         surface.setVisibility(View.VISIBLE);
         vlcVideoView.setSurfaceSubtitlesView(surface);
         vlcVideoView.setAddSlave(alaveFile.getAbsolutePath());
-    //    vlcVideoView.setAddSlave("android:resource://"+getActivity().getPackageName()+"/"+R.raw.test2);
+        //    vlcVideoView.setAddSlave("android:resource://"+getActivity().getPackageName()+"/"+R.raw.test2);
         vlcVideoView.startPlay(MainActivity.getUrl(getContext()));
     }
 
@@ -130,6 +131,12 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
                     mediaPlayer.setSpuTrack(isOpenSlave ? spuTracks[0].id : spuTracks[1].id);//关闭字幕
                 }
                 isOpenSlave = !isFullscreen;
+                break;
+            case R.id.change2:
+                if (!vlcVideoView.isPrepare()) return;
+                MediaPlayer mediaPlayer2 = vlcVideoView.getMediaPlayer();
+               // mediaPlayer2.setAspectRatio("16:9");
+             //   mediaPlayer2.setScale(4/3);
                 break;
         }
     }

@@ -229,7 +229,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         }
         int viewWidth = getWidth();
         int viewHeight = getHeight();
-        double videoRatio = (double) viewWidth / (double) viewHeight;//显示比例
+        double videoRatio = (double) viewWidth / (double) viewHeight;//显示比例 (小屏16：9 大屏厂商手机比例  真乱)
         double aspectRatio = (double) videoWidth / (double) videoHeight;//视频比例
         int newWidth, newHeight;
         if (videoWidth > videoHeight) {//正常比例16：9
@@ -259,13 +259,14 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
         } else {
             setRotation(0);
         }
+        LogUtils.i(tag, "onVideoSizeChanged   newVideo=" + newWidth + "x" + newHeight);
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
-            adjustAspectRatio(mVideoWidth, mVideoHeight, 0);
+            adjustAspectRatio(mVideoWidth, mVideoHeight, rotation);
         }
     }
 
@@ -280,7 +281,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Tex
 
     @Override
     public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int orientation) {
-        LogUtils.i(tag, "onVideoSizeChanged   video=" + width + "x" + width + " visible="
+        LogUtils.i(tag, "onVideoSizeChanged   video=" + width + "x" + height + " visible="
                 + visibleWidth + "x" + visibleHeight + "   orientation=" + orientation);
         if (width * height == 0) return;
         this.mVideoWidth = visibleWidth;
