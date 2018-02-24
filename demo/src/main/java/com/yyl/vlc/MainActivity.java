@@ -97,17 +97,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 ArrayList<String> options = new ArrayList<String>(10);
-                //   options.add("vlc --help");
                 options.add("-vvv");
                 LibVLC libVLC = new LibVLC(context, options);
                 Media media = new Media(libVLC, Uri.parse(path));//网络截图效率不高
-                media.addOption("--vout=android_display,none");
+                //   media.addOption("--vout=android_display,none");
                 //   media.addOption("--no-audio");
                 //   media.addOption("--start-time=20");
-                //  media.setHWDecoderEnabled(false, false);
+                media.setHWDecoderEnabled(false, false);//软解码
                 media.parse(Media.Parse.ParseNetwork);
                 Log.i("yyl", "getTrackCount=" + media.getTrackCount());
                 Media.VideoTrack track = (Media.VideoTrack) media.getTrack(Media.Track.Type.Video);//获取video轨道1的信息 可用ffmpeg查看
+                if (track == null) return;
                 Log.i("yyl", "track=" + track.toString());
                 final Bitmap bitmap = ThumbnailUtils.getThumbnail(media, track.width / 2, track.height / 2);
                 Log.i("yyl", "bitmap=" + bitmap);
