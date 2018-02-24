@@ -1,10 +1,10 @@
 ### Vlc-sdk-lib
 
-构建切换大小屏播放器  参考<br>
+构建切换大小屏播放器  推荐<br>
 
   * [VideoHeaderView]https://github.com/mengzhidaren/RecylerViewMultiHeaderView <br>
 
-转码视频的命令行工具  参考<br>
+转码视频的命令行工具  推荐<br>
 
   * [FFmpegCmdSdk]https://github.com/mengzhidaren/FFmpegCmdSdk <br>
   
@@ -42,7 +42,7 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  Bitmap thumbnail = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                  thumbnail.copyPixelsFromBuffer(ByteBuffer.wrap(b));
            }
-  好多人留言字幕功能 请用这个方法 或者参考demo里也写了
+  字幕功能 请用这个方法 或者参考demo
   mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, "字幕文件地址", true);
           
 ```
@@ -50,7 +50,7 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
-   compile 'com.yyl.vlc:vlc-android-sdk:2.5.17'
+   compile 'com.yyl.vlc:vlc-android-sdk:3.0.2'
    
    }
     ndk {
