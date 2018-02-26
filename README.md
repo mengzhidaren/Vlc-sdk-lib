@@ -50,7 +50,8 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
-   compile 'com.yyl.vlc:vlc-android-sdk:3.0.2'
+   //3.0.2有点小问题 等下个版本修改下  先回退到2.5.15
+   compile 'com.yyl.vlc:vlc-android-sdk:2.5.15'
    
    }
     ndk {
