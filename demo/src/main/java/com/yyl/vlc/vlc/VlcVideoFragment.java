@@ -120,14 +120,29 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
 
     //自定义 源文件
     private void startPlay3() {
-        ArrayList<String> libOptions = new ArrayList<>();
-        libOptions.add("vlc");
-        libOptions.add("--help");
+//        ArrayList<String> libOptions = new ArrayList<>();
+        ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
+
+        //并不通用 所有环境
+        libOptions.add("--rtsp-caching=0");
+        libOptions.add("--network-caching=0"); // probably overwritten in org\videolan\libvlc\Media.java
+        libOptions.add("--file-caching=0"); // probably overwritten in org\videolan\libvlc\Media.java
+        libOptions.add("--rtsp-timeout=5");
+        libOptions.add("--udp-timeout=5");
+        libOptions.add("--clock-synchro=0");
+        libOptions.add("--clock-jitter=0");
+        libOptions.add("--network-synchronisation");
+        libOptions.add("--no-drop-late-frames");
+        libOptions.add("--quiet-synchro");
+        libOptions.add("--sout-ts-dts-delay=100");
+        libOptions.add("--sout-ps-dts-delay=100");
         LibVLC libVLC = new LibVLC(getContext(), libOptions);
 
-        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
+        Media media = new Media(libVLC, Uri.parse("rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm"));
+
+
+
         vlcVideoView.setMedia(new MediaPlayer(media));
-        //字幕
         vlcVideoView.startPlay();
     }
 
