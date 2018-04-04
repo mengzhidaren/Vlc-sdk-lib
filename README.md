@@ -36,13 +36,16 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 
 <其它>
  thumbnail 
- 如果你有截图需求最好用我写的ffmpeg截图       
- 截图方法   byte[] b = VLCUtil.getThumbnail(media, width, height);
+ 如果你有截封面图需求可以用我写的ffmpeg工具 截封面图 
+ 截封面图方法   byte[] b = VLCUtil.getThumbnail(media, width, height);
            if (b != null) {
                  Bitmap thumbnail = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                  thumbnail.copyPixelsFromBuffer(ByteBuffer.wrap(b));
            }
-  字幕功能 请用这个方法 或者参考demo
+
+ 运行时截图用TextureView.getBitmap()保存图片
+ 
+  字幕功能 
   mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, "字幕文件地址", true);
           
 ```
@@ -50,10 +53,9 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
-   //3.0.2有点小问题 等下个版本修改下  先回退到2.5.15
-   compile 'com.yyl.vlc:vlc-android-sdk:2.5.15'
-   
+        compile 'com.yyl.vlc:vlc-android-sdk:3.0.5'
    }
+   
     ndk {
         //支持的abi    可选 精简的库
         abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86'

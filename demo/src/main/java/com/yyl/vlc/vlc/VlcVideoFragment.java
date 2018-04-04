@@ -47,7 +47,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
 
 
     //录像
-    private File recordFile = new File(Environment.getExternalStorageDirectory(), "recordFile.mp4");
+//    private File recordFile = new File(Environment.getExternalStorageDirectory(), "recordFile.mp4");
 
 
     @Override
@@ -107,17 +107,16 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     }
 
     //自定义 源文件
-    private void startPlay2() {
-        ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
-        libOptions.add("--record-path");
-        libOptions.add(recordFile.getAbsolutePath());
-        LibVLC libVLC = new LibVLC(getContext(), libOptions);
-
-        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
-        vlcVideoView.setMedia(new MediaPlayer(media));
-        //字幕
-        vlcVideoView.startPlay();
-    }
+//    private void startPlay2() {
+//        ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
+//        libOptions.add("--record-path");
+//        libOptions.add(recordFile.getAbsolutePath());
+//        LibVLC libVLC = new LibVLC(getContext(), libOptions);
+//
+//        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
+//        vlcVideoView.setMedia(new MediaPlayer(media));
+//        vlcVideoView.startPlay();
+//    }
 
     //自定义 源文件
     private void startPlay3() {
@@ -191,7 +190,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
 //                Bitmap bitmap = vlcVideoView.getBitmap();
 //                saveBitmap("", bitmap);
 
-                //如果要截关键帧用MainActivity里的方法
+                //如果要截封面图用MainActivity里的方法
                 break;
 
 
