@@ -76,7 +76,7 @@ public class IjkPlayer extends TextureView implements TextureView.SurfaceTexture
                 Log.i(TAG, "buffing=" + i);
             }
         });
-
+        mMediaPlayer.setLooping(true);
     }
 
     public void setSpeed(float speed) {

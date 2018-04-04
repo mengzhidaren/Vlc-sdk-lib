@@ -2,17 +2,17 @@ package com.yyl.vlc.vlc;
 
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yyl.vlc.MainActivity;
@@ -23,10 +23,12 @@ import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.vlc.VlcVideoView;
 import org.videolan.vlc.util.VLCInstance;
+import org.videolan.vlc.util.VLCOptions;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 /**
@@ -35,24 +37,36 @@ import java.util.Arrays;
 public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     private VlcVideoView vlcVideoView;
     private TextView logInfo;
-    private TextureView surface;//字幕画布
+    private ImageView thumbnail;
+
+
     //本地字幕文件
     private File alaveFile = new File(Environment.getExternalStorageDirectory(), "test2.srt");
-    //    private File alaveFile = new File(Environment.getExternalStorageDirectory(), "test.ass");
     //网络字幕
     private String uri = "";
+
+
+    //录像
+    private File recordFile = new File(Environment.getExternalStorageDirectory(), "recordFile.mp4");
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_video, container, false);
         vlcVideoView = view.findViewById(R.id.player);
-        surface = view.findViewById(R.id.surface);
         logInfo = view.findViewById(R.id.info);
+        thumbnail = view.findViewById(R.id.thumbnail);
+
+        thumbnail.setOnClickListener(this);
         view.findViewById(R.id.change).setOnClickListener(this);
         view.findViewById(R.id.changeSlave).setOnClickListener(this);
-        view.findViewById(R.id.change2).setOnClickListener(this);
+        view.findViewById(R.id.recordStart).setOnClickListener(this);
+        view.findViewById(R.id.recordStop).setOnClickListener(this);
+
+
         vlcVideoView.setMediaListenerEvent(new MediaControl(vlcVideoView, logInfo));
+        vlcVideoView.setPath(MainActivity.getUrl(getContext()));
         return view;
     }
 
@@ -60,32 +74,62 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        startPlay0();
+        startPlay();
     }
 
     //大多数情况
     private void startPlay() {
-        vlcVideoView.startPlay(MainActivity.getUrl(getContext()));
+        vlcVideoView.startPlay();
     }
 
+    //直播测试
+    private void startPlay11() {
+        vlcVideoView.setPath("rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm");
+        vlcVideoView.startPlay();
+    }
 
     //加载字幕方法
     //这里仅供参考
     // 更多方法参考官方APP
     private void startPlay0() {
-        surface.setVisibility(View.VISIBLE);
-        vlcVideoView.setSurfaceSubtitlesView(surface);
         vlcVideoView.setAddSlave(alaveFile.getAbsolutePath());
         //    vlcVideoView.setAddSlave("android:resource://"+getActivity().getPackageName()+"/"+R.raw.test2);
-        vlcVideoView.startPlay(MainActivity.getUrl(getContext()));
+        vlcVideoView.startPlay();
     }
 
     //打开硬件加速
     private void startPlay1() {
-        Media media = new Media(VLCInstance.get(getContext()), Uri.parse(MainActivity.getUrl(getContext())));
+        LibVLC libVLC = VLCInstance.get(getContext());
+        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
         media.setHWDecoderEnabled(true, false);
-        vlcVideoView.setMedia(media);
-        vlcVideoView.startPlay(null);
+        vlcVideoView.setMedia(new MediaPlayer(libVLC));
+        vlcVideoView.startPlay();
+    }
+
+    //自定义 源文件
+    private void startPlay2() {
+        ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
+        libOptions.add("--record-path");
+        libOptions.add(recordFile.getAbsolutePath());
+        LibVLC libVLC = new LibVLC(getContext(), libOptions);
+
+        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
+        vlcVideoView.setMedia(new MediaPlayer(media));
+        //字幕
+        vlcVideoView.startPlay();
+    }
+
+    //自定义 源文件
+    private void startPlay3() {
+        ArrayList<String> libOptions = new ArrayList<>();
+        libOptions.add("vlc");
+        libOptions.add("--help");
+        LibVLC libVLC = new LibVLC(getContext(), libOptions);
+
+        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
+        vlcVideoView.setMedia(new MediaPlayer(media));
+        //字幕
+        vlcVideoView.startPlay();
     }
 
     @Override
@@ -124,41 +168,54 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.changeSlave:
                 if (!vlcVideoView.isPrepare()) return;
-                MediaPlayer mediaPlayer = vlcVideoView.getMediaPlayer();
-                MediaPlayer.TrackDescription[] spuTracks = mediaPlayer.getSpuTracks();
-                if (spuTracks != null && spuTracks.length > 1) {
-                    Log.i("yyl spu=" + mediaPlayer.getSpuTrack(), "spuTracks=" + Arrays.toString(spuTracks));
-                    mediaPlayer.setSpuTrack(isOpenSlave ? spuTracks[0].id : spuTracks[1].id);//关闭字幕
-                }
-                isOpenSlave = !isFullscreen;
+                Media media11 = vlcVideoView.getMediaPlayer().getMedia();
+                media11.clearSlaves();
                 break;
-            case R.id.change2:
-                if (!vlcVideoView.isPrepare()) return;
-                MediaPlayer mediaPlayer2 = vlcVideoView.getMediaPlayer();
-               // mediaPlayer2.setAspectRatio("16:9");
-             //   mediaPlayer2.setScale(4/3);
+            case R.id.recordStart:
+                // if (!vlcVideoView.isPrepare()) return;
+                //  Media media = vlcVideoView.getMediaPlayer().getMedia();
+
+//                var_SetString( p_input, "input-record-path", psz_filepath );
+//                var_SetString( p_input, "sout-record-dst-prefix", psz_filename );
+//                var_ToggleBool( p_input, "record");
                 break;
+            case R.id.recordStop:
+                //     if (!vlcVideoView.isPrepare()) return;
+                //       Media media2 = vlcVideoView.getMediaPlayer().getMedia();
+
+
+                break;
+            case R.id.thumbnail:
+                thumbnail.setImageBitmap(vlcVideoView.getBitmap());
+                //这个就是截图 保存Bitmap就行了 懒的写 老有人问
+//                Bitmap bitmap = vlcVideoView.getBitmap();
+//                saveBitmap("", bitmap);
+
+                //如果要截关键帧用MainActivity里的方法
+                break;
+
+
         }
     }
 
-    boolean isOpenSlave = true;
 
-    //自定义 源文件
-    private void startPlay2() {
-        ArrayList<String> options = new ArrayList<>();
-//        options.add("--text-renderer");
-//        options.add("UTF-8");//
-        //   options.add("--subsdec-encoding=UTF-8");// 字幕字体编码
-        // options.add("--no-osd");//
-        options.add("-vvv");//显示全部调试日志
-        LibVLC libVLC = new LibVLC(getContext(), options);
-        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
-        vlcVideoView.setMediaPlayer(new MediaPlayer(libVLC));
-        vlcVideoView.setMedia(media);
-        surface.setVisibility(View.VISIBLE);
-        vlcVideoView.setSurfaceSubtitlesView(surface);
-        //字幕
-        vlcVideoView.setAddSlave(alaveFile.getAbsolutePath());
-        vlcVideoView.startPlay(null);
+    public static boolean saveBitmap(String savePath, Bitmap mBitmap) {
+        try {
+            File filePic = new File(savePath);
+            if (!filePic.exists()) {
+                filePic.getParentFile().mkdirs();
+                filePic.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(filePic);
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
+
 }

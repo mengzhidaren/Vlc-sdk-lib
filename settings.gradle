@@ -1,3 +1,2 @@
 include ':demo'
-//include 'libvlc2.5.17'
-include 'libvlc3.0.2'
+include 'libvlc3.0.5'

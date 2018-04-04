@@ -1,5 +1,6 @@
 package com.yyl.vlc.vlc;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.MediaController;
@@ -7,7 +8,7 @@ import android.widget.TextView;
 
 import org.videolan.vlc.VlcVideoView;
 import org.videolan.vlc.listener.MediaListenerEvent;
-import org.videolan.vlc.listener.MediaPlayerControl;
+
 
 /**
  * Created by yyl on 2016/11/3/003.
@@ -18,6 +19,7 @@ public class MediaControl implements MediaListenerEvent {
     private TextView logInfo;
     private String tag = "MediaControl";
     private long time;
+    private Handler mainThread = new Handler();
 
     public MediaControl(VlcVideoView mediaPlayer, TextView logInfo) {
         this.logInfo = logInfo;
@@ -38,6 +40,7 @@ public class MediaControl implements MediaListenerEvent {
 
     @Override
     public void eventBuffing(int event, float buffing) {
+
     }
 
     @Override
@@ -49,25 +52,41 @@ public class MediaControl implements MediaListenerEvent {
     }
 
     @Override
-    public void eventStop(boolean isPlayError) {
-        logInfo.setText("Stop" + (isPlayError ? "  播放已停止   有错误" : ""));
+    public void eventStop(final boolean isPlayError) {
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                logInfo.setText("Stop" + (isPlayError ? "  播放已停止   有错误" : ""));
+            }
+        });
+    }
+
+    @Override
+    public void eventError(final int error, final boolean show) {
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                logInfo.setText("地址 出错了 error=" + error);
+            }
+        });
 
     }
 
     @Override
-    public void eventError(int error, boolean show) {
-        logInfo.setText("地址 出错了 error=" + error);
-    }
+    public void eventPlay(final boolean isPlaying) {
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                if (isPlaying) {
+                    controller.show();
+                    Log.i(tag, "加载耗时  time=" + (System.currentTimeMillis() - time));
+                    logInfo.setText("播放中");
+                } else {
+                    logInfo.setText("暂停中");
+                }
+            }
+        });
 
-    @Override
-    public void eventPlay(boolean isPlaying) {
-        if (isPlaying) {
-            controller.show();
-            Log.i(tag, "加载耗时  time=" + (System.currentTimeMillis() - time));
-            logInfo.setText("播放中");
-        } else {
-            logInfo.setText("暂停中");
-        }
 
     }
 

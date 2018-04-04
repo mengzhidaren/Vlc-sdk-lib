@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,11 @@ import com.yyl.vlc.vlc.VlcPlayerActivity;
 
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
+import org.videolan.libvlc.MediaPlayer;
+import org.videolan.libvlc.util.Dumper;
+import org.videolan.libvlc.util.VLCUtil;
 import org.videolan.vlc.ThumbnailUtils;
+import org.videolan.vlc.util.LogUtils;
 import org.videolan.vlc.util.VLCInstance;
 
 import java.io.File;
@@ -125,4 +130,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+//    private File downloadFile = new File(Environment.getExternalStorageDirectory(), "downloadFile.mp4");
+//
+//
+//    Dumper dumper;
+//
+//    public void myClick5(View view) {
+//        Uri uri = VLCUtil.UriFromMrl(getUrl(context));
+//        dumper = new Dumper(context, uri, downloadFile.getAbsolutePath(), new Dumper.Listener() {
+//            @Override
+//            public void onFinish(boolean success) {
+//                LogUtils.i("dumper   onFinish=" + success);
+//            }
+//
+//            @Override
+//            public void onProgress(float progress) {
+//                LogUtils.i("dumper   onProgress=" + progress);
+//            }
+//        });
+//        dumper.start();
+//    }
+//
+//    public void myClick6(View view) {
+//        if (dumper != null)
+//            dumper.cancel();
+//    }
 }

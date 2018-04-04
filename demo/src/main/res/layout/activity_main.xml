@@ -35,6 +35,18 @@
         android:onClick="myClick4"
         android:text="thumbnail" />
 
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="myClick5"
+        android:text="testStart" />
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="myClick6"
+        android:text="testStop" />
 
     <ImageView
         android:id="@+id/thumbnail"

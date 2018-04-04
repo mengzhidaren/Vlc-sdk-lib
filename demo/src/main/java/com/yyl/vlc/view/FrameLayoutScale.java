@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
  * Created by yyl on 2015/11/22/022.
  */
 
-public class FrameLayoutScale extends ViewGroup {
+public class FrameLayoutScale extends FrameLayout {
 
     private float videoScale = 9f / 16f;
     private boolean isFullVideoState;
@@ -38,63 +38,21 @@ public class FrameLayoutScale extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        onMeasureVideo(widthMeasureSpec, heightMeasureSpec, getLayoutParams().height);
+        onMeasureVideo(widthMeasureSpec, heightMeasureSpec);
     }
 
-    private void onMeasureVideo(int widthMeasureSpec, int heightMeasureSpec, int heightParams) {
+    //测量视频的大小
+    private void onMeasureVideo(int widthMeasureSpec, int heightMeasureSpec) {
         int measureWidth = MeasureSpec.getSize(widthMeasureSpec);
         int measureHeight = MeasureSpec.getSize(heightMeasureSpec);
         measureHeight = isFullVideoState ? measureHeight : (int) (measureWidth * videoScale);
         setMeasuredDimension(measureWidth, measureHeight);
-        if (isFullVideoState && heightParams != FrameLayout.LayoutParams.MATCH_PARENT) {
-            getLayoutParams().height = FrameLayout.LayoutParams.MATCH_PARENT;
-            if (isInEditMode()) {
-                setMeasuredDimension(measureWidth, measureHeight);
-            }
-            return;
-        } else if (!isFullVideoState && heightParams == FrameLayout.LayoutParams.MATCH_PARENT) {
-            getLayoutParams().height =measureHeight;
-            if (isInEditMode()) {
-                setMeasuredDimension(measureWidth, measureHeight);
-            }
-            return;
-        }
-
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            final View child = getChildAt(i);
-            if (child.getVisibility() != GONE) {
-                final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(measureWidth, MeasureSpec.EXACTLY);
-                final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(measureHeight, MeasureSpec.EXACTLY);
-                child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-            }
-        }
+        int newHeightMeasureSpec = MeasureSpec.makeMeasureSpec(measureHeight, MeasureSpec.AT_MOST);
+        measureChildren(widthMeasureSpec, newHeightMeasureSpec);
     }
 
     public void setScaleVideo(float videoScale) {
         this.videoScale = videoScale;
     }
 
-    @Override
-    public FrameLayout.LayoutParams generateLayoutParams(AttributeSet attrs) {
-        return new FrameLayout.LayoutParams(getContext(), attrs);
-    }
-
-    @Override
-    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
-        return p instanceof FrameLayout.LayoutParams;
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            final View child = getChildAt(i);
-            if (child.getVisibility() != GONE) {
-                // final int width = child.getMeasuredWidth();
-                //   final int height = child.getMeasuredHeight();
-                child.layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
-            }
-        }
-    }
 }
