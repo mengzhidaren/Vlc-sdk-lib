@@ -96,6 +96,18 @@ public class IjkPlayer extends TextureView implements TextureView.SurfaceTexture
         mMediaPlayer.start();
     }
 
+    public void onResume() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.start();
+        }
+    }
+
+    public void onPause() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.pause();
+        }
+    }
+
     private IMediaPlayer.OnCompletionListener mCompletionListener =
             new IMediaPlayer.OnCompletionListener() {
                 public void onCompletion(IMediaPlayer mp) {
@@ -166,7 +178,7 @@ public class IjkPlayer extends TextureView implements TextureView.SurfaceTexture
         if (isInEditMode()) return;
         Log.d(TAG, "onSurfaceTextureAvailable:");
         mMediaPlayer.setSurface(new Surface(surface));
-
+        onResume();
     }
 
     @Override
@@ -176,6 +188,7 @@ public class IjkPlayer extends TextureView implements TextureView.SurfaceTexture
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        onPause();
         return true;
     }
 

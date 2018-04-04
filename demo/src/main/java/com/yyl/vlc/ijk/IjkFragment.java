@@ -32,7 +32,17 @@ public class IjkFragment extends Fragment {
         ijkPlayer.setPath(MainActivity.getUrl(getContext()));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ijkPlayer.onResume();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        ijkPlayer.onPause();
+    }
 
     @Override
     public void onDetach() {
