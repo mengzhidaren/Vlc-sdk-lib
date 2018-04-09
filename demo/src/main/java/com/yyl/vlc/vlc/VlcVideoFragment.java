@@ -123,7 +123,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
 //        ArrayList<String> libOptions = new ArrayList<>();
         ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
 
-        //并不通用 所有环境
+        //并不通用所有环境
         libOptions.add("--rtsp-caching=0");
         libOptions.add("--network-caching=0"); // probably overwritten in org\videolan\libvlc\Media.java
         libOptions.add("--file-caching=0"); // probably overwritten in org\videolan\libvlc\Media.java
