@@ -47,7 +47,6 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     private static final int STATE_RESUME = 4;
     private static final int STATE_STOP = 5;
     private int currentState = STATE_LOAD;
-    private int orientation;
     private float speed = 1f;
 
     private final Lock lock = new ReentrantLock();
@@ -217,7 +216,6 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         }
         canSeek = false;
         isPlayError = false;
-        orientation = -1;
         initVideoState();
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer(libVLC);
@@ -524,19 +522,18 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     @Override
     public void onNewVideoLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
         if (videoSizeChange != null) {
-            if (orientation == -1) {
-                Media.VideoTrack videoTrack = getVideoTrack();
-                if (videoTrack != null) {
-                    orientation = videoTrack.orientation;
-                    LogUtils.i(tag, "videoTrack=" + videoTrack.toString());
-                } else {
-                    orientation = 0;
-                }
-            }
-            videoSizeChange.onVideoSizeChanged(width, height, visibleWidth, visibleHeight, orientation);
+            videoSizeChange.onVideoSizeChanged(width, height, visibleWidth, visibleHeight, 0);
         }
     }
 
+    public int getOrientation() {
+        Media.VideoTrack videoTrack = getVideoTrack();
+        if (videoTrack != null) {
+            LogUtils.i(tag, "videoTrack=" + videoTrack.toString());
+            return videoTrack.orientation;
+        }
+        return 0;
+    }
 
     @Override
     public void setMirror(boolean mirror) {

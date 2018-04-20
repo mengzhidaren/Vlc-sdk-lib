@@ -270,7 +270,6 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         if (width * height == 0) return;
         this.mVideoWidth = visibleWidth;
         this.mVideoHeight = visibleHeight;
-        this.rotation = orientation;
         post(new Runnable() {
             @Override
             public void run() {
