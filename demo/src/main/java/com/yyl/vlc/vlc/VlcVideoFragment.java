@@ -74,7 +74,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        startPlay();
+        startPlay0();
     }
 
     //大多数情况
@@ -100,23 +100,28 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     //打开硬件加速
     private void startPlay1() {
         LibVLC libVLC = VLCInstance.get(getContext());
+
         Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
         media.setHWDecoderEnabled(true, false);
         vlcVideoView.setMedia(new MediaPlayer(libVLC));
         vlcVideoView.startPlay();
     }
 
-    //自定义 源文件
-//    private void startPlay2() {
-//        ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
+    //    自定义 源文件
+    private void startPlay2() {
+        ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
 //        libOptions.add("--record-path");
+//        libOptions.add("--avcodec-skiploopfilter");
+//        libOptions.add("0");
+
 //        libOptions.add(recordFile.getAbsolutePath());
-//        LibVLC libVLC = new LibVLC(getContext(), libOptions);
-//
-//        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
-//        vlcVideoView.setMedia(new MediaPlayer(media));
-//        vlcVideoView.startPlay();
-//    }
+//        libOptions.add("")
+        LibVLC libVLC = new LibVLC(getContext(), libOptions);
+
+        Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
+        vlcVideoView.setMedia(new MediaPlayer(media));
+        vlcVideoView.startPlay();
+    }
 
     //自定义 源文件
     private void startPlay3() {
@@ -139,7 +144,6 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         LibVLC libVLC = new LibVLC(getContext(), libOptions);
 
         Media media = new Media(libVLC, Uri.parse("rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm"));
-
 
 
         vlcVideoView.setMedia(new MediaPlayer(media));
