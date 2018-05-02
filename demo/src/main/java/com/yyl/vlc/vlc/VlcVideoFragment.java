@@ -74,10 +74,10 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        startPlay0();
+        startPlay();
     }
 
-    //大多数情况
+    //more state
     private void startPlay() {
         vlcVideoView.startPlay();
     }

@@ -40,11 +40,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="myClick5"
+        android:visibility="invisible"
         android:text="testStart" />
     <Button
         android:id="@+id/button6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:onClick="myClick6"
         android:text="testStop" />
 

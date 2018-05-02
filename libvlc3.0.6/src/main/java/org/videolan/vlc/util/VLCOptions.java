@@ -98,7 +98,7 @@ public class VLCOptions {
         final boolean freetypeBold = pref.getBoolean("subtitles_bold", false);
         final String freetypeColor = pref.getString("subtitles_color", "16777215");
         final boolean freetypeBackground = pref.getBoolean("subtitles_background", false);
-    //    final int opengl = Integer.parseInt(pref.getString("opengl", "-1"));
+        final int opengl = Integer.parseInt(pref.getString("opengl", "-1"));
 
         /* CPU intensive plugin, setting for slow devices */
         options.add(timeStreching ? "--audio-time-stretch" : "--no-audio-time-stretch");
