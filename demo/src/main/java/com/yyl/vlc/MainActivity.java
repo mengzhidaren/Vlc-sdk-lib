@@ -23,6 +23,7 @@ import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.util.Dumper;
 import org.videolan.libvlc.util.VLCUtil;
+import org.videolan.vlc.RecordEvent;
 import org.videolan.vlc.ThumbnailUtils;
 import org.videolan.vlc.util.LogUtils;
 import org.videolan.vlc.util.VLCInstance;
@@ -130,29 +131,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    private File downloadFile = new File(Environment.getExternalStorageDirectory(), "downloadFile.mp4");
+    //    private File downloadFile = new File(Environment.getExternalStorageDirectory(), "downloadFile.mp4");
 //
 //
 //    Dumper dumper;
 //
-//    public void myClick5(View view) {
-//        Uri uri = VLCUtil.UriFromMrl(getUrl(context));
-//        dumper = new Dumper(context, uri, downloadFile.getAbsolutePath(), new Dumper.Listener() {
-//            @Override
-//            public void onFinish(boolean success) {
-//                LogUtils.i("dumper   onFinish=" + success);
-//            }
-//
-//            @Override
-//            public void onProgress(float progress) {
-//                LogUtils.i("dumper   onProgress=" + progress);
-//            }
-//        });
-//        dumper.start();
-//    }
-//
-//    public void myClick6(View view) {
-//        if (dumper != null)
-//            dumper.cancel();
-//    }
+    public void myClick5(View view) {
+
+    }
+
+    public void myClick6(View view) {
+    }
+
+    public void myClick7(View view) {
+//        new RecordEvent().isRecording();
+    }
 }

@@ -54,21 +54,14 @@
             android:id="@+id/recordStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="recordStart"
-            android:visibility="invisible" />
+            android:text="recordStart" />
 
         <Button
             android:id="@+id/recordStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="recordStop"
-            android:visibility="invisible" />
+            android:text="recordStop" />
 
-        <Button
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:text="test" />
 
         <ImageView
             android:id="@+id/thumbnail"

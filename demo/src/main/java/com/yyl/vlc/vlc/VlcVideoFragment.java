@@ -21,6 +21,7 @@ import com.yyl.vlc.R;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
+import org.videolan.vlc.RecordEvent;
 import org.videolan.vlc.VlcVideoView;
 import org.videolan.vlc.util.VLCInstance;
 import org.videolan.vlc.util.VLCOptions;
@@ -45,10 +46,10 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     //网络字幕
     private String uri = "";
 
-
+    private RecordEvent recordEvent = new RecordEvent();
     //录像
-//    private File recordFile = new File(Environment.getExternalStorageDirectory(), "recordFile.mp4");
-
+    private File recordFile = new File(Environment.getExternalStorageDirectory(), "yyl");
+    String directory = recordFile.getAbsolutePath();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +64,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.changeSlave).setOnClickListener(this);
         view.findViewById(R.id.recordStart).setOnClickListener(this);
         view.findViewById(R.id.recordStop).setOnClickListener(this);
-
+        recordFile.mkdirs();
 
         vlcVideoView.setMediaListenerEvent(new MediaControl(vlcVideoView, logInfo));
         vlcVideoView.setPath(MainActivity.getUrl(getContext()));
@@ -74,7 +75,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        startPlay();
+        startPlay2();
     }
 
     //more state
@@ -93,7 +94,6 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     // 更多方法参考官方APP
     private void startPlay0() {
         vlcVideoView.setAddSlave(alaveFile.getAbsolutePath());
-        //    vlcVideoView.setAddSlave("android:resource://"+getActivity().getPackageName()+"/"+R.raw.test2);
         vlcVideoView.startPlay();
     }
 
@@ -110,14 +110,10 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     //    自定义 源文件
     private void startPlay2() {
         ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
-//        libOptions.add("--record-path");
-//        libOptions.add("--avcodec-skiploopfilter");
-//        libOptions.add("0");
+//        libOptions.add("record-path");
+//        libOptions.add(recordFile2.getAbsolutePath());
 
-//        libOptions.add(recordFile.getAbsolutePath());
-//        libOptions.add("")
         LibVLC libVLC = new LibVLC(getContext(), libOptions);
-
         Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
         vlcVideoView.setMedia(new MediaPlayer(media));
         vlcVideoView.startPlay();
@@ -127,25 +123,8 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     private void startPlay3() {
 //        ArrayList<String> libOptions = new ArrayList<>();
         ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
-
-        //并不通用所有环境
-        libOptions.add("--rtsp-caching=0");
-        libOptions.add("--network-caching=0"); // probably overwritten in org\videolan\libvlc\Media.java
-        libOptions.add("--file-caching=0"); // probably overwritten in org\videolan\libvlc\Media.java
-        libOptions.add("--rtsp-timeout=5");
-        libOptions.add("--udp-timeout=5");
-        libOptions.add("--clock-synchro=0");
-        libOptions.add("--clock-jitter=0");
-        libOptions.add("--network-synchronisation");
-        libOptions.add("--no-drop-late-frames");
-        libOptions.add("--quiet-synchro");
-        libOptions.add("--sout-ts-dts-delay=100");
-        libOptions.add("--sout-ps-dts-delay=100");
         LibVLC libVLC = new LibVLC(getContext(), libOptions);
-
         Media media = new Media(libVLC, Uri.parse("rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm"));
-
-
         vlcVideoView.setMedia(new MediaPlayer(media));
         vlcVideoView.startPlay();
     }
@@ -190,26 +169,19 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
                 media11.clearSlaves();
                 break;
             case R.id.recordStart:
-                // if (!vlcVideoView.isPrepare()) return;
-                //  Media media = vlcVideoView.getMediaPlayer().getMedia();
+                String std = "std{access=file{no-append,no-format,no-overwrite},mux='avi',dst='" + directory + "'}";
+                String std2 = "standard{access=file,mux=mp4,dst='" + directory + "/yyl.mp4'}";
 
-//                var_SetString( p_input, "input-record-path", psz_filepath );
-//                var_SetString( p_input, "sout-record-dst-prefix", psz_filename );
-//                var_ToggleBool( p_input, "record");
+                recordEvent.startRecord(vlcVideoView.getMediaPlayer(), directory);
                 break;
             case R.id.recordStop:
-                //     if (!vlcVideoView.isPrepare()) return;
-                //       Media media2 = vlcVideoView.getMediaPlayer().getMedia();
-
-
+                recordEvent.stopRecord(vlcVideoView.getMediaPlayer());
                 break;
             case R.id.thumbnail:
-                thumbnail.setImageBitmap(vlcVideoView.getBitmap());
-                //这个就是截图 保存Bitmap就行了 懒的写 老有人问
+                //     thumbnail.setImageBitmap(vlcVideoView.getBitmap());
+                //这个就是截图 保存Bitmap就行了
 //                Bitmap bitmap = vlcVideoView.getBitmap();
 //                saveBitmap("", bitmap);
-
-                //如果要截封面图用MainActivity里的方法
                 break;
 
 

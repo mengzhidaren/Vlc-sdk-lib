@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion Integer.valueOf(project.properties.get("compileSdkVersion"))
-    buildToolsVersion project.properties.get("buildToolsVersion")
     defaultConfig {
         applicationId "com.yyl.vlc"
         minSdkVersion Integer.valueOf(project.properties.get("minSdkVersion"))
@@ -20,14 +19,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-//    compile 'com.yyl.vlc:vlc-android-sdk:3.0.5'
-    compile project(":libvlc3.0.6")
-    compile "com.android.support:appcompat-v7:${project.properties.get("support")}"
-    compile "com.android.support:support-v4:${project.properties.get("support")}"
-    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'
-    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
-    compile 'com.danikula:videocache:2.7.0'
+    compile 'com.yyl.vlc:vlc-android-sdk:3.0.9'
+//    implementation project(":libvlc3.0.9")
+    implementation "com.android.support:appcompat-v7:${project.properties.get("support")}"
+    implementation "com.android.support:support-v4:${project.properties.get("support")}"
+    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
+    implementation 'com.danikula:videocache:2.7.0'
 }

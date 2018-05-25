@@ -10,3 +10,6 @@
 /.idea/
 .idea
 build/
+.externalNativeBuild/
+.gitignore
+/libvlc3.0.9/.externalNativeBuild/
