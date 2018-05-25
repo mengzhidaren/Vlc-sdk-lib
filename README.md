@@ -20,11 +20,14 @@
 当前缓冲百分比 
 视频(音频)播放速度可调,任意速度可调. (0.25-4)   < player.setRate(float rate); >
 加载字幕(addSlave)，设置镜面等
+实时录制视频(测试中.. 有问题请留言)
+
+编译问题请不要找我留言(请自已google)
 ```
 # 使用方法
 ```
-<xml>
-//高度需要自已设置调整
+<xml>布局
+//最好继承VlcVideoView    重写adjustAspectRatio()方法   高度自已设置调整
  <org.videolan.vlc.VlcVideoView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -36,24 +39,20 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 
 <其它>
  thumbnail 
- 如果你有截封面图需求可以用我写的ffmpeg工具 截封面图 
- 截封面图方法   byte[] b = VLCUtil.getThumbnail(media, width, height);
-           if (b != null) {
-                 Bitmap thumbnail = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                 thumbnail.copyPixelsFromBuffer(ByteBuffer.wrap(b));
-           }
-
- 运行时截图用TextureView.getBitmap()保存图片
- 
+ 截封面图方法   
+        byte[] b = VLCUtil.getThumbnail(media, width, height);
+        运行时截图用TextureView.getBitmap()保存图片
   字幕功能 
-  mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, "字幕文件地址", true);
+        mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, "字幕文件地址", true);
+  录像功能(测试中   参考demo)
+        new RecordEvent().startRecord(vlcVideoView.getMediaPlayer(), "保存视频的目录","文件名");
           
 ```
 
 #引用库文件
 ```
    dependencies {
-        compile 'com.yyl.vlc:vlc-android-sdk:3.0.5'
+        compile 'com.yyl.vlc:vlc-android-sdk:3.0.9'
    }
    
     ndk {
@@ -75,9 +74,11 @@ Alipay:<br>
 ### 官方网站 ###
 * [vlc](https://www.videolan.org)
 
-### 编译方法 ###
+### 3.0以下编译方法 ###
 
 ```
+(3.0.0以上编译忽略吧  其它自已google吧 编译问题不要留言给我 )
+
 vlc-android的代码在  linux  ubuntu64  16.4  中搭建编绎环境
 android-sdk 版本 api25
 ndk版本 r13b
