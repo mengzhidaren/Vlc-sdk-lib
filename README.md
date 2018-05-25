@@ -38,14 +38,15 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  player.startPlay(path);
 
 <其它>
- thumbnail 
- 截封面图方法   
-        byte[] b = VLCUtil.getThumbnail(media, width, height);
-        运行时截图用TextureView.getBitmap()保存图片
-  字幕功能 
-        mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, "字幕文件地址", true);
+ 截封面图方法     byte[] b = VLCUtil.getThumbnail(media, width, height);
+ 运行时截图用     TextureView.getBitmap()保存图片
+ 
+ vlc原生截图      new RecordEvent().takeSnapshot(mediaPlayer,"保存图片的地址或目录",width,height);
+  
+  字幕功能  mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, "字幕文件地址", true);
+  
   录像功能(测试中   参考demo)
-        new RecordEvent().startRecord(vlcVideoView.getMediaPlayer(), "保存视频的目录","文件名");
+        new RecordEvent().startRecord(mediaPlayer, "保存视频的目录","文件名");
           
 ```
 
