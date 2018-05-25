@@ -82,7 +82,7 @@ Java_org_videolan_vlc_RecordEvent_isRecording(JNIEnv *env, jobject instance, job
         vlc_object_release(input_thread);
     }
     LOGII("isRecording   %i", b_record);
-    return (jboolean)b_record;
+    return (jboolean) b_record;
 }
 
 JNIEXPORT jboolean
@@ -101,9 +101,88 @@ Java_org_videolan_vlc_RecordEvent_isSuportRecord(JNIEnv *env, jobject instance,
 }
 
 
-//JNIEXPORT jboolean JNICALL
-//Java_org_videolan_vlc_RecordEvent_setMediaPlayerInit(JNIEnv *env, jobject instance,
-//                                                     jobject mediaPlayer) {
-//
-//
-//}
+/*
+ * Remember to release the returned vout_thread_t.
+ */
+static vout_thread_t **
+GetVouts1(JNIEnv *env, jobject mediaPlayer, libvlc_media_player_t *p_mi, size_t *n) {
+    input_thread_t *p_input = getInputThread(env, mediaPlayer);
+    if (!p_input) {
+        *n = 0;
+        return NULL;
+    }
+
+    vout_thread_t **pp_vouts;
+    if (input_Control(p_input, INPUT_GET_VOUTS, &pp_vouts, n)) {
+        *n = 0;
+        pp_vouts = NULL;
+    }
+    vlc_object_release (p_input);
+    return pp_vouts;
+}
+
+static vout_thread_t *
+GetVout2(JNIEnv *env, jobject mediaPlayer, libvlc_media_player_t *mp, size_t num) {
+    vout_thread_t *p_vout = NULL;
+    size_t n;
+    vout_thread_t **pp_vouts = GetVouts1(env, mediaPlayer, mp, &n);
+    if (pp_vouts == NULL)
+        goto err;
+
+    if (num < n)
+        p_vout = pp_vouts[num];
+
+    for (size_t i = 0; i < n; i++)
+        if (i != num)
+            vlc_object_release (pp_vouts[i]);
+    free(pp_vouts);
+
+    if (p_vout == NULL)
+        err:
+        libvlc_printerr("Video output not active");
+    return p_vout;
+}
+
+int
+libvlc_video_take_snapshot2(JNIEnv *env, jobject mediaPlayer, libvlc_media_player_t *p_mi,
+                            unsigned num,
+                            const char *psz_filepath,
+                            unsigned int i_width, unsigned int i_height) {
+    //assert( psz_filepath );
+    vout_thread_t *p_vout = GetVout2(env, mediaPlayer, p_mi, num);
+    if (p_vout == NULL)
+        return -1;
+
+    /* FIXME: This is not atomic. All parameters should be passed at once
+     * (obviously _not_ with var_*()). Also, the libvlc object should not be
+     * used for the callbacks: that breaks badly if there are concurrent
+     * media players in the instance. */
+    var_Create(p_vout, "snapshot-width", VLC_VAR_INTEGER);
+    var_SetInteger(p_vout, "snapshot-width", i_width);
+    var_Create(p_vout, "snapshot-height", VLC_VAR_INTEGER);
+    var_SetInteger(p_vout, "snapshot-height", i_height);
+    var_Create(p_vout, "snapshot-path", VLC_VAR_STRING);
+    var_SetString(p_vout, "snapshot-path", psz_filepath);
+    var_Create(p_vout, "snapshot-format", VLC_VAR_STRING);
+    var_SetString(p_vout, "snapshot-format", "png");
+    var_TriggerCallback(p_vout, "video-snapshot");
+    vlc_object_release(p_vout);
+    return 0;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_videolan_vlc_RecordEvent_takeSnapshot(JNIEnv *env, jobject instance, jobject mediaPlayer,
+                                               jstring path_, jint width, jint height) {
+    const char *path = (*env)->GetStringUTFChars(env, path_, 0);
+    vlcjni_object *vlcjniObject = VLCJniObject_getInstance(env, mediaPlayer);
+
+    int result = libvlc_video_take_snapshot2(env,
+                                             mediaPlayer,
+                                             vlcjniObject->u.p_mp,
+                                             0,
+                                             path,
+                                             (unsigned int) width,
+                                             (unsigned int) height);
+    (*env)->ReleaseStringUTFChars(env, path_, path);
+    return result;
+}

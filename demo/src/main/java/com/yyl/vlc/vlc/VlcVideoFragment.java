@@ -49,6 +49,10 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     private RecordEvent recordEvent = new RecordEvent();
     //录像
     private File recordFile = new File(Environment.getExternalStorageDirectory(), "yyl");
+
+
+    //vlc截图文件地址
+    private File takeSnapshotFile = new File(Environment.getExternalStorageDirectory(), "yyl.png");
     String directory = recordFile.getAbsolutePath();
 
     @Override
@@ -171,15 +175,26 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
             case R.id.recordStart:
                 String std = "std{access=file{no-append,no-format,no-overwrite},mux='avi',dst='" + directory + "'}";
                 String std2 = "standard{access=file,mux=mp4,dst='" + directory + "/yyl.mp4'}";
+                if (vlcVideoView.canControl()) {
+                    recordEvent.startRecord(vlcVideoView.getMediaPlayer(), directory);
+                }
 
-                recordEvent.startRecord(vlcVideoView.getMediaPlayer(), directory);
+
                 break;
             case R.id.recordStop:
-                recordEvent.stopRecord(vlcVideoView.getMediaPlayer());
+                if (vlcVideoView.canControl()) {
+                    recordEvent.stopRecord(vlcVideoView.getMediaPlayer());
+                }
+
                 break;
             case R.id.thumbnail:
-                thumbnail.setImageBitmap(vlcVideoView.getBitmap());
-//                这个就是截图 保存Bitmap就行了
+                if (vlcVideoView.canControl()) {
+                    recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), vlcVideoView.getVideoWidth(), vlcVideoView.getVideoHeight());
+                }
+
+
+                //                这个就是截图 保存Bitmap就行了
+                //   thumbnail.setImageBitmap(vlcVideoView.getBitmap());
 //                Bitmap bitmap = vlcVideoView.getBitmap();
 //                saveBitmap("", bitmap);
                 break;

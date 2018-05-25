@@ -23,8 +23,8 @@ android {
 }
 
 dependencies {
-    compile 'com.yyl.vlc:vlc-android-sdk:3.0.9'
-//    implementation project(":libvlc3.0.9")
+//    compile 'com.yyl.vlc:vlc-android-sdk:3.0.9'
+    implementation project(":libvlc3.0.9")
     implementation "com.android.support:appcompat-v7:${project.properties.get("support")}"
     implementation "com.android.support:support-v4:${project.properties.get("support")}"
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'

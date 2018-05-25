@@ -252,6 +252,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         }
     }
 
+
     private int mVideoWidth;
     private int mVideoHeight;
     private int rotation = 0;
@@ -260,6 +261,13 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         return rotation;
     }
 
+    public int getVideoWidth() {
+        return mVideoWidth;
+    }
+
+    public int getVideoHeight() {
+        return mVideoHeight;
+    }
 
     @Override
     public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int orientation) {

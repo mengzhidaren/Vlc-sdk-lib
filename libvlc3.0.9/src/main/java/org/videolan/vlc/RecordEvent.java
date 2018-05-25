@@ -64,6 +64,16 @@ public class RecordEvent {
     public native boolean isSuportRecord(MediaPlayer mediaPlayer);
 
 
+    /**
+     * @param mediaPlayer 播放器
+     * @param path        path 可以是文件也可以是文件夹
+     * @param width       图片
+     * @param height      图片
+     * @return 自已试吧
+     */
+    public native int takeSnapshot(MediaPlayer mediaPlayer, String path, int width, int height);
+
+
 //      public native boolean setMediaPlayerInit(MediaPlayer mediaPlayer);
 
 }
