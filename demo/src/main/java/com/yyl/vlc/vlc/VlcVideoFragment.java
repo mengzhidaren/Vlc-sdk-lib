@@ -68,6 +68,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.changeSlave).setOnClickListener(this);
         view.findViewById(R.id.recordStart).setOnClickListener(this);
         view.findViewById(R.id.recordStop).setOnClickListener(this);
+        view.findViewById(R.id.snapShot).setOnClickListener(this);
         recordFile.mkdirs();
 
         vlcVideoView.setMediaListenerEvent(new MediaControl(vlcVideoView, logInfo));
@@ -187,7 +188,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
                 }
 
                 break;
-            case R.id.thumbnail:
+            case R.id.snapShot:
                 if (vlcVideoView.canControl()) {
                     recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), vlcVideoView.getVideoWidth(), vlcVideoView.getVideoHeight());
                 }

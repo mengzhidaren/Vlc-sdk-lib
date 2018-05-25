@@ -6,4 +6,5 @@
     <string name="recordstart">recordStart</string>
     <string name="recordstop">recordStop</string>
     <string name="change">changeFull</string>
+    <string name="snapshot">snapShot</string>
 </resources>
