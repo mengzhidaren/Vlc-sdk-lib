@@ -178,8 +178,8 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
                 recordEvent.stopRecord(vlcVideoView.getMediaPlayer());
                 break;
             case R.id.thumbnail:
-                //     thumbnail.setImageBitmap(vlcVideoView.getBitmap());
-                //这个就是截图 保存Bitmap就行了
+                thumbnail.setImageBitmap(vlcVideoView.getBitmap());
+//                这个就是截图 保存Bitmap就行了
 //                Bitmap bitmap = vlcVideoView.getBitmap();
 //                saveBitmap("", bitmap);
                 break;

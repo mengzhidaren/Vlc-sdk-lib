@@ -131,11 +131,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //    private File downloadFile = new File(Environment.getExternalStorageDirectory(), "downloadFile.mp4");
-//
-//
-//    Dumper dumper;
-//
     public void myClick5(View view) {
 
     }
@@ -144,6 +139,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void myClick7(View view) {
-//        new RecordEvent().isRecording();
     }
 }
