@@ -138,7 +138,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         if (!mMediaPlayer.getVLCVout().areViewsAttached() && isAttached && !isAttachedSurface) {
             LogUtils.i(tag, "setVideoSurface   attachViews");
             isAttachedSurface = true;
-            mMediaPlayer.getVLCVout().setWindowSize(surfaceW,surfaceH);
+            setWindowSize(surfaceW,surfaceH);
             mMediaPlayer.getVLCVout().attachSurfaceSlave(surfaceVideo, null, this);
             // mMediaPlayer.setVideoTitleDisplay(MediaPlayer.Position.Disable, 0);
         }
@@ -415,7 +415,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     }
 
     @Override
-    public boolean canControl() {
+    public boolean canControl() {//直播流不要用这个
         return canReadInfo && canSeek && canPause;
     }
 
@@ -523,7 +523,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     @Override
     public void onNewVideoLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
         if (videoSizeChange != null) {
-            videoSizeChange.onVideoSizeChanged(width, height, visibleWidth, visibleHeight, 0);
+            videoSizeChange.onVideoSizeChanged(width, height, visibleWidth, visibleHeight);
         }
     }
 

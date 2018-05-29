@@ -20,14 +20,18 @@
 
 package org.videolan.vlc.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ConfigurationInfo;
 import android.media.AudioManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.MainThread;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.util.AndroidUtil;
@@ -39,6 +43,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Build.VERSION_CODES.KITKAT;
 
 //  <string-array name="deblocking_values" translatable="false">
@@ -66,6 +71,19 @@ public class VLCOptions {
 
     private static int AUDIOTRACK_SESSION_ID = 0;
 
+    private static boolean isSupportsOpenGL(Context context) {
+        final ActivityManager activityManager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
+        boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x2000;
+        boolean isEmulator = Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
+                && (Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86"));
+        return supportsEs2 || isEmulator;
+    }
+
     // TODO should return List<String>
     public static ArrayList<String> getLibOptions(Context context) {
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -83,9 +101,11 @@ public class VLCOptions {
         final boolean timeStreching = pref.getBoolean("enable_time_stretching_audio", timeStrechingDefault);
         final String subtitlesEncoding = pref.getString("subtitle_text_encoding", "");
         final boolean frameSkip = pref.getBoolean("enable_frame_skip", false);//启用跳帧     加速解码，但可能降低画质
-        String chroma = pref.getString("chroma_format", "RV32");//RGB 32 位: 默认色度\nRGB 16 位: 性能更佳，但画质下降\nYUV: 性能最佳，但并非所有设备可用。仅限 Android 2.3 及更高版本。
+        String chroma = pref.getString("chroma_format", "RV32");//RGB 32 位: 默认色度 RGB 16 位: 性能更佳，但画质下降 YUV: 性能最佳，但并非所有设备可用。仅限 Android 2.3 及更高版本。
         if (chroma.equals("YV12"))
             chroma = "";
+
+
         final boolean verboseMode = pref.getBoolean("enable_verbose_mode", true);
 
 
@@ -99,12 +119,16 @@ public class VLCOptions {
         final boolean freetypeBold = pref.getBoolean("subtitles_bold", false);
         final String freetypeColor = pref.getString("subtitles_color", "16777215");
         final boolean freetypeBackground = pref.getBoolean("subtitles_background", false);
-        final int opengl = Integer.parseInt(pref.getString("opengl", "-1"));
+//        final int opengl = Integer.parseInt(pref.getString("opengl", "-1"));
 
         /* CPU intensive plugin, setting for slow devices */
         options.add(timeStreching ? "--audio-time-stretch" : "--no-audio-time-stretch");
+
         options.add("--avcodec-skiploopfilter");
         options.add("" + getDeblocking(-1));//这里太大了消耗性能   太小了会花屏
+//        options.add("0");//这里太大了消耗性能   太小了会花屏
+
+
         options.add("--avcodec-skip-frame");
         options.add(frameSkip ? "2" : "0");
         options.add("--avcodec-skip-idct");
@@ -135,12 +159,11 @@ public class VLCOptions {
 //            options.add("--vout=android_display,none");
 //        else
 //            options.add("--vout=android_display");
-        if (AndroidUtil.isLolliPopOrLater){
-            options.add("--vout=gles2,none");//21以上的机器用 opengl绘制
-        }else {
-            options.add("--vout=android_display");
+        if (isSupportsOpenGL(context)) {
+            options.add("--vout=gles2,none");//OpenGL ES 2.0
+        } else {
+            options.add("--vout=android_display,none");
         }
-
 
         /* Configure keystore */
         options.add("--keystore");
@@ -254,7 +277,7 @@ public class VLCOptions {
     }
 
     private static MediaPlayer.Equalizer getEqualizerSetFromSettings(SharedPreferences pref) {
-        final float[] bands = Preferences.getFloatArray(pref, "equalizer_values");
+        final float[] bands = getFloatArray(pref, "equalizer_values");
         if (bands != null && pref.contains("equalizer_enabled")) {
             final int bandCount = MediaPlayer.Equalizer.getBandCount();
             if (bands.length != bandCount + 1)
@@ -300,7 +323,7 @@ public class VLCOptions {
             for (int i = 0; i < bandCount; ++i) {
                 bands[i + 1] = eq.getAmp(i);
             }
-            Preferences.putFloatArray(editor, "equalizer_values", bands);
+            putFloatArray(editor, "equalizer_values", bands);
             editor.putString("equalizer_set", name);
         } else {
             editor.putBoolean("equalizer_enabled", false);
@@ -314,7 +337,7 @@ public class VLCOptions {
         try {
             final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
             String key = "custom_equalizer_" + customName.replace(" ", "_");
-            final float[] bands = Preferences.getFloatArray(pref, key);
+            final float[] bands = getFloatArray(pref, key);
             final int bandCount = MediaPlayer.Equalizer.getBandCount();
             if (bands.length != bandCount + 1)
                 return null;
@@ -341,7 +364,7 @@ public class VLCOptions {
         for (int i = 0; i < bandCount; ++i) {
             bands[i + 1] = eq.getAmp(i);
         }
-        Preferences.putFloatArray(editor, key, bands);
+        putFloatArray(editor, key, bands);
         editor.apply();
     }
 
@@ -365,5 +388,32 @@ public class VLCOptions {
 
     public static int getAudiotrackSessionId() {
         return AUDIOTRACK_SESSION_ID;
+    }
+
+    public static float[] getFloatArray(SharedPreferences pref, String key) {
+        float[] array = null;
+        String s = pref.getString(key, null);
+        if (s != null) {
+            try {
+                JSONArray json = new JSONArray(s);
+                array = new float[json.length()];
+                for (int i = 0; i < array.length; i++)
+                    array[i] = (float) json.getDouble(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return array;
+    }
+
+    public static void putFloatArray(SharedPreferences.Editor editor, String key, float[] array) {
+        try {
+            JSONArray json = new JSONArray();
+            for (float f : array)
+                json.put(f);
+            editor.putString(key, json.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

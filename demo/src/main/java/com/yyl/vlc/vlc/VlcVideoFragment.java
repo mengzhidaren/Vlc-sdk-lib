@@ -80,17 +80,11 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        startPlay2();
+        startPlay();
     }
 
     //more state
     private void startPlay() {
-        vlcVideoView.startPlay();
-    }
-
-    //直播测试
-    private void startPlay11() {
-        vlcVideoView.setPath("rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm");
         vlcVideoView.startPlay();
     }
 
@@ -115,22 +109,29 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     //    自定义 源文件
     private void startPlay2() {
         ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
-//        libOptions.add("record-path");
-//        libOptions.add(recordFile2.getAbsolutePath());
 
         LibVLC libVLC = new LibVLC(getContext(), libOptions);
         Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
+        media.setHWDecoderEnabled(false, false);
         vlcVideoView.setMedia(new MediaPlayer(media));
         vlcVideoView.startPlay();
     }
 
-    //自定义 源文件
+   //直播测试 自定义 源文件
     private void startPlay3() {
 //        ArrayList<String> libOptions = new ArrayList<>();
         ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
+
         LibVLC libVLC = new LibVLC(getContext(), libOptions);
         Media media = new Media(libVLC, Uri.parse("rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm"));
-        vlcVideoView.setMedia(new MediaPlayer(media));
+        media.setHWDecoderEnabled(false, false);
+     //   media.addOption(":sout-record-dst-prefix=yylpre.mp4");
+//        media.addOption(":network-caching=1000");
+//        media.addOption(":rtsp-frame-buffer-size=100000");
+     //   media.addOption(":rtsp-tcp");
+
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        vlcVideoView.setMedia(mediaPlayer);
         vlcVideoView.startPlay();
     }
 
@@ -176,21 +177,22 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
             case R.id.recordStart:
                 String std = "std{access=file{no-append,no-format,no-overwrite},mux='avi',dst='" + directory + "'}";
                 String std2 = "standard{access=file,mux=mp4,dst='" + directory + "/yyl.mp4'}";
-                if (vlcVideoView.canControl()) {
+                if (vlcVideoView.isPrepare()) {
                     recordEvent.startRecord(vlcVideoView.getMediaPlayer(), directory);
                 }
-
-
                 break;
             case R.id.recordStop:
-                if (vlcVideoView.canControl()) {
+                if (vlcVideoView.isPrepare()) {
                     recordEvent.stopRecord(vlcVideoView.getMediaPlayer());
                 }
 
                 break;
             case R.id.snapShot:
-                if (vlcVideoView.canControl()) {
-                    recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), vlcVideoView.getVideoWidth(), vlcVideoView.getVideoHeight());
+                if (vlcVideoView.isPrepare()) {
+                    Media.VideoTrack videoTrack = vlcVideoView.getVideoTrack();
+                    if (videoTrack!=null){
+                        recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), videoTrack.width, videoTrack.height);
+                    }
                 }
 
 

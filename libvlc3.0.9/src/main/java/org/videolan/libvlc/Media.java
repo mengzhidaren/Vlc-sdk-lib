@@ -257,6 +257,29 @@ public class Media extends VLCObject<Media.Event> {
             this.orientation = orientation;
             this.projection = projection;
         }
+
+        @Override
+        public String toString() {
+            return "VideoTrack{" +
+                    "type=" + type +
+                    ", codec='" + codec + '\'' +
+                    ", originalCodec='" + originalCodec + '\'' +
+                    ", id=" + id +
+                    ", profile=" + profile +
+                    ", level=" + level +
+                    ", bitrate=" + bitrate +
+                    ", language='" + language + '\'' +
+                    ", description='" + description + '\'' +
+                    ", height=" + height +
+                    ", width=" + width +
+                    ", sarNum=" + sarNum +
+                    ", sarDen=" + sarDen +
+                    ", frameRateNum=" + frameRateNum +
+                    ", frameRateDen=" + frameRateDen +
+                    ", orientation=" + orientation +
+                    ", projection=" + projection +
+                    '}';
+        }
     }
 
     @SuppressWarnings("unused") /* Used from JNI */

@@ -4,12 +4,11 @@ package org.videolan.vlc;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Surface;
-import android.view.SurfaceHolder;
 import android.view.TextureView;
 
+import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.vlc.listener.MediaListenerEvent;
 import org.videolan.vlc.listener.MediaPlayerControl;
@@ -58,7 +57,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
     }
 
     @Override
-    public boolean canControl() {
+    public boolean canControl() {//直播流不要用这个判断
         return videoMediaLogic.canControl();
     }
 
@@ -244,7 +243,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (changed) {
+        if (changed && mVideoWidth * mVideoHeight > 0) {
             post(new Runnable() {
                 @Override
                 public void run() {
@@ -259,26 +258,37 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
     private int mVideoHeight;
     private int rotation = 0;
 
-    public int getVideoRotation() {
-        return rotation;
+//    public int getVideoRotation() {
+//        return rotation;
+//    }
+//
+//    public int getVideoWidth() {
+//        return mVideoWidth;
+//    }
+//
+//    public int getVideoHeight() {
+//        return mVideoHeight;
+//    }
+
+    public Media.VideoTrack getVideoTrack() {
+        return videoMediaLogic.getVideoTrack();
     }
 
-    public int getVideoWidth() {
-        return mVideoWidth;
-    }
-
-    public int getVideoHeight() {
-        return mVideoHeight;
-    }
-
+    /**
+     * 如果设备支持opengl这里就不会调用
+     *
+     * @param width w
+     * @param height h
+     * @param visibleWidth w
+     * @param visibleHeight h
+     */
     @Override
-    public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight, int orientation) {
+    public void onVideoSizeChanged(int width, int height, int visibleWidth, int visibleHeight) {
         LogUtils.i(tag, "onVideoSizeChanged   video=" + width + "x" + height + " visible="
-                + visibleWidth + "x" + visibleHeight + "   orientation=" + orientation);
+                + visibleWidth + "x" + visibleHeight);
         if (width * height == 0) return;
         this.mVideoWidth = visibleWidth;
         this.mVideoHeight = visibleHeight;
-
         post(new Runnable() {
             @Override
             public void run() {

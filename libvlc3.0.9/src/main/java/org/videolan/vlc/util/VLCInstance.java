@@ -20,7 +20,6 @@
 
 package org.videolan.vlc.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -68,10 +67,6 @@ public class VLCInstance {
 
     public static synchronized boolean testCompatibleCPU(Context context) {
         if (sLibVLC == null && !VLCUtil.hasCompatibleCPU(context)) {
-            if (context instanceof Activity) {
-//                final Intent i = new Intent(context, CompatErrorActivity.class);
-//                context.startActivity(i);
-            }
             return false;
         } else
             return true;
