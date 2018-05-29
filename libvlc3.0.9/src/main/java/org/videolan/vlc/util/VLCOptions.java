@@ -33,6 +33,7 @@ import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.util.AndroidUtil;
 import org.videolan.libvlc.util.HWDecoderUtil;
 import org.videolan.libvlc.util.VLCUtil;
+import org.videolan.medialibrary.media.MediaWrapper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -133,7 +134,14 @@ public class VLCOptions {
 //        else if (opengl == 0)
 //            options.add("--vout=android_display,none");
 //        else
-        options.add("--vout=android_display");
+//            options.add("--vout=android_display");
+        if (AndroidUtil.isLolliPopOrLater){
+            options.add("--vout=gles2,none");//21以上的机器用 opengl绘制
+        }else {
+            options.add("--vout=android_display");
+        }
+
+
         /* Configure keystore */
         options.add("--keystore");
         if (AndroidUtil.isMarshMallowOrLater)
@@ -211,38 +219,39 @@ public class VLCOptions {
         return (m == null || m.processors > 2) ? "soxr" : "ugly";
     }
 
-//    public static void setMediaOptions(Media media, Context context, int flags) {
-//        boolean noHardwareAcceleration = (flags & MediaWrapper.MEDIA_NO_HWACCEL) != 0;
-//        boolean noVideo = (flags & MediaWrapper.MEDIA_VIDEO) == 0;
-//        final boolean paused = (flags & MediaWrapper.MEDIA_PAUSED) != 0;
-//        int hardwareAcceleration = HW_ACCELERATION_DISABLED;
-//        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//
-//        if (!noHardwareAcceleration) {
-//            try {
-//                hardwareAcceleration = Integer.parseInt(prefs.getString("hardware_acceleration", "-1"));
-//            } catch (NumberFormatException ignored) {}
+    public static void setMediaOptions(Media media, Context context, int flags) {
+        boolean noHardwareAcceleration = (flags & MediaWrapper.MEDIA_NO_HWACCEL) != 0;
+        boolean noVideo = (flags & MediaWrapper.MEDIA_VIDEO) == 0;
+        final boolean paused = (flags & MediaWrapper.MEDIA_PAUSED) != 0;
+        int hardwareAcceleration = HW_ACCELERATION_DISABLED;
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        if (!noHardwareAcceleration) {
+            try {
+                hardwareAcceleration = Integer.parseInt(prefs.getString("hardware_acceleration", "-1"));
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        if (hardwareAcceleration == HW_ACCELERATION_DISABLED)
+            media.setHWDecoderEnabled(false, false);
+        else if (hardwareAcceleration == HW_ACCELERATION_FULL || hardwareAcceleration == HW_ACCELERATION_DECODING) {
+            media.setHWDecoderEnabled(true, true);
+            if (hardwareAcceleration == HW_ACCELERATION_DECODING) {
+                media.addOption(":no-mediacodec-dr");
+                media.addOption(":no-omxil-dr");
+            }
+        } /* else automatic: use default options */
+
+        if (noVideo) media.addOption(":no-video");
+        if (paused) media.addOption(":start-paused");
+        if (!prefs.getBoolean("subtitles_autoload", true)) media.addOption(":sub-language=none");
+        if (prefs.getBoolean("media_fast_seek", true)) media.addOption(":input-fast-seek");
+
+//        if (RendererDelegate.INSTANCE.getSelectedRenderer() != null) {
+//            media.addOption(":sout-chromecast-audio-passthrough="+prefs.getBoolean("casting_passthrough", true));
+//            media.addOption(":sout-chromecast-conversion-quality="+prefs.getString("casting_quality", "2"));
 //        }
-//        if (hardwareAcceleration == HW_ACCELERATION_DISABLED)
-//            media.setHWDecoderEnabled(false, false);
-//        else if (hardwareAcceleration == HW_ACCELERATION_FULL || hardwareAcceleration == HW_ACCELERATION_DECODING) {
-//            media.setHWDecoderEnabled(true, true);
-//            if (hardwareAcceleration == HW_ACCELERATION_DECODING) {
-//                media.addOption(":no-mediacodec-dr");
-//                media.addOption(":no-omxil-dr");
-//            }
-//        } /* else automatic: use default options */
-//
-//        if (noVideo) media.addOption(":no-video");
-//        if (paused) media.addOption(":start-paused");
-//        if (!prefs.getBoolean("subtitles_autoload", true)) media.addOption(":sub-language=none");
-//        if (prefs.getBoolean("media_fast_seek", true)) media.addOption(":input-fast-seek");
-//
-////        if (RendererDelegate.INSTANCE.getSelectedRenderer() != null) {
-////            media.addOption(":sout-chromecast-audio-passthrough="+prefs.getBoolean("casting_passthrough", true));
-////            media.addOption(":sout-chromecast-conversion-quality="+prefs.getString("casting_quality", "2"));
-////        }
-//    }
+    }
 
     private static MediaPlayer.Equalizer getEqualizerSetFromSettings(SharedPreferences pref) {
         final float[] bands = Preferences.getFloatArray(pref, "equalizer_values");

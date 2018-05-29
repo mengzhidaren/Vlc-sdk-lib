@@ -4,8 +4,10 @@ package org.videolan.vlc;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Surface;
+import android.view.SurfaceHolder;
 import android.view.TextureView;
 
 import org.videolan.libvlc.MediaPlayer;
@@ -276,6 +278,7 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         if (width * height == 0) return;
         this.mVideoWidth = visibleWidth;
         this.mVideoHeight = visibleHeight;
+
         post(new Runnable() {
             @Override
             public void run() {
@@ -328,12 +331,13 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
     private TextureView.SurfaceTextureListener videoSurfaceListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            videoMediaLogic.setWindowSize(width, height);
             videoMediaLogic.setSurface(new Surface(surface), null);
         }
 
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
+            videoMediaLogic.setWindowSize(width, height);
         }
 
         @Override

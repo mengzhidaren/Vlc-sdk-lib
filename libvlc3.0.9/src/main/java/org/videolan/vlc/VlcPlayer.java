@@ -125,6 +125,12 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         }
     }
 
+    public void setWindowSize(int surfaceW,int surfaceH){
+        if (mMediaPlayer!=null){
+            mMediaPlayer.getVLCVout().setWindowSize(surfaceW,surfaceH);
+        }
+    }
+
     private void attachSurface() {
         if (!mMediaPlayer.getVLCVout().areViewsAttached() && isAttached && !isAttachedSurface) {
             LogUtils.i(tag, "setVideoSurface   attachViews");

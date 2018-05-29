@@ -105,7 +105,7 @@ Java_org_videolan_vlc_RecordEvent_isSuportRecord(JNIEnv *env, jobject instance,
  * Remember to release the returned vout_thread_t.
  */
 static vout_thread_t **
-GetVouts1(JNIEnv *env, jobject mediaPlayer, libvlc_media_player_t *p_mi, size_t *n) {
+GetVoutsThread(JNIEnv *env, jobject mediaPlayer, libvlc_media_player_t *p_mi, size_t *n) {
     input_thread_t *p_input = getInputThread(env, mediaPlayer);
     if (!p_input) {
         *n = 0;
@@ -122,10 +122,10 @@ GetVouts1(JNIEnv *env, jobject mediaPlayer, libvlc_media_player_t *p_mi, size_t 
 }
 
 static vout_thread_t *
-GetVout2(JNIEnv *env, jobject mediaPlayer, libvlc_media_player_t *mp, size_t num) {
+GetVoutThread(JNIEnv *env, jobject mediaPlayer, libvlc_media_player_t *mp, size_t num) {
     vout_thread_t *p_vout = NULL;
     size_t n;
-    vout_thread_t **pp_vouts = GetVouts1(env, mediaPlayer, mp, &n);
+    vout_thread_t **pp_vouts = GetVoutsThread(env, mediaPlayer, mp, &n);
     if (pp_vouts == NULL)
         goto err;
 
@@ -149,7 +149,7 @@ libvlc_video_take_snapshot2(JNIEnv *env, jobject mediaPlayer, libvlc_media_playe
                             const char *psz_filepath,
                             unsigned int i_width, unsigned int i_height) {
     //assert( psz_filepath );
-    vout_thread_t *p_vout = GetVout2(env, mediaPlayer, p_mi, num);
+    vout_thread_t *p_vout = GetVoutThread(env, mediaPlayer, p_mi, num);
     if (p_vout == NULL)
         return -1;
 
