@@ -102,10 +102,6 @@ public class VLCOptions {
         final String subtitlesEncoding = pref.getString("subtitle_text_encoding", "");
         final boolean frameSkip = pref.getBoolean("enable_frame_skip", false);//启用跳帧     加速解码，但可能降低画质
         String chroma = pref.getString("chroma_format", "RV32");//RGB 32 位: 默认色度 RGB 16 位: 性能更佳，但画质下降 YUV: 性能最佳，但并非所有设备可用。仅限 Android 2.3 及更高版本。
-        if (chroma.equals("YV12"))
-            chroma = "";
-
-
         final boolean verboseMode = pref.getBoolean("enable_verbose_mode", true);
 
 
@@ -119,7 +115,7 @@ public class VLCOptions {
         final boolean freetypeBold = pref.getBoolean("subtitles_bold", false);
         final String freetypeColor = pref.getString("subtitles_color", "16777215");
         final boolean freetypeBackground = pref.getBoolean("subtitles_background", false);
-//        final int opengl = Integer.parseInt(pref.getString("opengl", "-1"));
+        final boolean opengl = isSupportsOpenGL(context);
 
         /* CPU intensive plugin, setting for slow devices */
         options.add(timeStreching ? "--audio-time-stretch" : "--no-audio-time-stretch");
@@ -140,6 +136,11 @@ public class VLCOptions {
         if (networkCaching > 0)
             options.add("--network-caching=" + networkCaching);
         options.add("--android-display-chroma");
+        if (chroma.equals("YV12")) {
+            chroma = "";
+        } else {
+            chroma = opengl ? "YUV" : "RV32";
+        }
         options.add(chroma);
         options.add("--audio-resampler");
         options.add(getResampler());
