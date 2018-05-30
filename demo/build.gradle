@@ -7,7 +7,7 @@ android {
         minSdkVersion Integer.valueOf(project.properties.get("minSdkVersion"))
         targetSdkVersion Integer.valueOf(project.properties.get("targetSdkVersion"))
         versionCode 1
-        versionName "1.0"
+        versionName "3.0.0"
         ndk {
             //支持的abi
             abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86'
@@ -23,8 +23,8 @@ android {
 }
 
 dependencies {
-//    compile 'com.yyl.vlc:vlc-android-sdk:3.0.9'
-    implementation project(":libvlc3.0.9")
+    compile 'com.yyl.vlc:vlc-android-sdk:3.0.10'
+//    implementation project(":libvlc3.0.9")
     implementation "com.android.support:appcompat-v7:${project.properties.get("support")}"
     implementation "com.android.support:support-v4:${project.properties.get("support")}"
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'

@@ -105,7 +105,7 @@ public class VLCOptions {
         final boolean verboseMode = pref.getBoolean("enable_verbose_mode", true);
 
 
-        int networkCaching = pref.getInt("network_caching_value", 0);
+        int networkCaching = pref.getInt("network_caching_value", 1500);
         if (networkCaching > 60000)//缓冲网络媒体的时间量 (单位为毫秒)。硬件解码时无效。留空可重置。
             networkCaching = 60000;
         else if (networkCaching < 0)

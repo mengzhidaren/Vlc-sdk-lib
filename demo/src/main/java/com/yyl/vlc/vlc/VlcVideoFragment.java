@@ -117,7 +117,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         vlcVideoView.startPlay();
     }
 
-   //直播测试 自定义 源文件
+    //直播测试 自定义 源文件
     private void startPlay3() {
 //        ArrayList<String> libOptions = new ArrayList<>();
         ArrayList<String> libOptions = VLCOptions.getLibOptions(getContext());
@@ -125,10 +125,10 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         LibVLC libVLC = new LibVLC(getContext(), libOptions);
         Media media = new Media(libVLC, Uri.parse("rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm"));
         media.setHWDecoderEnabled(false, false);
-     //   media.addOption(":sout-record-dst-prefix=yylpre.mp4");
+        //   media.addOption(":sout-record-dst-prefix=yylpre.mp4");
 //        media.addOption(":network-caching=1000");
 //        media.addOption(":rtsp-frame-buffer-size=100000");
-     //   media.addOption(":rtsp-tcp");
+        //   media.addOption(":rtsp-tcp");
 
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         vlcVideoView.setMedia(mediaPlayer);
@@ -190,8 +190,11 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
             case R.id.snapShot:
                 if (vlcVideoView.isPrepare()) {
                     Media.VideoTrack videoTrack = vlcVideoView.getVideoTrack();
-                    if (videoTrack!=null){
-                        recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), videoTrack.width, videoTrack.height);
+                    if (videoTrack != null) {
+                        //原图
+                       // recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), 0, 0);
+                        //原图的一半
+                        recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), videoTrack.width / 2, 0);
                     }
                 }
 

@@ -65,11 +65,17 @@ public class RecordEvent {
 
 
     /**
-     * @param mediaPlayer 播放器
-     * @param path        path 可以是文件也可以是文件夹
-     * @param width       图片
-     * @param height      图片
-     * @return 自已试吧
+     * * Take a snapshot of the current video window.
+     * <p>
+     * If i_width AND i_height is 0, original size is used.
+     * If i_width XOR i_height is 0, original aspect-ratio is preserved.
+     * <p>
+     * \param p_mi media player instance
+     * \param num number of video output (typically 0 for the first/only one)
+     * \param psz_filepath the path of a file or a folder to save the screenshot into
+     * \param i_width the snapshot's width
+     * \param i_height the snapshot's height
+     * \return 0 on success, -1 if the video was not found
      */
     public native int takeSnapshot(MediaPlayer mediaPlayer, String path, int width, int height);
 
