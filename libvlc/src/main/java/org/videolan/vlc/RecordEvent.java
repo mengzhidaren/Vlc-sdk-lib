@@ -45,7 +45,7 @@ public class RecordEvent {
      * @param fileDirectory 录像目录   这是文件夹 不是文件
      * @return 是否录制成功
      */
-    @Deprecated//这是临时的方法 因为还没找到改文件名的方法  后期必改
+    @Deprecated//这是临时的方法 文件名是宏定义的 还没有改文件名的方法  后期必改
     public boolean startRecord(MediaPlayer mediaPlayer, String fileDirectory) {
         if (mediaPlayer != null) {
             new File(fileDirectory).mkdirs();
@@ -54,7 +54,7 @@ public class RecordEvent {
         return false;
     }
 
-    // 还没找到改文件名的方法  先用 private  后期在开放
+    // TMD文件名是宏定义的  难道只能修改源代码    有知道的请留言
     private native boolean startRecord(MediaPlayer mediaPlayer, String fileDirectory, String fileName);
 
     public native boolean stopRecord(MediaPlayer mediaPlayer);

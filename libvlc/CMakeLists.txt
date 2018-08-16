@@ -5,7 +5,7 @@ add_library( yylRecord
              SHARED
             src/main/cpp/yyl_record.c
             src/main/cpp/yyl_log.c
-            src/main/cpp/yyl_fixsurface.c
+         #   src/main/cpp/yyl_fixsurface.c
              )
 
 add_library( vlcjni
@@ -30,9 +30,7 @@ include_directories(
    ${CMAKE_SOURCE_DIR}/include/
    )
 
-find_library(log-lib
-              log )
 target_link_libraries( yylRecord
                        vlcjni
                        android
-                       ${log-lib} )
+                       log )

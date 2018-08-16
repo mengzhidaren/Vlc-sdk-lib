@@ -45,7 +45,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     private int currentState = STATE_LOAD;
     private float speed = 1f;
 
-    private final Lock lock = new ReentrantLock();
+//    private final Lock lock = new ReentrantLock();
     private static final HandlerThread sThread = new HandlerThread("VlcPlayThread");
 
     static {
@@ -65,7 +65,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     private boolean isSeeking;//跳转位置中
 
     private MediaPlayer mMediaPlayer;
-    //    private Surface surfaceSlave;//字幕画布
+        private Surface surfaceSlave;//字幕画布
     private Surface surfaceVideo;//视频画布
     private int surfaceW,surfaceH;
     private String path;
@@ -79,8 +79,6 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
 
     @Override
     public boolean handleMessage(Message msg) {
-        lock.lock();
-        try {
             switch (msg.what) {
                 case INIT_START:
                     if (isInitStart)
@@ -99,9 +97,6 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
                     }
                     break;
             }
-        } finally {
-            lock.unlock();
-        }
         return true;
     }
 
@@ -112,7 +107,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     public void setSurface(Surface surfaceVideo, Surface surfaceSlave) {
         isAttached = true;
         this.surfaceVideo = surfaceVideo;
-//        this.surfaceSlave = surfaceSlave;
+        this.surfaceSlave = surfaceSlave;
         LogUtils.i(tag, "setSurface");
         if (isSufaceDelayerPlay && isInitStart) {//surface未创建时延迟加载播放
             isSufaceDelayerPlay = false;
@@ -139,7 +134,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
             LogUtils.i(tag, "setVideoSurface   attachViews");
             isAttachedSurface = true;
             setWindowSize(surfaceW,surfaceH);
-            mMediaPlayer.getVLCVout().attachSurfaceSlave(surfaceVideo, null, this);
+            mMediaPlayer.getVLCVout().attachSurfaceSlave(surfaceVideo, surfaceSlave, this);
             // mMediaPlayer.setVideoTitleDisplay(MediaPlayer.Position.Disable, 0);
         }
     }
@@ -147,6 +142,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     public void onSurfaceTextureDestroyedUI() {
         isAttached = false;
         this.surfaceVideo = null;
+        this.surfaceSlave=null;
         LogUtils.i(tag, "onSurfaceTextureDestroyedUI");
         if (isAttachedSurface) {
             isAttachedSurface = false;
@@ -317,9 +313,9 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
                 mMediaPlayer.stop();
                 mMediaPlayer.setMedia(null);
                 media.release();
-                LogUtils.i(tag, "release setMedia null");
+
             }
-            LogUtils.i(tag, "release over");
+
         }
     }
 
