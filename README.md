@@ -53,7 +53,7 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
-        compile 'com.yyl.vlc:vlc-android-sdk:3.0.10'
+        compile 'com.yyl.vlc:vlc-android-sdk:3.0.13'
    }
    
     ndk {
@@ -70,11 +70,28 @@ Alipay:<br>
 <br>
 谢谢支持我会和官方同步更新<br>
 
+# VLC for Android
+This is the official Android port of VLC.
 
-### 官方网站 ###
-* [vlc](https://www.videolan.org)
+## License
+VLC for Android is licensed under GPLv3
 
-### 3.0以下编译方法 ###
+## Build
+
+You will need a recent Linux distribution to build VLC.
+It should work with Windows 10, but no official support for this.
+
+Check our [AndroidCompile wiki page](https://wiki.videolan.org/AndroidCompile/)
+
+## Contribute
+
+VLC is a libre and open source project, we welcome all contributions.
+
+### Pull requests
+
+Pull requests can be proposed on [github mirror](https://github.com/videolan/vlc-android) as code.videolan.org is reserved to VideoLAN members
+
+### 3.0以下编译方法 不支持3.0.0以上编译
 
 ```
 (3.0.0以上编译忽略吧  其它自已google吧 编译问题不要留言给我 )

@@ -6,7 +6,7 @@ android {
         applicationId "com.yyl.vlc"
         minSdkVersion Integer.valueOf(project.properties.get("minSdkVersion"))
         targetSdkVersion Integer.valueOf(project.properties.get("targetSdkVersion"))
-        versionCode 1
+        versionCode 3
         versionName "3.0.13"
         ndk {
             //支持的abi
@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-//    implementation 'com.yyl.vlc:vlc-android-sdk:3.0.10'
+//    implementation 'com.yyl.vlc:vlc-android-sdk:3.0.13'
     implementation project(':libvlc')
     implementation "com.android.support:appcompat-v7:${project.properties.get("support")}"
     implementation "com.android.support:support-v4:${project.properties.get("support")}"

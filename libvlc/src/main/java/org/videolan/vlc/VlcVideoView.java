@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.TextureView;
 
+import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.vlc.listener.MediaListenerEvent;
@@ -51,6 +52,11 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         return new VlcPlayer(VLCInstance.get(context));
     }
 
+    public void setLibVLC(LibVLC libVLC) {
+        videoMediaLogic.onDestory();
+        videoMediaLogic=new VlcPlayer(libVLC);
+        videoMediaLogic.setVideoSizeChange(this);
+    }
 
     public void setMediaListenerEvent(MediaListenerEvent mediaListenerEvent) {
         videoMediaLogic.setMediaListenerEvent(mediaListenerEvent);
