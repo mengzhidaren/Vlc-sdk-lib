@@ -101,7 +101,9 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         LibVLC libVLC = VLCInstance.get(getContext());
 
         Media media = new Media(libVLC, Uri.parse(MainActivity.getUrl(getContext())));
-        media.setHWDecoderEnabled(true, false);
+      //  VLCOptions.setMediaOptions(media,getActivity(),VLCOptions.HW_ACCELERATION_AUTOMATIC);
+//        media.setHWDecoderEnabled(true, true);
+        media.setHWDecoderEnabled(false, false);
         vlcVideoView.setMedia(new MediaPlayer(libVLC));
         vlcVideoView.startPlay();
     }
@@ -170,15 +172,16 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.changeSlave:
-                if (!vlcVideoView.isPrepare()) return;
-                Media media11 = vlcVideoView.getMediaPlayer().getMedia();
-                media11.clearSlaves();
+//                if (!vlcVideoView.isPrepare()) return;
+//                Media media11 = vlcVideoView.getMediaPlayer().getMedia();
+//                media11.clearSlaves();
+                vlcVideoView.onStop();
+                vlcVideoView.startPlay();
                 break;
             case R.id.recordStart:
-                String std = "std{access=file{no-append,no-format,no-overwrite},mux='avi',dst='" + directory + "'}";
                 String std2 = "standard{access=file,mux=mp4,dst='" + directory + "/yyl.mp4'}";
                 if (vlcVideoView.isPrepare()) {
-                    recordEvent.startRecord(vlcVideoView.getMediaPlayer(), directory);
+                    recordEvent.startRecord(vlcVideoView.getMediaPlayer(),directory);
                 }
                 break;
             case R.id.recordStop:
