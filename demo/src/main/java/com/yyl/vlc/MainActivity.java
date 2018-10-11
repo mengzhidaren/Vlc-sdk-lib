@@ -35,6 +35,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
     private static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//    private static final String path = "https://upload.xianghunet.com/resources/videos/330109/201808/0a5ece0772c5dd50439ea7af7161f48091d67fd5.mp4";
 //    private static final String path = "http://haobashi.me/20180525T003000_0_10341127_0.ts";
 //    private static final String path = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
 //    private static final String path = "https://www.wowza.com/downloads/images/sample.mp4";

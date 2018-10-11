@@ -165,6 +165,12 @@ libvlc_video_take_snapshot2(JNIEnv *env, jobject mediaPlayer, libvlc_media_playe
     var_SetString(p_vout, "snapshot-path", psz_filepath);
     var_Create(p_vout, "snapshot-format", VLC_VAR_STRING);
     var_SetString(p_vout, "snapshot-format", "png");
+
+    var_Create(p_vout, "snapshot-preview", VLC_VAR_BOOL);//预览图
+    var_SetBool(p_vout,"snapshot-preview",false);
+    var_Create(p_vout, "osd", VLC_VAR_BOOL);//文件路径
+    var_SetBool(p_vout,"osd",false);
+
     var_TriggerCallback(p_vout, "video-snapshot");
     vlc_object_release(p_vout);
     return 0;

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion Integer.valueOf(project.properties.get("compileSdkVersion"))
+    buildToolsVersion project.properties.get("buildToolsVersion")
     defaultConfig {
         applicationId "com.yyl.vlc"
         minSdkVersion Integer.valueOf(project.properties.get("minSdkVersion"))
@@ -19,7 +20,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    buildToolsVersion '27.0.3'
+
 }
 
 dependencies {
