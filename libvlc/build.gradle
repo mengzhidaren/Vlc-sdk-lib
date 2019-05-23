@@ -2,24 +2,25 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion Integer.valueOf(project.properties.get("compileSdkVersion"))
-    buildToolsVersion project.properties.get("buildToolsVersion")
+//    buildToolsVersion project.properties.get("buildToolsVersion")
+
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion Integer.valueOf(project.properties.get("targetSdkVersion"))
-        versionCode 20180816
-        versionName "3.0.13"
+        compileSdkVersion rootProject.ext.compileSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion rootProject.ext.minSdkVersion
+        versionName "3.1.14"
         externalNativeBuild {
             cmake {
                 cppFlags "-std=c++11 -fexceptions"//-std=c++11 -frtti
             }
         }
         ndk {
-            abiFilters "armeabi-v7a","arm64-v8a","x86","x86_64"
+            abiFilters "armeabi-v7a" ,"arm64-v8a","x86","x86_64"
         }
     }
     sourceSets {
         main {
-            jniLibs.srcDirs = ['src/main/jniLibs']
+            jniLibs.srcDirs = ['jniLibs']
         }
     }
     buildTypes {
@@ -39,8 +40,7 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:${project.properties.get("support")}"
-    implementation "com.android.support:support-v4:${project.properties.get("support")}"
+    api project(':libvlc_')
 }
 
 

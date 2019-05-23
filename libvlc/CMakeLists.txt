@@ -8,6 +8,10 @@ add_library( yylRecord
          #   src/main/cpp/yyl_fixsurface.c
              )
 
+add_library( vlc
+            SHARED
+            IMPORTED
+            )
 add_library( vlcjni
             SHARED
             IMPORTED
@@ -15,15 +19,23 @@ add_library( vlcjni
 #if(${ANDROID_ABI} STREQUAL "armeabi")
 message("yyl abi=${ANDROID_ABI}")
 
-set(soPath ${CMAKE_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/libvlcjni.so)
+set(soPath ${CMAKE_SOURCE_DIR}/jniLibs/${ANDROID_ABI}/libvlc.so)
+set(soPathjni ${CMAKE_SOURCE_DIR}/jniLibs/${ANDROID_ABI}/libvlcjni.so)
 
 message("yyl abi=${soPath}")
+message("yyl abi=${soPathjni}")
 
+set_target_properties(
+            vlc
+            PROPERTIES IMPORTED_LOCATION
+            #${CMAKE_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/libvlcjni.so
+            ${soPath}
+             )
 set_target_properties(
             vlcjni
             PROPERTIES IMPORTED_LOCATION
             #${CMAKE_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/libvlcjni.so
-            ${soPath}
+            ${soPathjni}
              )
 
 include_directories(
@@ -31,6 +43,7 @@ include_directories(
    )
 
 target_link_libraries( yylRecord
+                       vlc
                        vlcjni
                        android
                        log )
