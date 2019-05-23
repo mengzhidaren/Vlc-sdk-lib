@@ -1,37 +1,35 @@
 package com.yyl.vlc;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.danikula.videocache.CacheListener;
-import com.danikula.videocache.HttpProxyCacheServer;
-import com.yyl.vlc.ijk.IjkPlayerActivity;
-import com.yyl.vlc.vlc.VlcPlayerActivity;
+import com.vlc.lib.ThumbnailUtils;
+
 
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
-import org.videolan.libvlc.MediaPlayer;
-import org.videolan.libvlc.util.Dumper;
-import org.videolan.libvlc.util.VLCUtil;
-import org.videolan.vlc.RecordEvent;
-import org.videolan.vlc.ThumbnailUtils;
-import org.videolan.vlc.util.LogUtils;
-import org.videolan.vlc.util.VLCInstance;
+
+import com.vlc.lib.listener.util.LogUtils;
+import com.vlc.lib.listener.util.VLCInstance;
+import com.yyl.vlc.ijk.IjkPlayerActivity;
+import com.yyl.vlc.vlc.VlcPlayerActivity;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     private static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private final String tag = "MainActivity";
     private ImageView thumbnail;
     private Context context;
-    public static boolean testNetWork = false;
+    public static boolean testNetWork = true;
 
     public static String getUrl(Context context) {
         if (testNetWork) {
@@ -63,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         thumbnail = findViewById(R.id.thumbnail);
         init();
         test();
+
     }
 
 
@@ -72,6 +71,21 @@ public class MainActivity extends AppCompatActivity {
             Log.i(tag, "support   cpu");
         } else {
             Log.i(tag, "not support  cpu");
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==10){
+            if(grantResults[0]!=0){
+                Toast.makeText(this,"WRITE_EXTERNAL_STORAGE error",Toast.LENGTH_LONG).show();
+            }
+            LogUtils.i("Permissions","grantResults="+ Arrays.toString(grantResults));
         }
     }
 

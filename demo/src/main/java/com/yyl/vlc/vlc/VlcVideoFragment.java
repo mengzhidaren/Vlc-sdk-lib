@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +13,19 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.vlc.lib.RecordEvent;
+import com.vlc.lib.VlcVideoView;
+import com.vlc.lib.listener.util.VLCInstance;
+import com.vlc.lib.listener.util.VLCOptions;
 import com.yyl.vlc.MainActivity;
 import com.yyl.vlc.R;
 
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
-import org.videolan.vlc.RecordEvent;
-import org.videolan.vlc.VlcVideoView;
-import org.videolan.vlc.util.VLCInstance;
-import org.videolan.vlc.util.VLCOptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -181,7 +182,7 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
             case R.id.recordStart:
                 String std2 = "standard{access=file,mux=mp4,dst='" + directory + "/yyl.mp4'}";
                 if (vlcVideoView.isPrepare()) {
-                    recordEvent.startRecord(vlcVideoView.getMediaPlayer(),directory);
+                    recordEvent.startRecord(vlcVideoView.getMediaPlayer(),directory,"yyl.mp4");
                 }
                 break;
             case R.id.recordStop:

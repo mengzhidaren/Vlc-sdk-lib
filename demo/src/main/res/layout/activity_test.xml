@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <fragment xmlns:tools="http://schemas.android.com/tools"
+    <fragment
         android:name="com.yyl.vlc.vlc.VlcVideoFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,7 +13,7 @@
         android:tag="yylvideo"
         tools:layout="@layout/fragment_video" />
 
-    <fragment xmlns:tools="http://schemas.android.com/tools"
+    <fragment
         android:name="com.yyl.vlc.ijk.IjkFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

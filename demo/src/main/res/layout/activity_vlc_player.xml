@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#b8c7de">
 
-    <fragment xmlns:tools="http://schemas.android.com/tools"
+    <fragment
         android:name="com.yyl.vlc.vlc.VlcVideoFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

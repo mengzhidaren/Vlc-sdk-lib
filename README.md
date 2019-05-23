@@ -28,7 +28,7 @@
 ```
 <xml>布局
 //最好继承VlcVideoView    重写adjustAspectRatio()方法   高度自已设置调整
- <org.videolan.vlc.VlcVideoView
+ <com.yyl.vlc.VlcVideoView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
         

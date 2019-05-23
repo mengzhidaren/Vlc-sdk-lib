@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.MediaController;
 import android.widget.TextView;
 
-import org.videolan.vlc.VlcVideoView;
-import org.videolan.vlc.listener.MediaListenerEvent;
+import com.vlc.lib.VlcVideoView;
+import com.vlc.lib.listener.MediaListenerEvent;
 
 
 /**

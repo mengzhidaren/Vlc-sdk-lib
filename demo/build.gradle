@@ -11,7 +11,7 @@ android {
         versionName "3.0.13"
         ndk {
             //支持的abi
-            abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86'
+            abiFilters 'armeabi-v7a','x86'//,'x86_64','arm64-v8a','x86'
         }
     }
     buildTypes {
@@ -26,9 +26,19 @@ android {
 dependencies {
 //    implementation 'com.yyl.vlc:vlc-android-sdk:3.0.13'
     implementation project(':libvlc')
-    implementation "com.android.support:appcompat-v7:${project.properties.get("support")}"
-    implementation "com.android.support:support-v4:${project.properties.get("support")}"
+//        implementation "androidx.annotation:annotation:1.0.2"
+//    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "androidx.appcompat:appcompat:1.0.2"
+
+//    implementation "com.android.support:support-v4:${project.properties.get("support")}"
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
     implementation 'com.danikula:videocache:2.7.0'
+
+
+    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+//    implementation 'org.videolan.android:libvlc-all:3.1.10'
 }
