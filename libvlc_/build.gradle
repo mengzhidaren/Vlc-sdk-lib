@@ -1,0 +1,76 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'com.github.dcendents.android-maven'
+
+//def abi = System.getenv('GRADLE_ABI')?.toLowerCase()
+//ext {
+//    library_version = '3.1.10'
+//    repoName = 'Android'
+//    libraryName = 'LibVLC-Android'
+//    lib_artifact = "libvlc-$abi"
+//
+//    libraryDescription = 'Android bindings and API for VLC'
+//}
+android {
+
+    defaultConfig {
+        compileSdkVersion rootProject.ext.compileSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion rootProject.ext.minSdkVersion
+//        resValue "string", "build_vlc_revision", vlcRevision()
+    }
+
+    sourceSets {
+        main {
+//            jni.srcDirs = [] // Prevent gradle from building native code with ndk; we have our own Makefile for it.
+//            jniLibs.srcDirs = [ 'jni/libs' ] // Where generated .so files are placed.
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+//            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+//            assets.srcDirs = ['assets' ]
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+//        dev {
+//            initWith debug
+//            matchingFallbacks = ['debug']
+//        }
+    }
+
+//    // Make per-variant version code
+//    libraryVariants.all { variant ->
+//        //Custom APK name
+//        variant.outputs.each { output ->
+//            if (output.outputFileName != null && output.outputFileName.endsWith('.aar')) {
+//                output.outputFileName = "libvlc-${abi}-${library_version}.aar"
+//            }
+//        }
+//    }
+}
+
+clean {
+    delete 'build', 'jni/libs', 'jni/obj'
+}
+
+dependencies {
+    api "androidx.annotation:annotation:$rootProject.ext.androidxAnnotationVersion"
+    api "androidx.legacy:legacy-support-v4:$rootProject.ext.androidxVersion"
+}
+
+def vlcRevision() {
+    def vlc = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = vlc
+    }
+    return vlc.toString()
+}
+
+//apply from: '../publish.gradle'
