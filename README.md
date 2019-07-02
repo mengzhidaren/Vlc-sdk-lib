@@ -22,16 +22,9 @@
 加载字幕(addSlave)，设置镜面等
 实时录制视频(测试中.. 有问题请留言)
 
-编译问题请不要找我留言(请自已google)
 ```
 # 使用方法
-```
-<xml>布局
-//最好继承VlcVideoView    重写adjustAspectRatio()方法   高度自已设置调整
- <com.yyl.vlc.VlcVideoView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-        
+```  
 <java>
 VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  player.setMediaListenerEvent(new MediaListenerEvent());
@@ -97,10 +90,10 @@ VLC is a libre and open source project, we welcome all contributions.
 
 Pull requests can be proposed on [github mirror](https://github.com/videolan/vlc-android) as code.videolan.org is reserved to VideoLAN members
 
-### 3.0以下编译方法 不支持3.0.0以上编译
+### 3.0.0以前的win10编译记录（编译问题不要留言给我，自已google吧）
 
 ```
-(3.0.0以上编译忽略吧  其它自已google吧 编译问题不要留言给我 )
+(下面是我自已以前在 3.0.0版本之前的编译记录 )
 
 vlc-android的代码在  linux  ubuntu64  16.4  中搭建编绎环境
 android-sdk 版本 api25
