@@ -53,9 +53,15 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 #引用库文件
 ```
    dependencies {
-        compile 'com.yyl.vlc:vlc-android-sdk:3.0.13'
-   }
    
+        //1.扩展功能仓库  增加新功能如录像截图自定义播放器等  已经引用官方标准lib仓库 
+        implementation 'com.yyl.vlc:vlc-android-sdk:3.0.13'
+       
+     
+        //2.备选  官方标准lib仓库 详细内容参考vlc官网
+        implementation 'org.videolan:vlc-lib-android:3.1.7'
+   }
+ 
     ndk {
         //支持的abi    可选 精简的库
         abiFilters 'armeabi-v7a'//,'x86_64','arm64-v8a','x86'
