@@ -1,33 +1,26 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.github.dcendents.android-maven'
-
-//def abi = System.getenv('GRADLE_ABI')?.toLowerCase()
-//ext {
-//    library_version = '3.1.10'
-//    repoName = 'Android'
-//    libraryName = 'LibVLC-Android'
-//    lib_artifact = "libvlc-$abi"
-//
-//    libraryDescription = 'Android bindings and API for VLC'
-//}
 android {
 
     defaultConfig {
         compileSdkVersion rootProject.ext.compileSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         minSdkVersion rootProject.ext.minSdkVersion
-//        resValue "string", "build_vlc_revision", vlcRevision()
+        versionCode 20190702
+        versionName "3.1.7"
+        ndk {
+            abiFilters "armeabi-v7a" ,"arm64-v8a","x86","x86_64"
+        }
     }
 
     sourceSets {
         main {
 //            jni.srcDirs = [] // Prevent gradle from building native code with ndk; we have our own Makefile for it.
-//            jniLibs.srcDirs = [ 'jni/libs' ] // Where generated .so files are placed.
+            jniLibs.srcDirs = [ 'jniLibs' ] // Where generated .so files are placed.
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
-            resources.srcDirs = ['src']
+//            resources.srcDirs = ['src']
 //            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
+//            renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
 //            assets.srcDirs = ['assets' ]
         }
@@ -38,25 +31,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
-//        dev {
-//            initWith debug
-//            matchingFallbacks = ['debug']
-//        }
+
+    }
+    lintOptions {
+        abortOnError false
     }
 
-//    // Make per-variant version code
-//    libraryVariants.all { variant ->
-//        //Custom APK name
-//        variant.outputs.each { output ->
-//            if (output.outputFileName != null && output.outputFileName.endsWith('.aar')) {
-//                output.outputFileName = "libvlc-${abi}-${library_version}.aar"
-//            }
-//        }
-//    }
-}
-
-clean {
-    delete 'build', 'jni/libs', 'jni/obj'
 }
 
 dependencies {
@@ -64,13 +44,29 @@ dependencies {
     api "androidx.legacy:legacy-support-v4:$rootProject.ext.androidxVersion"
 }
 
-def vlcRevision() {
-    def vlc = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-parse', '--short', 'HEAD'
-        standardOutput = vlc
+
+buildscript {
+    repositories {
+        jcenter()
     }
-    return vlc.toString()
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.9.1'
+    }
+}
+apply plugin: 'com.novoda.bintray-release'
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+}
+publish {
+    userOrg = 'yuyunlongyyl' //用户所在组织
+    groupId = 'org.videolan'// 包名
+    artifactId = 'vlc-lib-android' // library的名字
+    publishVersion = '3.1.7'// 版本
+    desc = 'vlc-lib-android  Official Warehouse Version 3.1.7   2019/07/02  suport x86_64   x86  armeabi-v7a  arm64-v8a'
+    // 描述
+    website = 'https://github.com/mengzhidaren'   // 项目的主页
 }
 
-//apply from: '../publish.gradle'

@@ -19,11 +19,12 @@ add_library( vlcjni
 #if(${ANDROID_ABI} STREQUAL "armeabi")
 message("yyl abi=${ANDROID_ABI}")
 
-set(soPath ${CMAKE_SOURCE_DIR}/jniLibs/${ANDROID_ABI}/libvlc.so)
-set(soPathjni ${CMAKE_SOURCE_DIR}/jniLibs/${ANDROID_ABI}/libvlcjni.so)
+set(soPath ${CMAKE_SOURCE_DIR}_/jniLibs/${ANDROID_ABI}/libvlc.so)
+set(soPathjni ${CMAKE_SOURCE_DIR}_/jniLibs/${ANDROID_ABI}/libvlcjni.so)
 
-message("yyl abi=${soPath}")
-message("yyl abi=${soPathjni}")
+message(" vlclib=${soPath}")
+message(" jnilib=${soPathjni}")
+#message("PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR} CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR} CMAKE_CURRENT_LIST_DIR=${CMAKE_CURRENT_LIST_DIR}  ")
 
 set_target_properties(
             vlc

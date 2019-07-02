@@ -243,6 +243,18 @@ public class MediaPlayer
         TrackInfo(Parcel in) {
         }
 
+        public static final Creator<TrackInfo> CREATOR = new Creator<TrackInfo>() {
+            @Override
+            public TrackInfo createFromParcel(Parcel in) {
+                return new TrackInfo(in);
+            }
+
+            @Override
+            public TrackInfo[] newArray(int size) {
+                return new TrackInfo[size];
+            }
+        };
+
         public int getTrackType() {
             return MEDIA_TRACK_TYPE_UNKNOWN;
         }

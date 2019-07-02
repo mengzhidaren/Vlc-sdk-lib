@@ -55,7 +55,7 @@ public class IjkPlayer extends TextureView implements TextureView.SurfaceTexture
 
         mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
 
-        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 0);
         mMediaPlayer.setOnInfoListener(mInfoListener);
         mMediaPlayer.setOnMediaCodecSelectListener(new IjkMediaPlayer.OnMediaCodecSelectListener() {
             @Override
