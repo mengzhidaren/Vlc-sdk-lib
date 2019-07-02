@@ -47,8 +47,9 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
 ```
    dependencies {
    
-        //1.扩展功能仓库  增加新功能如录像截图自定义播放器等  已经引用官方标准lib仓库 
-        implementation 'com.yyl.vlc:vlc-android-sdk:3.0.13'
+        //1.扩展功能仓库  
+        //在引用官方标准lib仓库中增加新功能如录像截图自定义播放器等  
+        implementation 'com.yyl.vlc:vlc-android-sdk:3.1.7'
        
      
         //2.备选  官方标准lib仓库 详细内容参考vlc官网

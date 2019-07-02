@@ -24,9 +24,8 @@ android {
 }
 
 dependencies {
-//    implementation 'com.yyl.vlc:vlc-android-sdk:3.1.4'
-//    implementation 'com.yyl.vlc:vlc-android-sdk:3.1.4'
-    implementation project(':libvlc')
+    implementation 'com.yyl.vlc:vlc-android-sdk:3.1.7'
+//    implementation project(':libvlc')
         implementation "androidx.annotation:annotation:1.0.2"
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "androidx.appcompat:appcompat:1.0.2"
@@ -41,5 +40,5 @@ dependencies {
 //    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-//    implementation 'org.videolan.android:libvlc-all:3.1.10'
+
 }

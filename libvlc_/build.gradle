@@ -1,12 +1,16 @@
 apply plugin: 'com.android.library'
+
+def versionJcenter='3.1.7'
+def versionJconterCode=20190702
+
 android {
 
     defaultConfig {
         compileSdkVersion rootProject.ext.compileSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         minSdkVersion rootProject.ext.minSdkVersion
-        versionCode 20190702
-        versionName "3.1.7"
+        versionCode versionJconterCode
+        versionName versionJcenter
         ndk {
             abiFilters "armeabi-v7a" ,"arm64-v8a","x86","x86_64"
         }
@@ -64,8 +68,8 @@ publish {
     userOrg = 'yuyunlongyyl' //用户所在组织
     groupId = 'org.videolan'// 包名
     artifactId = 'vlc-lib-android' // library的名字
-    publishVersion = '3.1.7'// 版本
-    desc = 'vlc-lib-android  Official Warehouse Version 3.1.7   2019/07/02  suport x86_64   x86  armeabi-v7a  arm64-v8a'
+    publishVersion =versionJcenter// 版本
+    desc = 'vlc-lib-android  Official Warehouse Version  suport x86_64   x86  armeabi-v7a  arm64-v8a'
     // 描述
     website = 'https://github.com/mengzhidaren'   // 项目的主页
 }

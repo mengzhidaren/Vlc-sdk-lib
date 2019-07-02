@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
 
+def versionJcenter='3.1.7'
+def versionJconterCode=20190702
+
 android {
     compileSdkVersion Integer.valueOf(project.properties.get("compileSdkVersion"))
 //    buildToolsVersion project.properties.get("buildToolsVersion")
@@ -8,8 +11,8 @@ android {
         compileSdkVersion rootProject.ext.compileSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         minSdkVersion rootProject.ext.minSdkVersion
-        versionCode 20190523
-        versionName "3.1.4"
+        versionCode versionJconterCode
+        versionName versionJcenter
         externalNativeBuild {
             cmake {
                 cppFlags "-std=c++11 -fexceptions"//-std=c++11 -frtti
@@ -19,11 +22,11 @@ android {
             abiFilters "armeabi-v7a" ,"arm64-v8a","x86","x86_64"
         }
     }
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['jniLibs']
-        }
-    }
+//    sourceSets {
+//        main {
+//            jniLibs.srcDirs = ['jniLibs']
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled false
@@ -42,6 +45,7 @@ android {
 
 dependencies {
 //    api project(':libvlc_')
+    //api 'org.videolan.android:libvlc-all:3.1.10'
     api 'org.videolan:vlc-lib-android:3.1.7'
 }
 
@@ -66,8 +70,8 @@ publish {
     userOrg = 'yuyunlongyyl' //用户所在组织
     groupId = 'com.yyl.vlc'// 包名
     artifactId = 'vlc-android-sdk' // library的名字
-    publishVersion = '3.1.41'// 版本
-    desc = 'vlc-android-lib 3.1.4   2019/05/23  suport x86_64   x86  armeabi-v7a  arm64-v8a'
+    publishVersion = versionJcenter// 版本
+    desc = 'vlc-android-lib  suport x86_64   x86  armeabi-v7a  arm64-v8a'
     // 描述
     website = 'https://github.com/mengzhidaren/Vlc-sdk-lib'   // 项目的主页
 }
