@@ -8,18 +8,21 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.Surface;
 
-import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
+import org.videolan.libvlc.interfaces.IMedia;
+import org.videolan.libvlc.interfaces.IVLCVout;
+
 import com.vlc.lib.listener.MediaListenerEvent;
 import com.vlc.lib.listener.MediaPlayerControl;
 import com.vlc.lib.listener.VideoSizeChange;
 import com.vlc.lib.listener.util.LogUtils;
 
 /**
- * 这个类实现了大部分播放器功能
+ * 这个类实现了大部分视频播放器功能
  * 只是提供参考的实例代码
+ * 如果只播放音频不建议使用
  * <p>
  * 如果有bug请在github留言
  *
@@ -41,8 +44,10 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     private static final int STATE_STOP = 5;
     private int currentState = STATE_LOAD;
     private float speed = 1f;
-
-//    private final Lock lock = new ReentrantLock();
+    private float position = 0f;
+    private long time = 0;
+    //    private final Lock lock = new ReentrantLock();
+    //单线程操作视频初始化和释放功能   防止多线程互斥
     private static final HandlerThread sThread = new HandlerThread("VlcPlayThread");
 
     static {
@@ -55,45 +60,56 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     private boolean canPause;//
     private boolean canReadInfo;//能否读取视频信息
     private boolean isPlayError;
-    private volatile boolean isAttached;//surface是否存在
+    private volatile boolean isSurfaceAvailable;//surface是否存在
     private boolean isAttachedSurface;//surface是否关联
     private boolean isLoop = true;//循环
     private boolean isDestory;//回收当前activity
     private boolean isSeeking;//跳转位置中
 
+    //切换view.parent时的2秒黑屏用seek恢复
+    public boolean clearVideoTrackCache = false;
+    //硬件加速
+    public boolean HWDecoderEnable=false;
+
     private MediaPlayer mMediaPlayer;
-        private Surface surfaceSlave;//字幕画布
+    private Surface surfaceSlave;//字幕画布
     private Surface surfaceVideo;//视频画布
-    private int surfaceW,surfaceH;
+    private int surfaceW, surfaceH;
     private String path;
     private LibVLC libVLC;
 
-    //libVLC 由外面传入方便定制播放器
+    private boolean loadOtherMedia;
+
+    //字幕文件
+    private String addSlave;
+
+    //libVLC 由外传入方便定制播放器
     public VlcPlayer(LibVLC libVLC) {
         this.libVLC = libVLC;
+//        isAvailable
         threadHandler = new Handler(sThread.getLooper(), this);
     }
 
     @Override
     public boolean handleMessage(Message msg) {
-            switch (msg.what) {
-                case INIT_START:
-                    if (isInitStart)
-                        opendVideo();
-                    break;
-                case INIT_STOP:
-                    onStopVideo();
-                    break;
-                case INIT_DESTORY:
-                    if (mMediaPlayer != null) {
-                        mMediaPlayer.setEventListener(null);
-                        if (!mMediaPlayer.isReleased()) {
-                            mMediaPlayer.release();
-                            mMediaPlayer = null;
-                        }
+        switch (msg.what) {
+            case INIT_START:
+                if (isInitStart)
+                    openVideo();
+                break;
+            case INIT_STOP:
+                onStopVideo();
+                break;
+            case INIT_DESTORY:
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.setEventListener(null);
+                    if (!mMediaPlayer.isReleased()) {
+                        mMediaPlayer.release();
+                        mMediaPlayer = null;
                     }
-                    break;
-            }
+                }
+                break;
+        }
         return true;
     }
 
@@ -102,7 +118,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
      * surface线程  可能有延迟
      */
     public void setSurface(Surface surfaceVideo, Surface surfaceSlave) {
-        isAttached = true;
+        isSurfaceAvailable = true;
         this.surfaceVideo = surfaceVideo;
         this.surfaceSlave = surfaceSlave;
         LogUtils.i(tag, "setSurface");
@@ -111,51 +127,72 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
             startPlay();
         } else if (isInitStart) {
             attachSurface();
-            // seekTo(getCurrentPosition());//老是黑一下 这buffing没给刷新接口啊 只能手工seek一下了
             if (currentState == STATE_RESUME || currentState == STATE_PLAY) {
                 start();
             }
         }
     }
 
-    public void setWindowSize(int surfaceW,int surfaceH){
-        this.surfaceW=surfaceW;
-        this.surfaceH=surfaceH;
-        if (mMediaPlayer!=null){
-            mMediaPlayer.getVLCVout().setWindowSize(surfaceW,surfaceH);
+
+    public void setWindowSize(int surfaceW, int surfaceH) {
+        this.surfaceW = surfaceW;
+        this.surfaceH = surfaceH;
+        if (mMediaPlayer != null) {
+            mMediaPlayer.getVLCVout().setWindowSize(surfaceW, surfaceH);
         }
     }
 
     private void attachSurface() {
-        if (!mMediaPlayer.getVLCVout().areViewsAttached() && isAttached && !isAttachedSurface) {
-            LogUtils.i(tag, "setVideoSurface   attachViews");
-            isAttachedSurface = true;
-            setWindowSize(surfaceW,surfaceH);
-            mMediaPlayer.getVLCVout().attachSurfaceSlave(surfaceVideo, surfaceSlave, this);
-            // mMediaPlayer.setVideoTitleDisplay(MediaPlayer.Position.Disable, 0);
+        if (!mMediaPlayer.getVLCVout().areViewsAttached() && isSurfaceAvailable && !isAttachedSurface) {
+            LogUtils.i(tag, "attachSurface");
+
+            setWindowSize(surfaceW, surfaceH);
+//            mMediaPlayer.getVLCVout().attachSurfaceSlave(surfaceVideo, surfaceSlave, this);
+            if (surfaceSlave != null && surfaceSlave.isValid()) {
+                mMediaPlayer.getVLCVout().setSubtitlesSurface(surfaceSlave, null);
+            }
+            if (surfaceVideo != null && surfaceVideo.isValid()) {
+                isAttachedSurface = true;
+                mMediaPlayer.getVLCVout().setVideoSurface(surfaceVideo, null);
+                mMediaPlayer.getVLCVout().attachViews();
+                if (attachVideoTrack) {
+                    clearVideoTrackCacheSeek();//这里真坑 为什么没有清空cache的方法 后期让官方改
+                    mMediaPlayer.setVideoTrackEnabled(true);
+                    attachVideoTrack = false;
+
+                }
+
+            }
         }
     }
 
+    boolean attachVideoTrack = false;
+
     public void onSurfaceTextureDestroyedUI() {
-        isAttached = false;
+        isSurfaceAvailable = false;
         this.surfaceVideo = null;
-        this.surfaceSlave=null;
+        this.surfaceSlave = null;
         LogUtils.i(tag, "onSurfaceTextureDestroyedUI");
         if (isAttachedSurface) {
             isAttachedSurface = false;
             if (mMediaPlayer != null) {
+                if (isInitStart) {
+                    mMediaPlayer.setVideoTrackEnabled(false);
+                    attachVideoTrack = true;
+                }
                 mMediaPlayer.getVLCVout().detachViews();
             }
         }
-        if (isPlaying()) {
-            mMediaPlayer.pause();
-            currentState = STATE_RESUME;
-        }
+        //不在这里暂停
+//        if (isPlaying()) {
+//            mMediaPlayer.pause();
+//            currentState = STATE_RESUME;
+//        }
     }
 
 
     //回收界面时用  不重要  可以不调用 不影响稳定性
-    public void onDestory() {
+    public void onDestroy() {
         videoSizeChange = null;
         isDestory = true;
         onStop();
@@ -181,7 +218,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         currentState = STATE_LOAD;
         if (mediaListenerEvent != null)
             mediaListenerEvent.eventPlayInit(true);
-        if (isAttached) {
+        if (isSurfaceAvailable) {
             isSufaceDelayerPlay = false;
             threadHandler.obtainMessage(INIT_START).sendToTarget();
         } else {
@@ -207,14 +244,14 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
     }
 
 
-    private void opendVideo() {
+    private void openVideo() {
         canSeek = false;
         isPlayError = false;
         initVideoState();
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer(libVLC);
-        //    mMediaPlayer.setAudioOutput(VLCOptions.getAout(PreferenceManager.getDefaultSharedPreferences(mContext)));
-         //   mMediaPlayer.setEqualizer(VLCOptions.getEqualizer(mContext));
+            //    mMediaPlayer.setAudioOutput(VLCOptions.getAout(PreferenceManager.getDefaultSharedPreferences(mContext)));
+            //   mMediaPlayer.setEqualizer(VLCOptions.getEqualizer(mContext));
         }
         if (!isAttachedSurface && mMediaPlayer.getVLCVout().areViewsAttached()) {//异常判断
             mMediaPlayer.getVLCVout().detachViews();
@@ -228,7 +265,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         });
         boolean isLoadMedia = loadMedia(libVLC);
         attachSurface();
-        if (isAttached && isInitStart && isAttachedSurface && isLoadMedia) {
+        if (isSurfaceAvailable && isInitStart && isAttachedSurface && isLoadMedia) {
             mMediaPlayer.play();
             LogUtils.i("加载 " + isLoadMedia);
         } else {
@@ -244,8 +281,8 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
      * // sdcard/mp4.mp4
      */
     private boolean loadMedia(LibVLC libVLC) {
-        if (loadOthereMedia) {
-            loadOthereMedia = false;
+        if (loadOtherMedia) {
+            loadOtherMedia = false;
             return true;
         }
         if (TextUtils.isEmpty(path)) {
@@ -254,12 +291,10 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         Media media;
         if (path.contains("://")) {
             media = new Media(libVLC, Uri.parse(path));
-            //    media.parseAsync(Media.Parse.FetchNetwork, 5 * 1000);
         } else {
             media = new Media(libVLC, path);
-            //    media.parseAsync(Media.Parse.FetchLocal);
         }
-        media.setHWDecoderEnabled(false, false);
+        media.setHWDecoderEnabled(HWDecoderEnable, false);
         media.setEventListener(mMediaListener);
         mMediaPlayer.setMedia(media);
         media.release();
@@ -298,19 +333,20 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         canSeek = false;
         canReadInfo = false;
         canPause = false;
+        time = 0;
+        position = 0f;
     }
 
     private void onStopVideo() {
         LogUtils.i(tag, "release");
         initVideoState();
         if (mMediaPlayer != null) {
-            final Media media = mMediaPlayer.getMedia();
+            final IMedia media = mMediaPlayer.getMedia();
             if (media != null) {
                 media.setEventListener(null);
                 mMediaPlayer.stop();
                 mMediaPlayer.setMedia(null);
                 media.release();
-
             }
 
         }
@@ -361,9 +397,11 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
 //                               seekTo(abTimeStart);
 //                    }
 //                }
+                time = event.getTimeChanged();
                 break;
             case MediaPlayer.Event.PositionChanged://PositionChanged   0.061593015
                 // LogUtils.i(tag, "PositionChanged" + event.getPositionChanged());
+                position = event.getPositionChanged();
                 break;
             case MediaPlayer.Event.Vout:
                 LogUtils.i(tag, "Vout" + event.getVoutCount());
@@ -404,7 +442,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
 
     @Override
     public boolean isPrepare() {
-        return  isInitStart && !isPlayError&&mMediaPlayer != null;
+        return isInitStart && !isPlayError && mMediaPlayer != null;
     }
 
     @Override
@@ -480,7 +518,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         if (isPrepare() && canSeek) {
             this.speed = speed;
             mMediaPlayer.setRate(speed);
-           // seekTo(getCurrentPosition());
+            // seekTo(getCurrentPosition());
         }
         return true;
     }
@@ -581,19 +619,26 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
         return mMediaPlayer;
     }
 
+    //切换parent时的2秒黑屏用seek恢复
+    public void clearVideoTrackCacheSeek() {
+        if (clearVideoTrackCache && isPrepare() && canSeek && time > 0) {
+            mMediaPlayer.setTime(time);
+        }
+    }
+
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
         this.mMediaPlayer = mediaPlayer;
     }
 
-    public void setMedia(MediaPlayer mediaPlayer) {
-        loadOthereMedia = true;
-        this.mMediaPlayer = mediaPlayer;
+    public void setMedia(IMedia media) {
+        if (mMediaPlayer == null) {
+            mMediaPlayer = new MediaPlayer(libVLC);
+        }
+        mMediaPlayer.setMedia(media);
+        loadOtherMedia = true;
     }
 
-    private boolean loadOthereMedia;
 
-    //字幕文件
-    private String addSlave;
 
 
     public void setAddSlave(String addSlave) {

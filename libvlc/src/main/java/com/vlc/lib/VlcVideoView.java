@@ -6,11 +6,15 @@ import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
 import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.TextureView;
 
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
+import org.videolan.libvlc.interfaces.IMedia;
+
 import com.vlc.lib.listener.MediaListenerEvent;
 import com.vlc.lib.listener.MediaPlayerControl;
 import com.vlc.lib.listener.VideoSizeChange;
@@ -42,18 +46,17 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         if (isInEditMode()) {
             return;
         }
-        videoMediaLogic = getVideoLogic(context);
-        videoMediaLogic.setVideoSizeChange(this);
+        initPlayer(context);
         setSurfaceTextureListener(videoSurfaceListener);
     }
-
     //这里改为子类继承   方便修改libVLC参数
-    public VlcPlayer getVideoLogic(Context context) {
-        return new VlcPlayer(VLCInstance.get(context));
+    public void initPlayer(Context context){
+        videoMediaLogic = new VlcPlayer(VLCInstance.get(context));
+        videoMediaLogic.setVideoSizeChange(this);
     }
 
     public void setLibVLC(LibVLC libVLC) {
-        videoMediaLogic.onDestory();
+        videoMediaLogic.onDestroy();
         videoMediaLogic=new VlcPlayer(libVLC);
         videoMediaLogic.setVideoSizeChange(this);
     }
@@ -92,9 +95,9 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
     /**
      * 退出界面时回收
      */
-    public void onDestory() {
+    public void onDestroy() {
         if (videoMediaLogic != null)
-            videoMediaLogic.onDestory();
+            videoMediaLogic.onDestroy();
         LogUtils.i(tag, "onDestory");
     }
 
@@ -169,6 +172,10 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         return videoMediaLogic.getPlaybackSpeed();
     }
 
+    //切换parent时的2秒黑屏用seek恢复 注意：直播时要为false
+    public void setClearVideoTrackCache(boolean clearVideoTrackCache){
+        videoMediaLogic.clearVideoTrackCache=clearVideoTrackCache;
+    }
 
     @Override
     public void setLoop(boolean isLoop) {
@@ -315,12 +322,16 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
     }
 
     //定制media
-    public void setMedia(MediaPlayer mediaPlayer) {
-        videoMediaLogic.setMedia(mediaPlayer);
+    public void setMedia(IMedia iMedia) {
+        videoMediaLogic.setMedia(iMedia);
     }
 
     public MediaPlayer getMediaPlayer() {
         return videoMediaLogic.getMediaPlayer();
+    }
+
+    public VlcPlayer getVlcPlayer() {
+        return videoMediaLogic;
     }
 
     @Override
@@ -343,10 +354,14 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         return videoMediaLogic.getAudioSessionId();
     }
 
+    public int  widthSurface=0;
+    public int  heightSurface=0;
 
     private TextureView.SurfaceTextureListener videoSurfaceListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            widthSurface=width;
+            heightSurface=height;
             videoMediaLogic.setWindowSize(width, height);
             videoMediaLogic.setSurface(new Surface(surface), null);
         }

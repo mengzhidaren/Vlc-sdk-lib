@@ -16,11 +16,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.danikula.videocache.CacheListener;
-import com.vlc.lib.ThumbnailUtils;
 
 
-import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.Media;
 
 import com.vlc.lib.listener.util.LogUtils;
 import com.vlc.lib.listener.util.VLCInstance;
@@ -28,17 +25,14 @@ import com.yyl.vlc.ijk.IjkPlayerActivity;
 import com.yyl.vlc.vlc.VlcPlayerActivity;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
-
 public class MainActivity extends AppCompatActivity {
-    private static final String path = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-//    private static final String path = "https://upload.xianghunet.com/resources/videos/330109/201808/0a5ece0772c5dd50439ea7af7161f48091d67fd5.mp4";
-//    private static final String path = "http://haobashi.me/20180525T003000_0_10341127_0.ts";
-//    private static final String path = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
-//    private static final String path = "https://www.wowza.com/downloads/images/sample.mp4";
-//     public static final String path = "http://192.168.1.27/demo2.mp4";
-    //public static final String path = "rtsp://video.fjtu.com.cn/vs01/flws/flws_01.rm";
+//    香港卫视： http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8
+//    CCTV1高清： http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8
+//    CCTV3高清： http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8
+//    CCTV5高清： http://ivi.bupt.edu.cn/hls/cctv5hd.m3u8
+    public static final String path = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
+
     private final String tag = "MainActivity";
     private ImageView thumbnail;
     private Context context;
@@ -120,28 +114,28 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ArrayList<String> options = new ArrayList<String>(10);
-                options.add("-vvv");
-                LibVLC libVLC = new LibVLC(context, options);
-                Media media = new Media(libVLC, Uri.parse(path));//网络截图效率不高
-                //   media.addOption("--vout=android_display,none");
-                //   media.addOption("--no-audio");
-                //   media.addOption("--start-time=20");
-                media.setHWDecoderEnabled(false, false);//软解码
-                media.parse(Media.Parse.ParseNetwork);
-                Log.i("yyl", "getTrackCount=" + media.getTrackCount());
-                Media.VideoTrack track = (Media.VideoTrack) media.getTrack(Media.Track.Type.Video);//获取video轨道1的信息 可用ffmpeg查看
-                if (track == null) return;
-                Log.i("yyl", "track=" + track.toString());
-                final Bitmap bitmap = ThumbnailUtils.getThumbnail(media, track.width / 2, track.height / 2);
-                Log.i("yyl", "bitmap=" + bitmap);
-                thumbnail.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (bitmap != null)
-                            thumbnail.setImageBitmap(bitmap);
-                    }
-                });
+//                ArrayList<String> options = new ArrayList<String>(10);
+//                options.add("-vvv");
+//                LibVLC libVLC = new LibVLC(context, options);
+//                Media media = new Media(libVLC, Uri.parse(path));//网络截图效率不高
+//                //   media.addOption("--vout=android_display,none");
+//                //   media.addOption("--no-audio");
+//                //   media.addOption("--start-time=20");
+//                media.setHWDecoderEnabled(false, false);//软解码
+//                media.parse(Media.Parse.ParseNetwork);
+//                Log.i("yyl", "getTrackCount=" + media.getTrackCount());
+//                Media.VideoTrack track = (Media.VideoTrack) media.getTrack(Media.Track.Type.Video);//获取video轨道1的信息 可用ffmpeg查看
+//                if (track == null) return;
+//                Log.i("yyl", "track=" + track.toString());
+//                final Bitmap bitmap = ThumbnailUtils.getThumbnail(media, track.width / 2, track.height / 2);
+//                Log.i("yyl", "bitmap=" + bitmap);
+//                thumbnail.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (bitmap != null)
+//                            thumbnail.setImageBitmap(bitmap);
+//                    }
+//                });
 
             }
         }).start();

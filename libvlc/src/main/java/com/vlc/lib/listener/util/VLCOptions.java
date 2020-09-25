@@ -96,7 +96,7 @@ public class VLCOptions {
         final boolean timeStreching = pref.getBoolean("enable_time_stretching_audio", timeStrechingDefault);
         final String subtitlesEncoding = pref.getString("subtitle_text_encoding", "");
         final boolean frameSkip = pref.getBoolean("enable_frame_skip", false);//启用跳帧     加速解码，但可能降低画质
-        String chroma = pref.getString("chroma_format", "RV32");//RGB 32 位: 默认色度 RGB 16 位: 性能更佳，但画质下降 YUV: 性能最佳，但并非所有设备可用。仅限 Android 2.3 及更高版本。
+        String chroma = pref.getString("chroma_format", "RV16");//RGB 32 位: 默认色度 RGB 16 位: 性能更佳，但画质下降 YUV: 性能最佳，但并非所有设备可用。仅限 Android 2.3 及更高版本。
         final boolean verboseMode = pref.getBoolean("enable_verbose_mode", true);
 
 
@@ -134,7 +134,7 @@ public class VLCOptions {
         if (chroma.equals("YV12")) {
             chroma = "";
         } else {
-            chroma = opengl ? "YUV" : "RV32";
+            chroma = opengl ? "YUV" : chroma;
         }
         options.add(chroma);
         options.add("--audio-resampler");
@@ -155,7 +155,7 @@ public class VLCOptions {
 //            options.add("--vout=android_display,none");
 //        else
 //            options.add("--vout=android_display");
-        if (isSupportsOpenGL(context)) {
+        if (opengl) {
             options.add("--vout=gles2,none");//OpenGL ES 2.0
         } else {
             options.add("--vout=android_display,none");
@@ -170,6 +170,8 @@ public class VLCOptions {
         options.add("--keystore-file");
         options.add(new File(context.getDir("keystore", Context.MODE_PRIVATE), "file").getAbsolutePath());
 
+
+
         //Chromecast
         options.add(verboseMode ? "-vv" : "-v");
         if (pref.getBoolean("casting_passthrough", false))
@@ -177,7 +179,8 @@ public class VLCOptions {
         else options.add("--no-sout-chromecast-audio-passthrough");
         options.add("--sout-chromecast-conversion-quality=" + pref.getString("casting_quality", "2"));
         options.add("--sout-keep");
-
+        //加入自已的配置
+        options.add("--smb-force-v1");
         LogUtils.i("options=" + Arrays.toString(options.toArray()));
         return options;
     }

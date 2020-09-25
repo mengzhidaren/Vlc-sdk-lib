@@ -54,9 +54,10 @@ public class RecordEvent {
         return false;
     }
 
-    //文件名是宏定义的  难道只能修改源代码    有知道的请留言
+    //这里不用了  请用官方的录制方法  MediaPlayer.record(fileDirectory)
+    @Deprecated
     public native boolean startRecord(MediaPlayer mediaPlayer, String fileDirectory, String fileName);
-
+    //这里不用了  请用官方的录制方法  MediaPlayer.record(null)
     public native boolean stopRecord(MediaPlayer mediaPlayer);
 
     public native boolean isRecording(MediaPlayer mediaPlayer);

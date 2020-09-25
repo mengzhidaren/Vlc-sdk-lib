@@ -3,13 +3,24 @@
     android:layout_height="match_parent">
 
     <com.yyl.vlc.view.FrameLayoutScale
+        android:id="@+id/layout1"
         android:layout_width="match_parent"
+        android:background="#20000000"
         android:layout_height="match_parent">
 
         <com.vlc.lib.VlcVideoView
             android:id="@+id/player"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+    </com.yyl.vlc.view.FrameLayoutScale>
+
+    <com.yyl.vlc.view.FrameLayoutScale
+        android:id="@+id/layout2"
+        android:background="#30000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="300dp">
 
     </com.yyl.vlc.view.FrameLayoutScale>
 
@@ -64,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/snapShot"
@@ -74,11 +85,35 @@
             android:background="#cccccccc"
             android:gravity="center"
             android:text="@string/snapshot" />
+        <TextView
+            android:id="@+id/change_Parent"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="2dp"
+            android:background="#cccccccc"
+            android:gravity="center"
+            android:text="change_Parent" />
+        <TextView
+            android:id="@+id/test1"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_margin="2dp"
+            android:background="#cccccccc"
+            android:gravity="center"
+            android:text="test1" />
+        <TextView
+            android:id="@+id/test2"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_margin="2dp"
+            android:background="#cccccccc"
+            android:gravity="center"
+            android:text="test2" />
 
         <com.yyl.vlc.view.FrameLayoutScale
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/thumbnail"
