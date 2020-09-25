@@ -1,3 +1,2 @@
 include ':demo'
-//include ':libvlc'
-//include ':libvlc_'
+include ':libvlc'

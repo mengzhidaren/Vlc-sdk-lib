@@ -20,7 +20,7 @@
 当前缓冲百分比 
 视频(音频)播放速度可调,任意速度可调. (0.25-4)   < player.setRate(float rate); >
 加载字幕(addSlave)，设置镜面等
-实时录制视频(测试中.. 有问题请留言)
+实时录制视频
 
 ```
 # 使用方法
@@ -31,16 +31,14 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
                  player.startPlay(path);
 
 <其它>
- 截封面图方法     byte[] b = VLCUtil.getThumbnail(media, width, height);
- 运行时截图用     TextureView.getBitmap()保存图片
- 
  vlc原生截图      new RecordEvent().takeSnapshot(mediaPlayer,"保存图片的地址或目录",width,height);
   
   字幕功能  mMediaPlayer.addSlave(Media.Slave.Type.Subtitle, "字幕文件地址", true);
   
-  录像功能(测试中   参考demo)
-        new RecordEvent().startRecord(mediaPlayer, "保存视频的目录","文件名");
-          
+  录像功能
+        vlcVideoView.getMediaPlayer().record(directory) //start
+        vlcVideoView.getMediaPlayer().record(null) //stop
+
 ```
 
 #引用库文件
@@ -49,11 +47,13 @@ VlcVideoPlayer   player = new VlcVideoPlayer(context);
    
         //1.扩展功能仓库  
         //在引用官方标准lib仓库中增加新功能如录像截图自定义播放器等  
-        implementation 'com.yyl.vlc:vlc-android-sdk:3.1.7'
+        implementation 'com.yyl.vlc:vlc-android-sdk:3.3.1'
        
      
         //2.备选  官方标准lib仓库 详细内容参考vlc官网
-        implementation 'org.videolan:vlc-lib-android:3.1.7'
+        implementation 'org.videolan.android:libvlc-all:3.3.1'
+        //备选   官方多媒体管理库
+        implementation 'org.videolan.android:medialibrary-all:0.7.1'
    }
  
     ndk {
