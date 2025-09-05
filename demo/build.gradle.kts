@@ -49,9 +49,9 @@ dependencies {
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
-
-    //    implementation("com.yyl.vlc:vlc-android-sdk:3.3.0")
-    implementation(project(":libvlc"))
+//新仓库
+    implementation("io.github.mengzhidaren:vlc-android-sdk:3.6.3")
+//    implementation(project(":libvlc"))
 //其它库
     implementation("tv.danmaku.ijk.media:ijkplayer-java:0.8.8")
     implementation("tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8")

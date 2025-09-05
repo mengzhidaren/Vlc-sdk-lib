@@ -16,7 +16,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io") }
+//        旧仓库支持
         maven { url = uri("https://artifactory.appodeal.com/appodeal-public/") }
     }
 }

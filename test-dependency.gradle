@@ -1,0 +1,56 @@
+// 测试依赖验证脚本
+// 使用方法: ./gradlew testDependency
+
+apply plugin: 'java'
+
+// 在 afterEvaluate 中配置仓库，避免与 settings.gradle.kts 冲突
+afterEvaluate {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+
+// 在 afterEvaluate 中配置依赖
+afterEvaluate {
+    dependencies {
+        // 测试您的包
+        implementation 'io.github.mengzhidaren:vlc-android-sdk:3.6.3'
+    }
+}
+
+task testDependency {
+    group = 'verification'
+    description = '测试依赖是否可用'
+    
+    doLast {
+        println "=== 依赖验证测试 ==="
+        
+        try {
+            // 检查依赖是否可解析
+            def configuration = project.configurations.getByName('implementation')
+            def resolvedDependencies = configuration.resolvedConfiguration.resolvedArtifacts
+            
+            println "✅ 依赖解析成功！"
+            println "找到 ${resolvedDependencies.size()} 个依赖："
+            
+            resolvedDependencies.each { artifact ->
+                println "  - ${artifact.moduleVersion.id.group}:${artifact.moduleVersion.id.name}:${artifact.moduleVersion.id.version}"
+                println "    文件: ${artifact.file.name}"
+                println "    大小: ${artifact.file.length()} bytes"
+            }
+            
+            // 检查 AAR 文件内容
+            def aarFile = resolvedDependencies.find { it.name == 'vlc-android-sdk' }?.file
+            if (aarFile && aarFile.exists()) {
+                println "\n✅ AAR 文件验证："
+                println "  路径: ${aarFile.absolutePath}"
+                println "  大小: ${aarFile.length()} bytes"
+                println "  修改时间: ${new Date(aarFile.lastModified())}"
+            }
+            
+        } catch (Exception e) {
+            println "❌ 依赖解析失败: ${e.message}"
+        }
+    }
+}

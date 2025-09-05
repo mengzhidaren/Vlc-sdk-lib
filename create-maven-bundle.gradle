@@ -1,0 +1,165 @@
+// 创建 Maven 发布包的脚本
+// 使用方法: ./gradlew createMavenBundle
+// 不要直接上传 AAR 文件，而是要上传包含 POM 文件的整个 Maven 目录结构
+// 方法一：使用新平台 (central.sonatype.com)
+// 登录 https://central.sonatype.com/
+// 选择 "Upload Bundle"
+// 上传整个 com 目录压缩包：D:\AsWork2025\Vlc-sdk-lib\libvlc\build\maven-bundle\com
+// 方法二：使用传统平台 (s01.oss.sonatype.org)
+// 登录 https://s01.oss.sonatype.org/
+// 进入 "Staging Upload"
+// 选择 "Artifact Bundle"
+// 上传 com 目录
+tasks.register('createMavenBundle') {
+    group = 'publishing'
+    description = '创建标准的 Maven 发布包'
+
+    doLast {
+        def groupId = "io.github.mengzhidaren"
+        def artifactId = "vlc-android-sdk"
+        def version = "3.6.3"
+
+        def bundleDir = file("$buildDir/maven-bundle")
+        bundleDir.deleteDir()
+        bundleDir.mkdirs()
+
+        // 创建目录结构 - 版本号不应该被分割
+        def groupPath = groupId.replace('.', '/')
+        def artifactDir = file("$bundleDir/$groupPath/$artifactId/$version")
+        artifactDir.mkdirs()
+
+        // 复制 AAR 文件
+        def aarFile = file("$buildDir/outputs/aar/${project.name}-release.aar")
+        if (aarFile.exists()) {
+            copy {
+                from aarFile
+                into artifactDir
+                rename { "${artifactId}-${version}.aar" }
+            }
+            println "已复制 AAR 文件: ${aarFile.name}"
+        } else {
+            println "错误: 找不到 AAR 文件: ${aarFile.absolutePath}"
+        }
+
+        // 创建 POM 文件
+        def pomFile = file("$artifactDir/${artifactId}-${version}.pom")
+        pomFile.text = """<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+    <packaging>aar</packaging>
+    
+    <name>VLC Android SDK</name>
+    <description>VLC Android SDK with custom native libraries</description>
+    <url>https://github.com/mengzhidaren/Vlc-sdk-lib</url>
+    
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    
+    <developers>
+        <developer>
+            <id>mengzhidaren</id>
+            <name>mengzhidaren</name>
+            <email>yuyunlongyyl@gmail.com</email>
+        </developer>
+    </developers>
+    
+    <scm>
+        <connection>scm:git:git://github.com/mengzhidaren/Vlc-sdk-lib.git</connection>
+        <developerConnection>scm:git:ssh://github.com:mengzhidaren/Vlc-sdk-lib.git</developerConnection>
+        <url>https://github.com/mengzhidaren/Vlc-sdk-lib</url>
+    </scm>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.videolan.android</groupId>
+            <artifactId>libvlc-all</artifactId>
+            <version>3.6.3</version>
+        </dependency>
+    </dependencies>
+</project>"""
+
+        // 生成校验和文件的辅助方法
+        def generateChecksum = { file, algorithm ->
+            def digest = java.security.MessageDigest.getInstance(algorithm)
+            def bytes = file.bytes
+            def hash = digest.digest(bytes)
+            return hash.encodeHex().toString()
+        }
+
+        // 生成 AAR 校验和文件
+        def aarFileForChecksum = file("$artifactDir/${artifactId}-${version}.aar")
+        if (aarFileForChecksum.exists()) {
+            // 生成 MD5
+            def md5File = file("$artifactDir/${artifactId}-${version}.aar.md5")
+            md5File.text = generateChecksum(aarFileForChecksum, "MD5")
+
+            // 生成 SHA1
+            def sha1File = file("$artifactDir/${artifactId}-${version}.aar.sha1")
+            sha1File.text = generateChecksum(aarFileForChecksum, "SHA-1")
+
+            println "已生成 AAR 校验和文件"
+        }
+
+        // 生成 POM 校验和文件
+        def pomMd5File = file("$artifactDir/${artifactId}-${version}.pom.md5")
+        pomMd5File.text = generateChecksum(pomFile, "MD5")
+
+        def pomSha1File = file("$artifactDir/${artifactId}-${version}.pom.sha1")
+        pomSha1File.text = generateChecksum(pomFile, "SHA-1")
+
+        println "已生成 POM 校验和文件"
+
+        // 生成 GPG 签名文件
+        def localProperties = new Properties()
+        def localPropertiesFile = rootProject.file('local.properties')
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.withInputStream { localProperties.load(it) }
+        }
+        
+        if (localProperties.containsKey('signing.keyId')) {
+            try {
+                println "开始生成 GPG 签名文件..."
+
+                // 生成 AAR 签名
+                def aarAscFile = file("$artifactDir/${artifactId}-${version}.aar.asc")
+                def aarAscProcess = "gpg --armor --detach-sign --output ${aarAscFile.absolutePath} ${aarFileForChecksum.absolutePath}".execute()
+                aarAscProcess.waitFor()
+
+                // 生成 POM 签名
+                def pomAscFile = file("$artifactDir/${artifactId}-${version}.pom.asc")
+                def pomAscProcess = "gpg --armor --detach-sign --output ${pomAscFile.absolutePath} ${pomFile.absolutePath}".execute()
+                pomAscProcess.waitFor()
+
+                if (aarAscProcess.exitValue() == 0 && pomAscProcess.exitValue() == 0) {
+                    println "✅ 已生成 GPG 签名文件"
+                } else {
+                    println "❌ GPG 签名生成失败"
+                    if (aarAscProcess.exitValue() != 0) {
+                        println "AAR 签名错误: ${aarAscProcess.errorStream.text}"
+                    }
+                    if (pomAscProcess.exitValue() != 0) {
+                        println "POM 签名错误: ${pomAscProcess.errorStream.text}"
+                    }
+                }
+            } catch (Exception e) {
+                println "❌ 无法生成 GPG 签名: ${e.message}"
+            }
+        } else {
+            println "⚠️  未配置 GPG 签名，跳过签名文件生成"
+        }
+
+        println "已创建 POM 文件: ${pomFile.name}"
+        println "Maven 发布包已创建在: ${bundleDir.absolutePath}"
+        println "您可以手动上传 ${artifactDir.absolutePath} 目录到 Maven Central"
+    }
+}

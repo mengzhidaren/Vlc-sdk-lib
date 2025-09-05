@@ -82,7 +82,6 @@ public class VLCOptions {
 
     // TODO should return List<String>
     public static ArrayList<String> getLibOptions(Context context) {
-        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         /* generate an audio session id so as to share audio output with external equalizer */
         if (Build.VERSION.SDK_INT >= 21 && AUDIOTRACK_SESSION_ID == 0) {
             AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -93,27 +92,21 @@ public class VLCOptions {
 
         final boolean timeStrechingDefault = Build.VERSION.SDK_INT > KITKAT;
         //启用音频的时间伸缩      可加速与减慢音频播放而不改变音调 (需要较快设备支持)。
-        final boolean timeStreching = pref.getBoolean("enable_time_stretching_audio", timeStrechingDefault);
-        final String subtitlesEncoding = pref.getString("subtitle_text_encoding", "");
-        final boolean frameSkip = pref.getBoolean("enable_frame_skip", false);//启用跳帧     加速解码，但可能降低画质
-        String chroma = pref.getString("chroma_format", "RV16");//RGB 32 位: 默认色度 RGB 16 位: 性能更佳，但画质下降 YUV: 性能最佳，但并非所有设备可用。仅限 Android 2.3 及更高版本。
-        final boolean verboseMode = pref.getBoolean("enable_verbose_mode", true);
+        final String subtitlesEncoding = "";
+        final boolean frameSkip = false;//启用跳帧     加速解码，但可能降低画质
+        String chroma = "RV16";//RGB 32 位: 默认色度 RGB 16 位: 性能更佳，但画质下降 YUV: 性能最佳，但并非所有设备可用。仅限 Android 2.3 及更高版本。
+        final boolean verboseMode = true;
 
-
-        int networkCaching = pref.getInt("network_caching_value", 1500);
-        if (networkCaching > 60000)//缓冲网络媒体的时间量 (单位为毫秒)。硬件解码时无效。留空可重置。
-            networkCaching = 60000;
-        else if (networkCaching < 0)
-            networkCaching = 0;
-
-        final String freetypeRelFontsize = pref.getString("subtitles_size", "16");
-        final boolean freetypeBold = pref.getBoolean("subtitles_bold", false);
-        final String freetypeColor = pref.getString("subtitles_color", "16777215");
-        final boolean freetypeBackground = pref.getBoolean("subtitles_background", false);
+//缓冲网络媒体的时间量 (单位为毫秒)。硬件解码时无效。留空可重置。
+        int networkCaching =1500;
+        final String freetypeRelFontsize = "16";
+        final boolean freetypeBold = false;
+        final String freetypeColor = "16777215";
+        final boolean freetypeBackground = false;
         final boolean opengl = isSupportsOpenGL(context);
 
         /* CPU intensive plugin, setting for slow devices */
-        options.add(timeStreching ? "--audio-time-stretch" : "--no-audio-time-stretch");
+        options.add(timeStrechingDefault ? "--audio-time-stretch" : "--no-audio-time-stretch");
 
         options.add("--avcodec-skiploopfilter");
         options.add("" + getDeblocking(-1));//这里太大了消耗性能   太小了会花屏
@@ -173,11 +166,9 @@ public class VLCOptions {
 
 
         //Chromecast
-        options.add(verboseMode ? "-vv" : "-v");
-        if (pref.getBoolean("casting_passthrough", false))
-            options.add("--sout-chromecast-audio-passthrough");
-        else options.add("--no-sout-chromecast-audio-passthrough");
-        options.add("--sout-chromecast-conversion-quality=" + pref.getString("casting_quality", "2"));
+        options.add("-v");
+        options.add("--no-sout-chromecast-audio-passthrough");
+        options.add("--sout-chromecast-conversion-quality=2");
         options.add("--sout-keep");
         //加入自已的配置
         options.add("--smb-force-v1");
@@ -275,137 +266,4 @@ public class VLCOptions {
 ////        }
 //    }
 
-    private static MediaPlayer.Equalizer getEqualizerSetFromSettings(SharedPreferences pref) {
-        final float[] bands = getFloatArray(pref, "equalizer_values");
-        if (bands != null && pref.contains("equalizer_enabled")) {
-            final int bandCount = MediaPlayer.Equalizer.getBandCount();
-            if (bands.length != bandCount + 1)
-                return null;
-
-            final MediaPlayer.Equalizer eq = MediaPlayer.Equalizer.create();
-            eq.setPreAmp(bands[0]);
-            for (int i = 0; i < bandCount; ++i)
-                eq.setAmp(i, bands[i + 1]);
-            return eq;
-        } else
-            return MediaPlayer.Equalizer.createFromPreset(0);
-    }
-
-    public static MediaPlayer.Equalizer getEqualizerSetFromSettings(Context context, boolean force) {
-        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        if (!force && !pref.getBoolean("equalizer_enabled", false))
-            return null;
-        return getEqualizerSetFromSettings(pref);
-    }
-
-    public static MediaPlayer.Equalizer getEqualizerSetFromSettings(Context context) {
-        return getEqualizerSetFromSettings(context, false);
-    }
-
-    public static String getEqualizerNameFromSettings(Context context) {
-        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        return pref.getString("equalizer_set", "Flat");
-    }
-
-    public static void saveEqualizerInSettings(Context context, MediaPlayer.Equalizer eq, String name, boolean enabled, boolean saved) {
-        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = pref.edit();
-        if (eq != null) {
-            editor.putBoolean("equalizer_enabled", enabled);
-            final int bandCount = MediaPlayer.Equalizer.getBandCount();
-            final float[] bands = new float[bandCount + 1];
-            bands[0] = eq.getPreAmp();
-            for (int i = 0; i < bandCount; ++i) {
-                bands[i + 1] = eq.getAmp(i);
-            }
-            putFloatArray(editor, "equalizer_values", bands);
-            editor.putString("equalizer_set", name);
-        } else {
-            editor.putBoolean("equalizer_enabled", false);
-        }
-        editor.putBoolean("equalizer_saved", saved);
-        editor.apply();
-    }
-
-    public static MediaPlayer.Equalizer getCustomSet(Context context, String customName) {
-        try {
-            final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-            String key = "custom_equalizer_" + customName.replace(" ", "_");
-            final float[] bands = getFloatArray(pref, key);
-            final int bandCount = MediaPlayer.Equalizer.getBandCount();
-            if (bands.length != bandCount + 1)
-                return null;
-
-            final MediaPlayer.Equalizer eq = MediaPlayer.Equalizer.create();
-            eq.setPreAmp(bands[0]);
-            for (int i = 0; i < bandCount; ++i)
-                eq.setAmp(i, bands[i + 1]);
-            return eq;
-        } catch (Exception e) {
-            return MediaPlayer.Equalizer.createFromPreset(0);
-        }
-    }
-
-    public static void saveCustomSet(Context context, MediaPlayer.Equalizer eq, String customName) {
-        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String formatedName = customName.replace(" ", "_");
-        String key = "custom_equalizer_" + formatedName;
-        SharedPreferences.Editor editor = pref.edit();
-        final int bandCount = MediaPlayer.Equalizer.getBandCount();
-        final float[] bands = new float[bandCount + 1];
-        bands[0] = eq.getPreAmp();
-        for (int i = 0; i < bandCount; ++i) {
-            bands[i + 1] = eq.getAmp(i);
-        }
-        putFloatArray(editor, key, bands);
-        editor.apply();
-    }
-
-    public static void deleteCustomSet(Context context, String customName) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .remove("custom_equalizer_" + customName.replace(" ", "_"))
-                .apply();
-    }
-
-    public static boolean getEqualizerSavedState(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean("equalizer_saved", true);
-    }
-
-    public static boolean getEqualizerEnabledState(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean("equalizer_enabled", false);
-    }
-
-    public static int getAudiotrackSessionId() {
-        return AUDIOTRACK_SESSION_ID;
-    }
-
-    public static float[] getFloatArray(SharedPreferences pref, String key) {
-        float[] array = null;
-        String s = pref.getString(key, null);
-        if (s != null) {
-            try {
-                JSONArray json = new JSONArray(s);
-                array = new float[json.length()];
-                for (int i = 0; i < array.length; i++)
-                    array[i] = (float) json.getDouble(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return array;
-    }
-
-    public static void putFloatArray(SharedPreferences.Editor editor, String key, float[] array) {
-        try {
-            JSONArray json = new JSONArray();
-            for (float f : array)
-                json.put(f);
-            editor.putString(key, json.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 }

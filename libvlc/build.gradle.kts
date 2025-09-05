@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
 }
+
+// 应用 Maven 包创建脚本
+apply(from = "../create-maven-bundle.gradle")
+
 android {
     namespace = "com.vlc.lib"
     compileSdk = 36
@@ -48,37 +52,5 @@ android {
 }
 
 dependencies {
-    api("org.videolan.android:libvlc-all:3.6.3")
+    api(libs.libvlc.all)
 }
-
-
-
-
-//tasks.withType(JavaCompile) {
-//    options.encoding = "UTF-8"
-//}
-//tasks.withType(Javadoc) {
-//    options.encoding = "UTF-8"
-//}
-//
-//buildscript {
-//    repositories {
-//        jcenter()
-//    }
-//    dependencies {
-////        classpath 'com.novoda:bintray-release:0.9.2'
-//        classpath 'com.github.panpf.bintray-publish:bintray-publish:1.0.0'
-//    }
-//}
-//apply plugin: 'com.github.panpf.bintray-publish'
-////apply plugin: 'com.novoda.bintray-release'
-//publish {
-//    userOrg = 'yuyunlongyyl' //用户所在组织
-//    groupId = 'com.yyl.vlc'// 包名
-//    artifactId = 'vlc-android-sdk' // library的名字
-//    publishVersion = project.properties.get("versionJcenter") // 版本
-//    desc = 'vlc-android-lib  suport x86_64   x86  armeabi-v7a  arm64-v8a'
-//    // 描述
-//    website = 'https://github.com/mengzhidaren/Vlc-sdk-lib'   // 项目的主页
-//}
-//
