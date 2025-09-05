@@ -37,25 +37,25 @@ import java.util.ArrayList;
 /**
  * 有问题留言给我 https://github.com/mengzhidaren
  */
-public class VlcVideoFragment extends Fragment implements View.OnClickListener {
+public class VlcVideoFragment extends Fragment {
     private VlcVideoView vlcVideoView;
     private TextView logInfo;
     private ImageView thumbnail;
 
     String tag = "VlcVideoFragment";
     //本地字幕文件
-    private File alaveFile = new File(Environment.getExternalStorageDirectory(), "test2.srt");
+    private File alaveFile = new File(MainActivity.cachePath, "test2.srt");
     //网络字幕
     private String uri = "";
 
     private RecordEvent recordEvent = new RecordEvent();
     //录像
-    private File recordFile = new File(Environment.getExternalStorageDirectory(), "yyl");
-    private File videoFile = new File(Environment.getExternalStorageDirectory(), "yyl" + File.separatorChar + "yyl.mp4");
+    private File recordFile = new File(MainActivity.cachePath, "yyl");
+    private File videoFile = new File(MainActivity.cachePath, "yyl" + File.separatorChar + "yyl.mp4");
 
 
     //vlc截图文件地址
-    private File takeSnapshotFile = new File(Environment.getExternalStorageDirectory(), "yyl.png");
+    private File takeSnapshotFile = new File(MainActivity.cachePath, "yyl.png");
     String directory = recordFile.getAbsolutePath();
 
     boolean show1 = true;
@@ -72,12 +72,46 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
         frameLayout1 = view.findViewById(R.id.layout1);
         frameLayout2 = view.findViewById(R.id.layout2);
         recordFile.mkdirs();
-        thumbnail.setOnClickListener(this);
-        view.findViewById(R.id.change).setOnClickListener(this);
-        view.findViewById(R.id.changeSlave).setOnClickListener(this);
-        view.findViewById(R.id.recordStart).setOnClickListener(this);
-        view.findViewById(R.id.recordStop).setOnClickListener(this);
-        view.findViewById(R.id.snapShot).setOnClickListener(this);
+        thumbnail.setOnClickListener(v->{
+
+        });
+        view.findViewById(R.id.change).setOnClickListener(v->{
+            isFullscreen = !isFullscreen;
+            if (isFullscreen) {
+                getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+            } else {
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        });
+        view.findViewById(R.id.changeSlave).setOnClickListener(v->{
+
+        });
+        view.findViewById(R.id.recordStart).setOnClickListener(v->{
+            if (vlcVideoView.isPrepare()) {
+                vlcVideoView.getMediaPlayer().record(directory);
+//                    recordEvent.startRecord(vlcVideoView.getMediaPlayer(), directory, "yyl.mp4");
+            }
+        });
+        view.findViewById(R.id.recordStop).setOnClickListener(v->{
+            if (vlcVideoView.isPrepare()) {
+                vlcVideoView.getMediaPlayer().record(null);
+//                    recordEvent.stopRecord(vlcVideoView.getMediaPlayer());
+            }
+        });
+        view.findViewById(R.id.snapShot).setOnClickListener(v->{
+            if (vlcVideoView.isPrepare()) {
+                Media.VideoTrack videoTrack = vlcVideoView.getVideoTrack();
+                if (videoTrack != null) {
+//                        vlcVideoView.getMediaPlayer().updateVideoSurfaces();
+                    //原图
+                    recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), 0, 0);
+                    //原图的一半
+                    //    recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), videoTrack.width / 2, 0);
+                }
+            }
+        });
         view.findViewById(R.id.change_Parent).setOnClickListener(v -> {
             Log.i(tag, "removeAllViews");
             ((ViewGroup) vlcVideoView.getParent()).removeAllViews();
@@ -176,59 +210,6 @@ public class VlcVideoFragment extends Fragment implements View.OnClickListener {
     }
 
     public boolean isFullscreen;
-
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.change:
-                isFullscreen = !isFullscreen;
-                if (isFullscreen) {
-                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-                } else {
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
-                break;
-            case R.id.changeSlave:
-//                if (!vlcVideoView.isPrepare()) return;
-//                Media media11 = vlcVideoView.getMediaPlayer().getMedia();
-//                media11.clearSlaves();
-//                vlcVideoView.onStop();
-//                vlcVideoView.startPlay();
-                break;
-            case R.id.recordStart:
-                if (vlcVideoView.isPrepare()) {
-                    vlcVideoView.getMediaPlayer().record(directory);
-//                    recordEvent.startRecord(vlcVideoView.getMediaPlayer(), directory, "yyl.mp4");
-                }
-                break;
-            case R.id.recordStop:
-                if (vlcVideoView.isPrepare()) {
-                    vlcVideoView.getMediaPlayer().record(null);
-//                    recordEvent.stopRecord(vlcVideoView.getMediaPlayer());
-                }
-
-                break;
-            case R.id.snapShot:
-                if (vlcVideoView.isPrepare()) {
-                    Media.VideoTrack videoTrack = vlcVideoView.getVideoTrack();
-                    if (videoTrack != null) {
-//                        vlcVideoView.getMediaPlayer().updateVideoSurfaces();
-                        //原图
-                        recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), 0, 0);
-                        //原图的一半
-                        //    recordEvent.takeSnapshot(vlcVideoView.getMediaPlayer(), takeSnapshotFile.getAbsolutePath(), videoTrack.width / 2, 0);
-                    }
-                }
-                //                这个就是截图 保存Bitmap就行了
-                //   thumbnail.setImageBitmap(vlcVideoView.getBitmap());
-//                Bitmap bitmap = vlcVideoView.getBitmap();
-//                saveBitmap("", bitmap);
-                break;
-
-
-        }
-    }
 
 
     public static boolean saveBitmap(String savePath, Bitmap mBitmap) {

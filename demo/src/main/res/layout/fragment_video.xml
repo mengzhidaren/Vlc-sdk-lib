@@ -5,7 +5,6 @@
     <com.yyl.vlc.view.FrameLayoutScale
         android:id="@+id/layout1"
         android:layout_width="match_parent"
-        android:background="#20000000"
         android:layout_height="match_parent">
 
         <com.vlc.lib.VlcVideoView
@@ -17,7 +16,6 @@
 
     <com.yyl.vlc.view.FrameLayoutScale
         android:id="@+id/layout2"
-        android:background="#30000000"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="300dp">
@@ -72,7 +70,7 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:orientation="vertical">

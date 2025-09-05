@@ -14,6 +14,7 @@ public class VlcPlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vlc_player);
+
     }
 
     @Override

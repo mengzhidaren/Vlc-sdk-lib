@@ -3,13 +3,13 @@ package com.yyl.vlc;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
 //    CCTV1高清： http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8
 //    CCTV3高清： http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8
 //    CCTV5高清： http://ivi.bupt.edu.cn/hls/cctv5hd.m3u8
-    public static final String path = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
+    public static final String path = "https://media.w3.org/2010/05/sintel/trailer.mp4";
 
     private final String tag = "MainActivity";
     private ImageView thumbnail;
     private Context context;
     public static boolean testNetWork = true;
-
+    public static String cachePath="";
     public static String getUrl(Context context) {
         if (testNetWork) {
             return path;
@@ -53,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = this;
         thumbnail = findViewById(R.id.thumbnail);
+        cachePath=getExternalCacheDir().getAbsolutePath();
         init();
         test();
+
 
     }
 
@@ -67,21 +69,10 @@ public class MainActivity extends AppCompatActivity {
             Log.i(tag, "not support  cpu");
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10);
-        }
+        Log.i(tag, "Environment dir="+  cachePath);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==10){
-            if(grantResults[0]!=0){
-                Toast.makeText(this,"WRITE_EXTERNAL_STORAGE error",Toast.LENGTH_LONG).show();
-            }
-            LogUtils.i("Permissions","grantResults="+ Arrays.toString(grantResults));
-        }
-    }
+
 
     private void test() {
         App.getProxy(context).registerCacheListener(new CacheListener() {

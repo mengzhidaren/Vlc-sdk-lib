@@ -60,15 +60,6 @@ static u1 checkUtfBytes(const char* bytes, const char** errorKind) {
     }
     return 0;
 }
-char *string_add(char *s1, char *s2) {
-    char *result = malloc(strlen(s1) + strlen(s2) + 1);//+1 for the zero-terminator
-    if (result == NULL) {
-        return NULL;
-    }
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
-}
 
 /**
  * 保存控制台json信息
@@ -96,7 +87,6 @@ void yyl_print_callback_json(const char *fmt, ...) {
         }
     }
     if (p) {
-        JSON_RESULT = string_add(JSON_RESULT, p);
         free(p);
         p = NULL;
     }

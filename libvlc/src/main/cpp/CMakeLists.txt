@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.4.1)
-
+cmake_minimum_required(VERSION 3.22.1)
+project("yylRecord")
 #set(CMAKE_C_STANDARD 99)
 add_library(yylRecord
         SHARED
-        src/main/cpp/yyl_record.c
-        src/main/cpp/yyl_log.c
-        #   src/main/cpp/yyl_fixsurface.c
+        yyl_record.c
+        yyl_log.c
+        #yyl_fixsurface.c
         )
 
 
@@ -17,8 +17,8 @@ add_library(vlcjni
         SHARED
         IMPORTED
         )
-message(AUTHOR_WARNING 'yyl CMAKE_ANDROID_ARCH_ABI=${CMAKE_ANDROID_ARCH_ABI})
-message(AUTHOR_WARNING 'yyl CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR})
+#message(AUTHOR_WARNING 'yyl CMAKE_ANDROID_ARCH_ABI=${CMAKE_ANDROID_ARCH_ABI})
+#message(AUTHOR_WARNING 'yyl CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR})
 
 set(soPath ${CMAKE_SOURCE_DIR}/jniLibs/${CMAKE_ANDROID_ARCH_ABI}/libvlc.so)
 set(soPathjni ${CMAKE_SOURCE_DIR}/jniLibs/${CMAKE_ANDROID_ARCH_ABI}/libvlcjni.so)
@@ -40,7 +40,7 @@ set_target_properties(
 include_directories(
         ${CMAKE_SOURCE_DIR}/include/
 )
-
+target_link_options(yylRecord PRIVATE "-Wl,-z,max-page-size=16384")
 
 target_link_libraries(yylRecord
         android

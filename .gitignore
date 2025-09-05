@@ -13,3 +13,5 @@ build/
 .externalNativeBuild/
 .gitignore
 /libvlc3.0.9/.externalNativeBuild/
+demo/.cxx/
+libvlc/.cxx/

@@ -4,27 +4,21 @@
 
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 允许读取手机状态的权限 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 允许程序获取当前WiFi接入的状态以及WLAN热点的信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 允许程序获取网络信息状态，如当前的网络连接是否有效 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 允许程序写入外部存储,如SD卡上写文件 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 程序可以读取设备外部存储空间（内置SDcard和外置SDCard）的文件 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:name=".App"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:hardwareAccelerated="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
